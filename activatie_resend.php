@@ -6,20 +6,14 @@ $msg2 = '';
 // Now we check if the email from the resend activation form was submitted, isset() will check if the email exists.
 if (isset($_POST['email'])) {
     // Prepare our SQL, preparing the SQL statement will prevent SQL injection.
-    $stmt = $con->prepare('SELECT activatie_code FROM users WHERE email = ? AND activatie_code != "" AND activatie_code != "activated"');
-    // In this case we can use the account ID to get the account info.
-    $stmt->bind_param('s', $_POST['email']);
-    $stmt->execute();
-    $stmt->store_result();
-    // Check if the account exists:
-    if ($stmt->num_rows > 0) {
-        // account exists
-        $stmt->bind_result($activatie_code);
-        $stmt->fetch();
-        $stmt->close();
+    $stmt = $pdo->prepare('SELECT * FROM users WHERE email = ? AND activatie_code != "" AND activatie_code != "activated"');
+    $stmt->execute([ $_POST['email'] ]);
+    $account = $stmt->fetch(PDO::FETCH_ASSOC);
+    // If the account exists with the email
+    if ($account) {
         // Account exist, the $msg variable will be used to show the output message (on the HTML form)
-        send_activation_email($_POST['email'], $activatie_code);
-        $msg2 = 'De link voor het activeren van uw account is naar uw e-mailadres verstuurd!';
+        send_activation_email($_POST['email'], $account['activatie_code']);
+        $msg = 'De link voor het activeren van uw account is naar uw e-mailadres verstuurd!';
     } else {
         $msg = 'Er is geen account gevonden met dit e-mailadres!';
     }

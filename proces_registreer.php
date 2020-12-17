@@ -1,8 +1,5 @@
 <?php
 include 'main.php';
-if (mysqli_connect_errno()) {
-    exit('Failed to connect to MySQL: ' . mysqli_connect_error());
-}
 // Now we check if the data was submitted, isset() function will check if the data exists.
 if (!isset($_POST['email'], $_POST['wachtwoord'], $_POST['cwachtwoord'])) {
     exit('Vervolledig het registratie formulier!');
@@ -23,22 +20,23 @@ if (strlen($_POST['wachtwoord']) > 16 || strlen($_POST['wachtwoord']) < 8) {
 if ($_POST['cwachtwoord'] != $_POST['wachtwoord']) {
     exit('Wachtwoorden komen niet overeen!');
 }
-// We need to check if the account with that username exists.
-$stmt = $con->prepare('SELECT user_id, wachtwoord FROM users WHERE email = ?');
-$stmt->bind_param('s', $_POST['email']);
-$stmt->execute();
-$stmt->store_result();
-if ($stmt->num_rows > 0) {
+// Check if the account with that username already exists
+$stmt = $pdo->prepare('SELECT user_id, wachtwoord FROM users WHERE email = ?');
+$stmt->execute([$_POST['email']]);
+$account = $stmt->fetch(PDO::FETCH_ASSOC);
+// Store the result so we can check if the account exists in the database.
+if ($account) {
+    // Username already exists
     echo 'Dit e-mailadres bestaat al!';
 } else {
-    $stmt->close();
-    $stmt = $con->prepare('INSERT INTO users (email, wachtwoord, activatie_code, registratie_datum, voornaam, achternaam, adres_straat, adres_nr, adres_postcode, adres_plaats, telefoon_nr, bedrijfsnaam, btw_nr) VALUES (?, ?, ?, NOW(), ?, ?, ?, ?, ?, ?, ?, ?, ?)');
+    // Username doesnt exists, insert new account
+    $stmt = $pdo->prepare('INSERT INTO users (email, wachtwoord, activatie_code, registratie_datum, voornaam, achternaam, adres_straat, adres_nr, adres_postcode, adres_plaats, telefoon_nr, bedrijfsnaam, btw_nr) VALUES (?, ?, ?, NOW(), ?, ?, ?, ?, ?, ?, ?, ?, ?)');
+    // We do not want to expose passwords in our database, so hash the password and use password_verify when a user logs in.
     $wachtwoord = password_hash($_POST['wachtwoord'], PASSWORD_DEFAULT);
     $uniqid = account_activatie ? uniqid() : 'activated';
-    $stmt->bind_param('ssssssssssss',$_POST['email'],$wachtwoord, $uniqid, $_POST['voornaam'], $_POST['achternaam'], $_POST['adres_straat'], $_POST['adres_nr'], $_POST['adres_postcode'], $_POST['adres_plaats'], $_POST['telefoon_nr'], $_POST['bedrijfsnaam'], $_POST['btw_nr']);
-    $stmt->execute();
-    $stmt->close();
+    $stmt->execute([ $_POST['email'], $wachtwoord, $uniqid, $_POST['voornaam'], $_POST['achternaam'], $_POST['adres_straat'], $_POST['adres_nr'], $_POST['adres_postcode'], $_POST['adres_plaats'], $_POST['telefoon_nr'], $_POST['bedrijfsnaam'], $_POST['btw_nr'] ]);
     if (account_activatie) {
+        // Account activation required, send the user the activation email with the "send_activation_email" function from the "main.php" file
         send_activation_email($_POST['email'], $uniqid);
         echo 'Bekijk uw email voor het activeren van je account!';
     } else {

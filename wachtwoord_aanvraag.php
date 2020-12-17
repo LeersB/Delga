@@ -6,18 +6,14 @@ $msg2 = '';
 // Now we check if the data from the login form was submitted, isset() will check if the data exists.
 if (isset($_POST['email'])) {
     // Prepare our SQL, preparing the SQL statement will prevent SQL injection.
-    $stmt = $con->prepare('SELECT * FROM users WHERE email = ?');
-    $stmt->bind_param('s', $_POST['email']);
-    $stmt->execute();
-    $stmt->store_result();
+    $stmt = $pdo->prepare('SELECT * FROM users WHERE email = ?');
+    $stmt->execute([$_POST['email']]);
+    $account = $stmt->fetch(PDO::FETCH_ASSOC);
     // Check if the email exists...
-    if ($stmt->num_rows > 0) {
-        $stmt->close();
+    if ($account) {
+        $stmt = $pdo->prepare('UPDATE users SET reset_code = ? WHERE email = ?');
         $uniqid = uniqid();
-        $stmt = $con->prepare('UPDATE users SET reset_code = ? WHERE email = ?');
-        $stmt->bind_param('ss', $uniqid, $_POST['email']);
-        $stmt->execute();
-        $stmt->close();
+        $stmt->execute([$uniqid, $_POST['email']]);
         // Email to send below, customize this
         $subject = 'Wachtwoord herstel Delga.be';
         $headers = 'From: ' . mail_from . "\r\n" . 'Reply-To: ' . mail_from . "\r\n" . 'Return-Path: ' . mail_from . "\r\n" . 'X-Mailer: PHP/' . phpversion() . "\r\n" . 'MIME-Version: 1.0' . "\r\n" . 'Content-Type: text/html; charset=UTF-8' . "\r\n";

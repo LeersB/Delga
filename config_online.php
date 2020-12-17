@@ -9,13 +9,15 @@ define('db_user', 'delga');
 define('db_password', 'Hbutciaf-2304');
 // database name
 define('db_name', 'delgatest');
+// database charset
+define('db_charset', 'utf8');
 // Email activation variables
 // account activation required?
 define('account_activatie', false);
 // Change "Your Company Name" and "yourdomain.com", do not remove the < and >
 define('mail_from', 'Delga <noreply@delga.be>');
-// Link to activation file, update this
+// Link to activation file
 define('activatie_link', 'https://test.delga.be/activatie.php');
-
-define('reset_link', 'https://test.delga.be/reset-wachtwoord.php');
+// Link to Reset file
+define('reset_link', 'https://test.delga.be/wachtwoord_reset.php');
 ?>

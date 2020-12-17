@@ -20,28 +20,23 @@ $user = array(
 $user_levels = array('User', 'Admin');
 if (isset($_GET['user_id'])) {
     // Get the account from the database
-    $stmt = $con->prepare('SELECT email, wachtwoord, voornaam, achternaam, bedrijfsnaam, btw_nr, adres_straat, adres_nr, adres_postcode, adres_plaats, telefoon_nr, activatie_code, terugkeer_code, user_level FROM users WHERE user_id = ?');
-    $stmt->bind_param('i', $_GET['user_id']);
-    $stmt->execute();
-    $stmt->bind_result($user['email'], $user['wachtwoord'], $user['voornaam'], $user['achternaam'], $user['bedrijfsnaam'], $user['btw_nr'], $user['adres_straat'], $user['adres_nr'], $user['adres_postcode'], $user['adres_plaats'], $user['telefoon_nr'], $user['activatie_code'], $user['terugkeer_code'], $user['user_level']);
-    $stmt->fetch();
-    $stmt->close();
+    $stmt = $pdo->prepare('SELECT * FROM users WHERE user_id = ?');
+    $stmt->execute([$_GET['user_id']]);
+    $user = $stmt->fetch(PDO::FETCH_ASSOC);
     // ID param exists, edit an existing account
     $page = 'Edit';
     if (isset($_POST['submit'])) {
         // Update the account
+        $stmt = $pdo->prepare('UPDATE users SET email = ?, wachtwoord = ?, voornaam = ?, achternaam = ?, adres_straat = ?, adres_nr = ?, adres_postcode = ?, adres_plaats = ?, telefoon_nr = ?, bedrijfsnaam = ?, btw_nr = ?, activatie_code = ?, terugkeer_code = ?, user_level = ? WHERE user_id = ?');
         $wachtwoord = $user['wachtwoord'] != $_POST['wachtwoord'] ? password_hash($_POST['wachtwoord'], PASSWORD_DEFAULT) : $user['wachtwoord'];
-        $stmt = $con->prepare('UPDATE IGNORE users SET email = ?, wachtwoord = ?, voornaam = ?, achternaam = ?, adres_straat = ?, adres_nr = ?, adres_postcode = ?, adres_plaats = ?, telefoon_nr = ?, bedrijfsnaam = ?, btw_nr = ?, activatie_code = ?, terugkeer_code = ?, user_level = ? WHERE user_id = ?');
-        $stmt->bind_param('ssssssssssssssi', $_POST['email'], $wachtwoord, $_POST['voornaam'], $_POST['achternaam'], $_POST['adres_straat'], $_POST['adres_nr'], $_POST['adres_postcode'], $_POST['adres_plaats'], $_POST['telefoon_nr'], $_POST['bedrijfsnaam'], $_POST['btw_nr'], $_POST['activatie_code'], $_POST['terugkeer_code'], $_POST['user_level'], $_GET['user_id']);
-        $stmt->execute();
+        $stmt->execute([$_POST['email'], $wachtwoord, $_POST['voornaam'], $_POST['achternaam'], $_POST['adres_straat'], $_POST['adres_nr'], $_POST['adres_postcode'], $_POST['adres_plaats'], $_POST['telefoon_nr'], $_POST['bedrijfsnaam'], $_POST['btw_nr'], $_POST['activatie_code'], $_POST['terugkeer_code'], $_POST['user_level'], $_GET['user_id']]);
         header('Location: index.php');
         exit;
     }
     if (isset($_POST['delete'])) {
         // Delete the account
-        $stmt = $con->prepare('DELETE FROM users WHERE user_id = ?');
-        $stmt->bind_param('i', $_GET['user_id']);
-        $stmt->execute();
+        $stmt = $pdo->prepare('DELETE FROM users WHERE user_id = ?');
+        $stmt->execute([$_GET['user_id']]);
         header('Location: index.php');
         exit;
     }
@@ -49,20 +44,18 @@ if (isset($_GET['user_id'])) {
     // Create a new account
     $page = 'Create';
     if (isset($_POST['submit'])) {
+        $stmt = $pdo->prepare('INSERT IGNORE INTO users (email, wachtwoord, user_level, activatie_code, registratie_datum, voornaam, achternaam, adres_straat, adres_nr, adres_postcode, adres_plaats, telefoon_nr, bedrijfsnaam, btw_nr) VALUES (?, ?, ?, ?, NOW(), ?, ?, ?, ?, ?, ?, ?, ?, ?)');
         $wachtwoord = password_hash($_POST['wachtwoord'], PASSWORD_DEFAULT);
-        $stmt = $con->prepare('INSERT IGNORE INTO users (email, wachtwoord, user_level, activatie_code, registratie_datum, voornaam, achternaam, adres_straat, adres_nr, adres_postcode, adres_plaats, telefoon_nr, bedrijfsnaam, btw_nr) VALUES (?, ?, ?, ?, NOW(), ?, ?, ?, ?, ?, ?, ?, ?, ?)');
-        $stmt->bind_param('sssssssssssss',$_POST['email'],$wachtwoord, $_POST['user_level'], $_POST['activatie_code'], $_POST['voornaam'], $_POST['achternaam'], $_POST['adres_straat'], $_POST['adres_nr'], $_POST['adres_postcode'], $_POST['adres_plaats'], $_POST['telefoon_nr'], $_POST['bedrijfsnaam'], $_POST['btw_nr']);
-        $stmt->execute();
+        $stmt->execute([$_POST['email'], $wachtwoord, $_POST['user_level'], $_POST['activatie_code'], $_POST['voornaam'], $_POST['achternaam'], $_POST['adres_straat'], $_POST['adres_nr'], $_POST['adres_postcode'], $_POST['adres_plaats'], $_POST['telefoon_nr'], $_POST['bedrijfsnaam'], $_POST['btw_nr']]);
         header('Location: index.php');
         exit;
     }
 }
 ?>
 
-
 <?= template_admin_header($page . ' Account') ?>
 
-<h2><?= $page ?> Account</h2>
+<h2><?= $page ?> Gebruiker</h2>
 
 <div class="content-block">
 
@@ -87,7 +80,7 @@ if (isset($_GET['user_id'])) {
                         <div class="input-group-text"><i class="fas fa-user"></i></div>
                     </div>
                     <input type="text" class="form-control" id="achternaam" name="achternaam"
-                           value="<?= $user['achternaam']?>" placeholder="Achternaam" required>
+                           value="<?= $user['achternaam'] ?>" placeholder="Achternaam" required>
                     <div class="invalid-feedback">Dit veld is verplicht.</div>
                 </div>
             </div>
@@ -138,7 +131,7 @@ if (isset($_GET['user_id'])) {
             </div>
             <div class="input-group col-md-6">
                 <input type="text" class="form-control" id="adres_plaats" name="adres_plaats"
-                       value="<?= $user['adres_plaats']?>"
+                       value="<?= $user['adres_plaats'] ?>"
                        placeholder="Plaats" required>
                 <div class="invalid-feedback">Dit veld is verplicht.</div>
             </div>
@@ -201,6 +194,12 @@ if (isset($_GET['user_id'])) {
                            value="<?= $user['user_level'] ?>" placeholder="User_level" required>
                 </div>
             </div>
+
+            <select id="role" name="role" style="margin-bottom: 30px;">
+                <?php foreach ($user_levels as $level): ?>
+                    <option value="<?= $level ?>"<?= $level == $user['user_level'] ? ' selected' : '' ?>><?= $level ?></option>
+                <?php endforeach; ?>
+            </select>
 
             <div class="input-group col-md-12"><br></div>
             <div class="col-12">

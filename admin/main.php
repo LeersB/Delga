@@ -2,16 +2,12 @@
 // Include the root "main.php" file and check if user is logged-in...
 include_once '../config.php';
 include_once '../main.php';
-check_loggedin($con, '../index.php');
-$stmt = $con->prepare('SELECT wachtwoord, email, user_level FROM users WHERE user_id = ?');
-// Get the account info using the logged-in session ID
-$stmt->bind_param('i', $_SESSION['user_id']);
-$stmt->execute();
-$stmt->bind_result($wachtwoord, $email, $user_level);
-$stmt->fetch();
-$stmt->close();
+check_loggedin($pdo, '../index.php');
+$stmt = $pdo->prepare('SELECT * FROM users WHERE user_id = ?');
+$stmt->execute([ $_SESSION['user_id'] ]);
+$account = $stmt->fetch(PDO::FETCH_ASSOC);
 // Check if the user is an admin...
-if ($user_level != 'Admin') {
+if ($account['user_level'] != 'Admin') {
     exit('You do not have permission to access this page!');
 }
 // Template admin header

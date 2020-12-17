@@ -1,35 +1,27 @@
 <?php
 $menu = 3;
 include 'main.php';
-// No need for the user to see the login form if they're logged-in so redirect them to the home page
 if (isset($_SESSION['loggedin'])) {
-    // If the user is not logged in redirect to the home page.
     header('Location: home.php');
     exit;
 }
-// Also check if they are "remembered"
 if (isset($_COOKIE['rememberme']) && !empty($_COOKIE['rememberme'])) {
-    // If the remember me cookie matches one in the database then we can update the session variables.
-    $stmt = $con->prepare('SELECT user_id, email, user_level FROM users WHERE terugkeer_code = ?');
-    $stmt->bind_param('s', $_COOKIE['rememberme']);
-    $stmt->execute();
-    $stmt->store_result();
-    if ($stmt->num_rows > 0) {
-        // Found a match
-        $stmt->bind_result($user_id, $email, $user_level);
-        $stmt->fetch();
-        $stmt->close();
+    // If the remember me cookie matches one in the database then we can update the session variables and the user will be logged-in.
+    $stmt = $pdo->prepare('SELECT * FROM users WHERE terugkeer_code = ?');
+    $stmt->execute([ $_COOKIE['rememberme'] ]);
+    $account = $stmt->fetch(PDO::FETCH_ASSOC);
+    if ($account) {
+        // Found a match, user is "remembered" log them in automatically
         session_regenerate_id();
         $_SESSION['loggedin'] = TRUE;
-        $_SESSION['email'] = $email;
-        $_SESSION['user_id'] = $user_id;
-        $_SESSION['user_level'] = $user_level;
+        $_SESSION['email'] = $account['email'];
+        $_SESSION['user_id'] = $account['user_id'];
+        $_SESSION['user_level'] = $account['user_level'];
         header('Location: home.php');
         exit;
     }
 }
 ?>
-
 <!DOCTYPE html>
 <html class="h-100" lang="en">
 <head>

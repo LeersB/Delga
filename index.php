@@ -7,28 +7,6 @@ if (isset($_SESSION['loggedin'])) {
     header('Location: home.php');
     exit;
 }
-// Also check if they are "remembered"
-if (isset($_COOKIE['rememberme']) && !empty($_COOKIE['rememberme'])) {
-    // If the remember me cookie matches one in the database then we can update the session variables.
-    $stmt = $con->prepare('SELECT user_id, voornaam, achternaam, user_level FROM users WHERE terugkeer_code = ?');
-    $stmt->bind_param('s', $_COOKIE['rememberme']);
-    $stmt->execute();
-    $stmt->store_result();
-    if ($stmt->num_rows > 0) {
-        // Found a match
-        $stmt->bind_result($user_id, $voornaam, $achternaam, $user_level);
-        $stmt->fetch();
-        $stmt->close();
-        session_regenerate_id();
-        $_SESSION['loggedin'] = TRUE;
-        $_SESSION['voornaam'] = $voornaam;
-        $_SESSION['achternaam'] = $achternaam;
-        $_SESSION['id'] = $user_id;
-        $_SESSION['user_level'] = $user_level;
-        header('Location: home.php');
-        exit;
-    }
-}
 ?>
 
 <!DOCTYPE html>

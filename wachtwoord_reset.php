@@ -6,24 +6,20 @@ $msg2 = '';
 // Now we check if the data from the login form was submitted, isset() will check if the data exists.
 if (isset($_GET['email'], $_GET['code']) && !empty($_GET['code'])) {
     // Prepare our SQL, preparing the SQL statement will prevent SQL injection.
-    $stmt = $con->prepare('SELECT * FROM users WHERE email = ? AND reset_code = ?');
-    $stmt->bind_param('ss', $_GET['email'], $_GET['code']);
-    $stmt->execute();
-    $stmt->store_result();
+    $stmt = $pdo->prepare('SELECT * FROM users WHERE email = ? AND reset_code = ?');
+    $stmt->execute([$_GET['email'], $_GET['code']]);
+    $account = $stmt->fetch(PDO::FETCH_ASSOC);
     // Check if the account exists...
-    if ($stmt->num_rows > 0) {
-        $stmt->close();
+    if ($account) {
         if (isset($_POST['nwachtwoord'], $_POST['cwachtwoord'])) {
             if (strlen($_POST['nwachtwoord']) > 16 || strlen($_POST['nwachtwoord']) < 8) {
                 $msg = 'Wachtwoord moet tussen 8 en 16 karakters lang zijn!';
             } else if ($_POST['nwachtwoord'] != $_POST['cwachtwoord']) {
                 $msg = 'Wachtwoorden komen niet overeen!';
             } else {
-                $stmt = $con->prepare('UPDATE users SET wachtwoord = ?, reset_code = "" WHERE email = ?');
+                $stmt = $pdo->prepare('UPDATE users SET wachtwoord = ?, reset_code = "" WHERE email = ?');
                 $wachtwoord = password_hash($_POST['nwachtwoord'], PASSWORD_DEFAULT);
-                $stmt->bind_param('ss', $wachtwoord, $_GET['email']);
-                $stmt->execute();
-                $stmt->close();
+                $stmt->execute([$wachtwoord, $_GET['email']]);
                 $msg2 = 'Uw wachtwoord is aangepast! U kan zich nu <a href="login.php">aanmelden</a>!';
             }
         }

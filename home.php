@@ -1,7 +1,7 @@
 <?php
 $menu = 1;
 include 'main.php';
-check_loggedin($con);
+check_loggedin($pdo);
 ?>
 
 <!DOCTYPE html>

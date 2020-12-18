@@ -1,15 +1,25 @@
 <?php
 include_once 'config.php';
-
 session_start();
 // Connect to the MySQL database using PDO
 try {
-    $pdo = new PDO('mysql:host=' . db_host . ';dbname=' . db_name . ';charset=' . db_charset . ';db_port=' . db_port,db_user, db_password);
+    $pdo = new PDO('mysql:host=' . db_host . ';dbname=' . db_name . ';db_port=' . db_port,db_user, db_password);
 } catch (PDOException $exception) {
-    // If there is an error with the connection, stop the script and display the error.
+// If there is an error with the connection, stop the script and display the error.
     exit('Failed to connect to database!');
+//exit("Connection failed - ".$exception->getMessage());
 }
 
+function pdo_connect_mysql() {
+    try {
+        // Connect to the MySQL database using PDO...
+        return new PDO('mysql:host=' . db_host . ';dbname=' . db_name . ';db_port=' . db_port,db_user, db_password);
+    } catch (PDOException $exception) {
+        // Could not connect to the MySQL database, if this error occurs make sure you check your db settings are correct!
+        exit('Failed to connect to database!');
+        //exit("Connection failed - ".$exception->getMessage());
+    }
+}
 // The below function will check if the user is logged-in and also check the remember me cookie
 function check_loggedin($pdo, $redirect_file = 'login.php') {
     // Check for remember me cookie variable and loggedin session variable

@@ -1,0 +1,170 @@
+<?php
+//define('shoppingcart', true);
+$menu = 5;
+
+include 'main.php';
+// Prevent direct access to file
+//defined('shoppingcart') or exit;
+$pdo_function = pdo_connect_mysql();
+$stmt = $pdo_function->query('SELECT * FROM categorie');
+$stmt->execute();
+$categories = $stmt->fetchAll(PDO::FETCH_ASSOC);
+// Get the current category from the GET request, if none exists set the default selected category to: all
+$categorie = isset($_GET['categorie']) ? $_GET['categorie'] : 'all';
+$category_sql = '';
+if ($categorie != 'all') {
+    $category_sql = 'WHERE categorie_id = :categorie';
+}
+// Get the sort from GET request, will occur if the user changes an item in the select box
+$sort = isset($_GET['sort']) ? $_GET['sort'] : 'sort1';
+// The amounts of products to show on each page
+$num_products_on_each_page = 8;
+// The current page, in the URL this will appear as index.php?page=products&p=1, index.php?page=products&p=2, etc...
+$current_page = isset($_GET['p']) && is_numeric($_GET['p']) ? (int)$_GET['p'] : 1;
+// Select products ordered by the date added
+if ($sort == 'sort1') {
+    $stmt = $pdo_function->prepare('SELECT p.* FROM producten p  ' . $category_sql . ' ORDER BY p.product_naam ASC LIMIT :page,:num_products');
+} elseif ($sort == 'sort2') {
+    $stmt = $pdo_function->prepare('SELECT p.* FROM producten p ' . $category_sql . ' ORDER BY p.product_naam DESC LIMIT :page,:num_products');
+} else {
+    $stmt = $pdo_function->prepare('SELECT p.* FROM producten p ' . $category_sql . ' LIMIT :page,:num_products');
+}
+// bindValue will allow us to use integer in the SQL statement, we need to use for LIMIT
+if ($categorie != 'all') {
+    $stmt->bindValue(':categorie', $categorie, PDO::PARAM_INT);
+}
+$stmt->bindValue(':page', ($current_page - 1) * $num_products_on_each_page, PDO::PARAM_INT);
+$stmt->bindValue(':num_products', $num_products_on_each_page, PDO::PARAM_INT);
+$stmt->execute();
+// Fetch the products from the database and return the result as an Array
+$products = $stmt->fetchAll(PDO::FETCH_ASSOC);
+// Get the total number of products
+$stmt = $pdo_function->prepare('SELECT COUNT(*) FROM producten p ' . $category_sql);
+if ($categorie != 'all') {
+    $stmt->bindValue(':categorie', $categorie, PDO::PARAM_INT);
+}
+$stmt->execute();
+$total_products = $stmt->fetchColumn()
+?>
+<!DOCTYPE html>
+<html class="h-100" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
+    <meta content="Delga contactgegevens" name="description">
+    <meta content="Bart Leers" name="author">
+    <title>Delga home</title>
+    <link href="css/bootstrap.css" rel="stylesheet" type="text/css">
+    <link href="css/delga.css" rel="stylesheet">
+</head>
+
+<body class="d-flex flex-column h-100">
+
+<header>
+    <?php include('includes/header.php'); ?>
+</header>
+
+<main class="flex-shrink-0" role="main">
+    <div class="container">
+
+        <div class="products content-wrapper">
+            <h1>Producten</h1>
+            <div class="products-header">
+                <p><?= $total_products ?> Producten</p>
+                <form action="" method="get" class="products-form">
+
+                    <label class="categorie">
+                        Categorie
+                        <select name="categorie">
+                            <option value="all"<?= ($categorie == 'all' ? ' selected' : '') ?>>All</option>
+                            <?php foreach ($categories as $c): ?>
+                                <option value="<?= $c['categorie_id'] ?>"<?= ($categorie == $c['categorie_id'] ? ' selected' : '') ?>><?= $c['categorie_naam'] ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </label>
+                    <button type="submit" class="btn btn-secondary">Toepassen</button>
+                </form>
+            </div>
+            <div class="row"><br></div>
+
+            <form action="" method="get" class="products-form">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <label class="input-group-text" for="inputGroupSelect01">Categorie</label>
+                    </div>
+                    <select class="custom-select" id="inputGroupSelect01">
+                        <option selected>Choose...</option>
+                        <option value="1">One</option>
+                        <option value="2">Two</option>
+                        <option value="3">Three</option>
+                    </select>
+                    <div class="input-group-prepend">
+                        <label class="input-group-text" for="sort">Sorteren</label>
+                    </div>
+                    <select class="custom-select" name="sort" id="sort">
+                        <option value="sort1"<?= ($sort == 'sort1' ? ' selected' : '') ?> selected>Alfabetisch A-Z
+                        </option>
+                        <option value="sort2"<?= ($sort == 'sort2' ? ' selected' : '') ?>>Alfabetisch Z-A</option>
+                    </select>
+                    <div class="input-group-append">
+                        <button class="btn btn-secondary" type="submit">Toepassen</button>
+                    </div>
+                </div>
+            </form>
+
+            <div class="row"><br></div>
+
+            <div class="row" id="page-content-wrapper">
+
+                <?php foreach ($products as $product): ?>
+                    <div class="col-md-6">
+                        <div class="card mb-2">
+                            <div class="card-header">
+                                <h5><?= $product['product_naam'] ?></h5>
+                            </div>
+                            <div class="card-body">
+                                <p class="card-text">
+                                    <?= $product['omschrijving'] ?>
+                                </p>
+                                <p class="text-danger">  <?= $product['waarschuwing'] ?></p>
+
+
+                                <p class="card-text text-secondary"> <?= '€ ' ?><?= number_format($product['eenheidsprijs'], 2) ?></p>
+                                <a href="#" class="btn btn-primary">Go somewhere</a>
+                            </div>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+
+
+            <!-- <div class="products-wrapper">
+                <?php foreach ($products as $product): ?>
+                    <a href="product.php?page=&id=<?= $product['product_id'] ?>" class="product">
+                        <?php if (!empty($product['product_foto']) && file_exists('images/' . $product['product_foto'])): ?>
+                            <img src="images/<?= $product['product_foto'] ?>" width="200" height="200" alt="<?= $product['product_naam'] ?>">
+                        <?php endif; ?>
+                            <?php if ($product['btw'] > 0): ?>
+                                <span class="rrp"><?= '€ ' ?><?= number_format($product['btw'], 2) ?></span>
+                            <?php endif; ?>
+            </span>
+                    </a>
+                <?php endforeach; ?>
+
+            </div> -->
+
+            <div class="buttons">
+                <?php if ($current_page > 1): ?>
+                    <a href="producten.php?p=<?= $current_page - 1 ?>&categorie_id=<?= $categorie ?>&sort=<?= $sort ?>">Prev</a>
+                <?php endif; ?>
+                <?php if ($total_products > ($current_page * $num_products_on_each_page) - $num_products_on_each_page + count($products)): ?>
+                    <a href="producten.php?p=<?= $current_page + 1 ?>&categorie_id=<?= $categorie ?>&sort=<?= $sort ?>">Next</a>
+                <?php endif; ?>
+            </div>
+
+        </div>
+</main>
+
+<?php include('includes/footer.php'); ?>
+</body>
+</html>

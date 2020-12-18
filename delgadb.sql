@@ -83,7 +83,7 @@ CREATE TABLE `producten` (
     `omschrijving` varchar(300) NOT NULL,
     `waarschuwing` varchar(250),
     `eenheidsprijs` decimal(7,2) NOT NULL,
-    `btw` int(2) NOT NULL
+    `btw` decimal(7,2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --

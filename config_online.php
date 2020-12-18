@@ -1,6 +1,6 @@
 <?php
 // database hostname, you don't usually need to change this
-define('db_host', '127.0.0.1');
+define('db_host', 'localhost');
 // database port
 define('db_port', '3307');
 // database username
@@ -9,8 +9,6 @@ define('db_user', 'delga');
 define('db_password', 'Hbutciaf-2304');
 // database name
 define('db_name', 'delgatest');
-// database charset
-define('db_charset', 'utf8');
 // Email activation variables
 // account activation required?
 define('account_activatie', false);

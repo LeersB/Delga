@@ -100,32 +100,72 @@ $total_products = $stmt->fetchColumn()
         </div>
 
         <div class="row"><br></div>
-
+        <!--
         <div class="row" id="page-content-wrapper">
 
+
             <?php foreach ($products as $product): ?>
-            <a href="product.php?page=&id=<?= $product['product_id'] ?>" class="product">
-                <div class="col-md-6">
-                    <div class="card mb-2">
-                        <?php if (!empty($product['product_foto']) && file_exists('images/producten/' . $product['product_foto'])): ?>
-                            <img src="images/producten/<?= $product['product_foto'] ?>" class="card-img-top" alt="<?= $product['product_naam'] ?>">
-                        <?php endif; ?>
-                        <div class="card-header">
-                            <h5><?= $product['product_naam'] ?></h5>
+                <a href="product.php?page=&id=<?= $product['product_id'] ?>" class="product">
+                    <div class="col-md-3">
+                        <div class="card mb-2">
+                            <?php if (!empty($product['product_foto']) && file_exists('images/producten/' . $product['product_foto'])): ?>
+                                <img src="images/producten/<?= $product['product_foto'] ?>" class="card-img-top"
+                                     alt="<?= $product['product_naam'] ?>">
+                            <?php endif; ?>
+                            <div class="card-header">
+                                <h5><?= $product['product_naam'] ?></h5>
+                            </div>
+                            <div class="card-body">
+                                <p class="card-text">
+                                    <?= $product['omschrijving'] ?>
+                                </p>
+                                <p class="text-danger">  <?= $product['waarschuwing'] ?></p>
+
+
+                                <p class="card-text text-secondary"> <?= '€ ' ?><?= number_format($product['eenheidsprijs'], 2) ?></p>
+                                <a href="#" class="btn btn-primary">Go somewhere</a>
+                            </div>
                         </div>
-                        <div class="card-body">
-                            <p class="card-text">
-                                <?= $product['omschrijving'] ?>
-                            </p>
-                            <p class="text-danger">  <?= $product['waarschuwing'] ?></p>
+                    </div>
+                </a>
+            <?php endforeach; ?>
+        </div>
+-->
+        <!--<svg class="bd-placeholder-img" width="200" height="250" role="img"><title>Placeholder</title>
+            <rect width="100%" height="100%" fill="#55595c"/>
+            <text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text>
+        </svg>-->
 
+        <div class="row mb-2">
+            <?php foreach ($products as $product): ?>
+                <div class="col-md-6">
+                    <div class="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+                        <div class="card md-3" style="max-width: 540px;">
+                            <h5 class="card-header"> <?= $product['product_naam'] ?></h5>
+                            <div class="row g-0">
+                                <div class="col-md-4">
+                                    <?php if (!empty($product['product_foto']) && file_exists('images/producten/' . $product['product_foto'])): ?>
+                                        <img src="images/producten/<?= $product['product_foto'] ?>" class="card-img-top"
+                                             alt="<?= $product['product_naam'] ?>">
+                                    <?php endif; ?>
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="card-body">
+                                        <p class="card-text"><?= $product['omschrijving'] ?></p>
+                                        <p class="card-text"><small
+                                                    class="text-danger"> <?= $product['waarschuwing'] ?></small></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <p class="card-text text-secondary"> <?= '€ ' ?><?= number_format($product['eenheidsprijs'], 2) ?>
 
-                            <p class="card-text text-secondary"> <?= '€ ' ?><?= number_format($product['eenheidsprijs'], 2) ?></p>
-                            <a href="#" class="btn btn-primary">Go somewhere</a>
+                                    <a href="#" class="btn btn-outline-success"><i
+                                                class="fas fa-shopping-basket"></i></a></p>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </a>
             <?php endforeach; ?>
         </div>
 
@@ -142,9 +182,7 @@ $total_products = $stmt->fetchColumn()
             </span>
                     </a>
                 <?php endforeach; ?>
-
-            </div> -->
-
+            </div>
         <div class="buttons">
             <?php if ($current_page > 1): ?>
                 <a href="producten.php?p=<?= $current_page - 1 ?>&categorie_id=<?= $categorie ?>&sort=<?= $sort ?>">Prev</a>
@@ -152,8 +190,20 @@ $total_products = $stmt->fetchColumn()
             <?php if ($total_products > ($current_page * $num_products_on_each_page) - $num_products_on_each_page + count($products)): ?>
                 <a href="producten.php?p=<?= $current_page + 1 ?>&categorie_id=<?= $categorie ?>&sort=<?= $sort ?>">Next</a>
             <?php endif; ?>
-        </div>
+        </div> -->
 
+
+        <div class="btn-group" role="group" aria-label="Sorteren">
+            <?php if ($current_page > 1): ?>
+                <a type="button" class="btn btn-outline-success"
+                   href="producten.php?p=<?= $current_page - 1 ?>&categorie_id=<?= $categorie ?>&sort=<?= $sort ?>">Terug</a>
+            <?php endif; ?>
+            <?php if ($total_products > ($current_page * $num_products_on_each_page) - $num_products_on_each_page + count($products)): ?>
+                <a type="button" class="btn btn-outline-success"
+                   href="producten.php?p=<?= $current_page + 1 ?>&categorie_id=<?= $categorie ?>&sort=<?= $sort ?>">Volgende</a>
+            <?php endif; ?>
+        </div>
+        <div class="row"><br></div>
     </div>
 </main>
 

@@ -3,7 +3,6 @@
 $menu = 5;
 
 include 'main.php';
-// Prevent direct access to file
 //defined('shoppingcart') or exit;
 $pdo_function = pdo_connect_mysql();
 $stmt = $pdo_function->query('SELECT * FROM categorie');
@@ -70,75 +69,68 @@ $total_products = $stmt->fetchColumn()
         <div class="products content-wrapper">
             <h1>Producten</h1>
             <div class="products-header">
-                <p><?= $total_products ?> Producten</p>
-                <form action="" method="get" class="products-form">
-
-                    <label class="categorie">
-                        Categorie
-                        <select name="categorie">
-                            <option value="all"<?= ($categorie == 'all' ? ' selected' : '') ?>>All</option>
-                            <?php foreach ($categories as $c): ?>
-                                <option value="<?= $c['categorie_id'] ?>"<?= ($categorie == $c['categorie_id'] ? ' selected' : '') ?>><?= $c['categorie_naam'] ?></option>
-                            <?php endforeach; ?>
-                        </select>
-                    </label>
-                    <button type="submit" class="btn btn-secondary">Toepassen</button>
-                </form>
+                <p><?= $total_products ?> product(en) gevonden</p>
             </div>
             <div class="row"><br></div>
-
             <form action="" method="get" class="products-form">
                 <div class="input-group">
                     <div class="input-group-prepend">
-                        <label class="input-group-text" for="inputGroupSelect01">Categorie</label>
+                        <label class="input-group-text" for="categorie">Categorie</label>
                     </div>
-                    <select class="custom-select" id="inputGroupSelect01">
-                        <option selected>Choose...</option>
-                        <option value="1">One</option>
-                        <option value="2">Two</option>
-                        <option value="3">Three</option>
+                    <select class="custom-select" id="categorie" name="categorie">
+                        <option value="all"<?= ($categorie == 'all' ? ' selected' : '') ?>>Alle producten
+                        </option>
+                        <?php foreach ($categories as $c): ?>
+                            <option value="<?= $c['categorie_id'] ?>"<?= ($categorie == $c['categorie_id'] ? ' selected' : '') ?>><?= $c['categorie_naam'] ?></option>
+                        <?php endforeach; ?>
                     </select>
                     <div class="input-group-prepend">
                         <label class="input-group-text" for="sort">Sorteren</label>
                     </div>
                     <select class="custom-select" name="sort" id="sort">
-                        <option value="sort1"<?= ($sort == 'sort1' ? ' selected' : '') ?> selected>Alfabetisch A-Z
+                        <option value="sort1"<?= ($sort == 'sort1' ? ' selected' : '') ?> selected>Oplopend
                         </option>
-                        <option value="sort2"<?= ($sort == 'sort2' ? ' selected' : '') ?>>Alfabetisch Z-A</option>
+                        <option value="sort2"<?= ($sort == 'sort2' ? ' selected' : '') ?>>Aflopend</option>
                     </select>
                     <div class="input-group-append">
                         <button class="btn btn-secondary" type="submit">Toepassen</button>
                     </div>
                 </div>
             </form>
+        </div>
 
-            <div class="row"><br></div>
+        <div class="row"><br></div>
 
-            <div class="row" id="page-content-wrapper">
+        <div class="row" id="page-content-wrapper">
 
-                <?php foreach ($products as $product): ?>
-                    <div class="col-md-6">
-                        <div class="card mb-2">
-                            <div class="card-header">
-                                <h5><?= $product['product_naam'] ?></h5>
-                            </div>
-                            <div class="card-body">
-                                <p class="card-text">
-                                    <?= $product['omschrijving'] ?>
-                                </p>
-                                <p class="text-danger">  <?= $product['waarschuwing'] ?></p>
+            <?php foreach ($products as $product): ?>
+            <a href="product.php?page=&id=<?= $product['product_id'] ?>" class="product">
+                <div class="col-md-6">
+                    <div class="card mb-2">
+                        <?php if (!empty($product['product_foto']) && file_exists('images/producten/' . $product['product_foto'])): ?>
+                            <img src="images/producten/<?= $product['product_foto'] ?>" class="card-img-top" alt="<?= $product['product_naam'] ?>">
+                        <?php endif; ?>
+                        <div class="card-header">
+                            <h5><?= $product['product_naam'] ?></h5>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text">
+                                <?= $product['omschrijving'] ?>
+                            </p>
+                            <p class="text-danger">  <?= $product['waarschuwing'] ?></p>
 
 
-                                <p class="card-text text-secondary"> <?= '€ ' ?><?= number_format($product['eenheidsprijs'], 2) ?></p>
-                                <a href="#" class="btn btn-primary">Go somewhere</a>
-                            </div>
+                            <p class="card-text text-secondary"> <?= '€ ' ?><?= number_format($product['eenheidsprijs'], 2) ?></p>
+                            <a href="#" class="btn btn-primary">Go somewhere</a>
                         </div>
                     </div>
-                <?php endforeach; ?>
-            </div>
+                </div>
+            </a>
+            <?php endforeach; ?>
+        </div>
 
 
-            <!-- <div class="products-wrapper">
+        <!-- <div class="products-wrapper">
                 <?php foreach ($products as $product): ?>
                     <a href="product.php?page=&id=<?= $product['product_id'] ?>" class="product">
                         <?php if (!empty($product['product_foto']) && file_exists('images/' . $product['product_foto'])): ?>
@@ -153,16 +145,16 @@ $total_products = $stmt->fetchColumn()
 
             </div> -->
 
-            <div class="buttons">
-                <?php if ($current_page > 1): ?>
-                    <a href="producten.php?p=<?= $current_page - 1 ?>&categorie_id=<?= $categorie ?>&sort=<?= $sort ?>">Prev</a>
-                <?php endif; ?>
-                <?php if ($total_products > ($current_page * $num_products_on_each_page) - $num_products_on_each_page + count($products)): ?>
-                    <a href="producten.php?p=<?= $current_page + 1 ?>&categorie_id=<?= $categorie ?>&sort=<?= $sort ?>">Next</a>
-                <?php endif; ?>
-            </div>
-
+        <div class="buttons">
+            <?php if ($current_page > 1): ?>
+                <a href="producten.php?p=<?= $current_page - 1 ?>&categorie_id=<?= $categorie ?>&sort=<?= $sort ?>">Prev</a>
+            <?php endif; ?>
+            <?php if ($total_products > ($current_page * $num_products_on_each_page) - $num_products_on_each_page + count($products)): ?>
+                <a href="producten.php?p=<?= $current_page + 1 ?>&categorie_id=<?= $categorie ?>&sort=<?= $sort ?>">Next</a>
+            <?php endif; ?>
         </div>
+
+    </div>
 </main>
 
 <?php include('includes/footer.php'); ?>

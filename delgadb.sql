@@ -80,8 +80,8 @@ CREATE TABLE `producten` (
     `categorie_id` int(2) UNSIGNED NOT NULL,
     `product_naam` varchar(60) NOT NULL,
     `product_foto` varchar(60),
-    `omschrijving` varchar(300) NOT NULL,
-    `waarschuwing` varchar(250),
+    `omschrijving` varchar(600) NOT NULL,
+    `waarschuwing` varchar(400),
     `eenheidsprijs` decimal(7,2) NOT NULL,
     `btw` decimal(7,2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -104,8 +104,8 @@ INSERT INTO `producten` (`product_id`, `categorie_id`, `product_naam`, `product_
 (11, 3, 'PROF ONTKALKER VOOR INOX EN KERAMIEK','','Desoxyderende ontkalkende snelreiniger voor keuken en sanitair.<br>TOEPASSING: elke keukenuitrusting in inox, plastic, keramiek, porselein en email die bestand zijn tegen zuren.<br>Dosering: 1/10 tot ½ gebruik maken van een vod.<br>Overvloedig naspoelen.<br>Biologisch afbreekbaar.','VEILIGHEIDSNORMEN:<br>§2: Buiten bereik houden van kinderen.<br>§24: contact vermijden met de huid.',2,21),
 (12, 3, 'SCHUURCREME','',' Onze schuurcrème is een product dat zeer doeltreffend is in horecazaken,<br>omdat het een goede werking heeft bij het reinigen van potten en pannen.<br>Onze schuurcrème is bovendien ook geschikt voor het reinigen van keukens en inox oppervlakten.','',2,21),
 (13, 3, 'SPOELMIDDEL VOOR AFWASMACHINES','','Dit spoelmiddel is uitstekend geschikt voor zowel horeca als huishoudelijk gebruik.<br>Het geeft een mooie glans aan de afwas en beschermt het bovendien tegen kalkaanslag.<br>Past voor alle soorten afwasmachines.<br>Verpakking: 5 liter','',2,21),
-(14, 2, 'ALLESREINIGER POMPELMOES','','Deze allesreiniger is zeer geschikt voor linoleum, tegels, houtwerk, email en alle andere afwasbare oppervlakken, lavabo’s, badkuipen, toonbanken.<br>Dosering: 2 à 3 doppen op ½ emmer water<br>Glaswerk, ruiten, spiegels, enz.<br>½ dop op een ½ emmer water.<br>Extra vuile plekken zoals teer, olie, vet, onverdund gebruiken.<br>Verpakking: 5 liter','',2,21);
-
+(14, 2, 'ALLESREINIGER POMPELMOES','','Deze allesreiniger is zeer geschikt voor linoleum, tegels, houtwerk, email en alle andere afwasbare oppervlakken, lavabo’s, badkuipen, toonbanken.<br>Dosering: 2 à 3 doppen op ½ emmer water<br>Glaswerk, ruiten, spiegels, enz.<br>½ dop op een ½ emmer water.<br>Extra vuile plekken zoals teer, olie, vet, onverdund gebruiken.<br>Verpakking: 5 liter','',2,21),
+(15, 5, 'PROF ONTVETTER','ontvetter_5L_pro.jpg','Deze ontvetter is zeer geschikt voor het reinigen van dampkappen, keukenmateriaal, vloeren en muren.<br>Speciaal gemaakt om dierlijke en andere vetten los te weken en op te lossen in grootkeukens en slachterijen.<br>Gebruik: DELGA ontvetter verdunnen 1/15 in heet water. De oplossing aanbrengen en circa 4 min. laten inwerken. Daarna goed naspoelen met warm water.','Veiligheid: Contact met de ogen en de huid vermijden. <br>Buiten bereik van kinderen houden.<br>Best gebruiken met rubberen of plastieken handschoenen. <br>Na contact met de ogen onmiddellijk overvloedig met water spoelen en de dokter raadplegen. <br>Antigifcentrum: tel. (+32) 070/245 245.',20,21);
 -- --------------------------------------------------------
 
 --

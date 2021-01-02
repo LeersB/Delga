@@ -1,7 +1,32 @@
 <?php
 $menu = 5;
-
+$error = '';
 include 'main.php';
+
+// Prevent direct access to file
+//defined('shoppingcart') or exit;
+// Check to make sure the id parameter is specified in the URL
+if (isset($_GET['product_id'])) {
+    $stmt = $pdo->prepare('SELECT * FROM producten WHERE product_id = ?');
+    $stmt->execute([$_GET['product_id']]);
+    $product = $stmt->fetch(PDO::FETCH_ASSOC);
+    if (!$product) {
+        $error = 'Product bestaat niet!';
+    }
+    // Select the product images (if any) from the products_images table
+    //$stmt = $pdo->prepare('SELECT * FROM products_images WHERE product_id = ?');
+    //$stmt->execute([$_GET['product_id']]);
+    // Fetch the product images from the database and return the result as an Array
+    //$product_imgs = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    // Select the product options (if any) from the products_options table
+    //$stmt = $pdo->prepare('SELECT title, GROUP_CONCAT(name) AS options, GROUP_CONCAT(price) AS prices FROM products_options WHERE product_id = ? GROUP BY title');
+    //$stmt->execute([ $_GET['id'] ]);
+    // Fetch the product options from the database and return the result as an Array
+    //$product_options = $stmt->fetchAll(PDO::FETCH_ASSOC);
+} else {
+    // Simple error to display if the id wasn't specified
+    $error = 'Product bestaat niet!';
+}
 ?>
 <!DOCTYPE html>
 <html class="h-100" lang="en">
@@ -25,28 +50,43 @@ include 'main.php';
     <div class="container">
 
 
-        <div class="card text-center">
-            <div class="card-header">
-                <ul class="nav nav-tabs card-header-tabs">
-                    <li class="nav-item">
-                        <a class="nav-link active" href="#">Active</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Link</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
-                    </li>
-                </ul>
-            </div>
-            <div class="card-body">
-                <h5 class="card-title">Special title treatment</h5>
-                <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                <a href="#" class="btn btn-primary">Go somewhere</a>
-            </div>
-        </div>
+        <?php if ($error): ?>
 
+            <p class="content-wrapper error"><?= $error ?></p>
 
+        <?php else: ?>
+
+            <div class="row" id="content-wrapper">
+                <div class="col-md">
+                        <div class="card md-12">
+                            <div class="row no-gutters g-0">
+                                <div class="col-md-4">
+                                    <?php if (!empty($product['product_foto']) && file_exists('images/producten/' . $product['product_foto'])): ?>
+                                        <img src="images/producten/<?= $product['product_foto'] ?>" class="card-img-top"
+                                             alt="<?= $product['product_naam'] ?>">
+                                    <?php endif; ?>
+                                </div>
+                                <div class="col-md-8">
+                                    <h5 class="card-header text-uppercase"> <?= $product['product_naam'] ?></h5>
+                                    <div class="card-body">
+                                        <p class="card-text"><?= $product['product_info'] ?></p>
+                                        <p class="card-text">
+                                            <?= $product['omschrijving'] ?></p>
+                                        <p class="card-text">Verpakking: <?= $product['verpakking'] ?></p>
+                                        <p class="text-danger">  <?= $product['waarschuwing'] ?></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <p class="card-text text-secondary"> <?= '€ ' ?><?= number_format($product['eenheidsprijs'], 2) ?>
+                                    <a href="#" class="btn btn-outline-success"><i
+                                                class="fas fa-shopping-basket"></i></a></p>
+                            </div>
+                        </div>
+                </div>
+            </div>
+        <?php endif; ?>
+        <div class="row"><br></div>
     </div>
 </main>
 

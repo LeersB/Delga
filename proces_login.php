@@ -2,7 +2,6 @@
 include 'main.php';
 // Now we check if the data from the login form was submitted, isset() will check if the data exists.
 if (!isset($_POST['email'], $_POST['wachtwoord'])) {
-    // Could not get the data that should have been sent.
     exit('Vul zowel uw e-mailadres als wachtwoord in!');
 }
 // Prepare our SQL, preparing the SQL statement will prevent SQL injection.
@@ -13,7 +12,6 @@ $account = $stmt->fetch(PDO::FETCH_ASSOC);
 // Check if the account exists:
 if ($account) {
     // Account exists, now we verify the password.
-    // Note: remember to use password_hash in your registration file to store the hashed passwords.
     if (password_verify($_POST['wachtwoord'], $account['wachtwoord'])) {
         // Check if the account is activated
         if (account_activatie && $account['activatie_code'] != 'activated') {
@@ -40,14 +38,12 @@ if ($account) {
                 $stmt = $pdo->prepare('UPDATE users SET terugkeer_code = ? WHERE user_id = ?');
                 $stmt->execute([ $cookiehash, $account['user_id'] ]);
             }
-            echo 'Success'; // Do not change this line as it will be used to check with the AJAX code
+            echo 'Success'; // check with AJAX code
         }
     } else {
-        // Incorrect password
         echo 'Foutief wachtwoord!';
     }
 } else {
-    // Incorrect username
     echo 'Geldig e-mailadres is verplicht!';
 }
 ?>

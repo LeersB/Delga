@@ -106,13 +106,13 @@ $menu = 3;
                         </div>
                     </div>
                     <div class="input-group col-md-3">
-                        <label class="sr-only" for="adres_nr">Huisnummer / Bus</label>
+                        <label class="sr-only" for="adres_nr">Nr. / Bus</label>
                         <div class="input-group mb-2">
                             <div class="input-group-prepend">
                                 <div class="input-group-text"><i class="fas fa-house-user"></i></div>
                             </div>
                             <input type="text" class="form-control" id="adres_nr" name="adres_nr"
-                                   placeholder="Huisnummer / Bus" required>
+                                   placeholder="Nr. / Bus" required>
                         </div>
                     </div>
                     <div class="input-group col-md-12"><br></div>

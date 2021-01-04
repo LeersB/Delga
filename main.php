@@ -1,21 +1,20 @@
 <?php
 include_once 'config.php';
+define('winkelmand', true);
 session_start();
 // Connect to the MySQL database using PDO
 try {
     $pdo = new PDO('mysql:host=' . db_host . ';dbname=' . db_name . ';db_port=' . db_port,db_user, db_password);
 } catch (PDOException $exception) {
-// If there is an error with the connection, stop the script and display the error.
     exit('Failed to connect to database!');
 //exit("Connection failed - ".$exception->getMessage());
 }
 
 function pdo_connect_mysql() {
     try {
-        // Connect to the MySQL database using PDO...
+        // Connect to the MySQL database using PDO
         return new PDO('mysql:host=' . db_host . ';dbname=' . db_name . ';db_port=' . db_port,db_user, db_password);
     } catch (PDOException $exception) {
-        // Could not connect to the MySQL database, if this error occurs make sure you check your db settings are correct!
         exit('Failed to connect to database!');
         //exit("Connection failed - ".$exception->getMessage());
     }
@@ -54,5 +53,18 @@ function send_activation_email($email, $code) {
     $activate_link = activatie_link . '?email=' . $email . '&code=' . $code;
     $email_template = str_replace('%link%', $activate_link, file_get_contents('activatie_email.html'));
     mail($email, $subject, $email_template, $headers);
+}
+// Function to retrieve a product from cart by the ID and options string
+function &get_cart_product($id, $options) {
+    $p = null;
+    if (isset($_SESSION['cart'])) {
+        foreach ($_SESSION['cart'] as &$product) {
+            if ($product['id'] == $id && $product['options'] == $options) {
+                $p = &$product;
+                return $p;
+            }
+        }
+    }
+    return $p;
 }
 ?>

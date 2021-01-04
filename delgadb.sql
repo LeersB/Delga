@@ -58,16 +58,20 @@ CREATE TABLE `categorie` (
 -- Data for table `categorie`
 --
 
-INSERT INTO `categorie` (`categorie_id`, `categorie_naam`) VALUES
-(1, 'Vloerreinigers'),
+INSERT INTO `categorie` (`categorie_id`, `categorie_naam`) VALUE
+(1, 'Afwasmiddelen'),
 (2, 'Allesreinigers'),
-(3, 'Vaatreinigers'),
-(4, 'Sanitairreinigers'),
+(3, 'Beschermingsproducten'),
+(4, 'Dispensers'),
 (5, 'Ontvetters'),
-(6, 'Wasmiddelen'),
-(7, 'Papierwaren'),
-(8, 'Toiletartikelen'),
-(9, 'Speciaal gamma');
+(6, 'Papierwaren'),
+(7, 'Reinigingsartikelen'),
+(8, 'Sanitairreinigers'),
+(9, 'Speciaal gamma'),
+(10, 'Vloerreinigers'),
+(11, 'Wasproducten'),
+(12, 'Zepen');
+
 
 -- --------------------------------------------------------
 
@@ -93,27 +97,107 @@ CREATE TABLE `producten` (
 --
 
 INSERT INTO `producten` (`product_id`, `categorie_id`, `product_naam`, `product_foto`, `product_info`, `omschrijving`, `verpakking`, `waarschuwing`, `eenheidsprijs`, `btw`) VALUES
-(1, 1, 'REUKWEGNEMER 5L','','','Dit product ontgeurt en hygiëniseert met zijn frisse geur onder meer urinoirs, wc’s, burelen, scholen, gootstenen, riolen, …','','Vrijwaren tegen de koude.',25,21),
-(2, 1, 'VLOERZEEP GROEN 5L','','','Deze vloerzeep is iets enigs voor het onderhoud van uw vloeren en geeft een aangename geur. <br>Onze vloerzeep is geschikt voor alle vloeren.','5 liter','',14,21),
-(3, 1, 'INDUSTRIEREINIGER 10L','','','Dit is onze krachtige allesreiniger, is sterk geconcentreerd en dient voor hetafwassen van allerhande oppervlakten.<br>Verwijdert zonder moeite teer en andere vuilen vlekken op vloeren,<br>zeer goed geschikt voor garages en werkplaatsen.','10 liter','',40,21),
-(4, 1, 'ZILVERGLANS 5L','','','Dit is een product waarmee allerlei vloeren gedweild kunnen worden. <br>Het heeft een aangename eucalyptusgeur en doet uw vloer glanzen. <br>Zeer geschikt voor moderne vloeren.','5 liter','',25,21),
-(5, 3, 'DETERGENT 1L','','','Onze detergent is een afwasmiddel dat geen schadelijke stoffen bevat en die de handen beschermt.<br>Is hoog van concentraat en is aanbevolen voor vaat, linnen met de hand te wassen, auto’s, enz.<br>Dosering: 8 gram per afwasbeurt.','6 x 1 liter','',2,21),
-(6, 3, 'DETERGENT 5L','','','Onze detergent is een afwasmiddel dat geen schadelijke stoffen bevat en die de handen beschermt.<br>Is hoog van concentraat en is aanbevolen voor vaat, linnen met de hand te wassen, auto’s, enz.<br>Dosering: 8 gram per afwasbeurt.<br>Verpakking: 5 liter','', '',18,21),
-(7, 3, 'AFWASPOEDER 10 KG','','',' Deze vaatpoeder wast grondig, lost alle vetten op en verwijdert alle voedselresten en geuren. Geschikt voor alle machines.<br>Dosering: 1 gram per 1 liter water. Verpakking: 10 kg','','SPECIAAL VOOR HORECA, GEMEENSCHAPPEN EN INDUSTRIE.',2,21),
-(8, 3, 'VLOEIBAAR WASMIDDEL VOOR VAATWAS','','','Dit is een wasmiddel voor de vaatwasser die alle vetten oplost en die bovendien zeer geschikt is voor industriële afwasmachines.<br>Dosering: zoals aangegeven door de fabrikant.<br>Verpakking: 4 x 5 liter of 25 liter','', '',2,21),
-(9, 3, 'GLAZENWAS','','','Een reuk- en smaakloos product, dat speciaal geschikt is voor horecabedrijven.<br>Het ontvet, ontgeurt, ontsmet en geeft een mooie glans aan glazen, ruiten en spiegels.<br>Dosering: 8 gram per afwasbak.<br>Verpakking: 6 x 1 liter','','',2,21),
-(10, 3, 'PROF ONTKALKER VOOR INOX EN KERAMIEK','','','Desoxyderende ontkalkende snelreiniger voor keuken en sanitair.<br>TOEPASSING: elke keukenuitrusting in inox, plastic, keramiek, porselein en email die bestand zijn tegen zuren.<br>Dosering: 1/10 tot ½ gebruik maken van een vod.<br>Overvloedig naspoelen.<br>Biologisch afbreekbaar.','','VEILIGHEIDSNORMEN:<br>§2: Buiten bereik houden van kinderen.<br>§24: contact vermijden met de huid.',2,21),
-(11, 3, 'SCHUURCREME','','',' Onze schuurcrème is een product dat zeer doeltreffend is in horecazaken,<br>omdat het een goede werking heeft bij het reinigen van potten en pannen.<br>Onze schuurcrème is bovendien ook geschikt voor het reinigen van keukens en inox oppervlakten.','','',2,21),
-(12, 3, 'SPOELMIDDEL VOOR AFWASMACHINES','','','Dit spoelmiddel is uitstekend geschikt voor zowel horeca als huishoudelijk gebruik.<br>Het geeft een mooie glans aan de afwas en beschermt het bovendien tegen kalkaanslag.<br>Past voor alle soorten afwasmachines.<br>Verpakking: 5 liter','','',2,21),
-(13, 2, 'ALLESREINIGER POMPELMOES','','','Deze allesreiniger is zeer geschikt voor linoleum, tegels, houtwerk, email en alle andere afwasbare oppervlakken, lavabo’s, badkuipen, toonbanken.<br>Dosering: 2 à 3 doppen op ½ emmer water<br>Glaswerk, ruiten, spiegels, enz.<br>½ dop op een ½ emmer water.<br>Extra vuile plekken zoals teer, olie, vet, onverdund gebruiken.<br>Verpakking: 5 liter','','',2,21),
-(14, 5, 'PROF ONTVETTER','ontvetter_5L_pro.jpg','','Deze ontvetter is zeer geschikt voor het reinigen van dampkappen, keukenmateriaal, vloeren en muren.<br>Speciaal gemaakt om dierlijke en andere vetten los te weken en op te lossen in grootkeukens en slachterijen.<br>Gebruik: DELGA ontvetter verdunnen 1/15 in heet water. De oplossing aanbrengen en circa 4 min. laten inwerken. Daarna goed naspoelen met warm water.','','Veiligheid: Contact met de ogen en de huid vermijden. <br>Buiten bereik van kinderen houden.<br>Best gebruiken met rubberen of plastieken handschoenen. <br>Na contact met de ogen onmiddellijk overvloedig met water spoelen en de dokter raadplegen. <br>Antigifcentrum: tel. (+32) 070/245 245.',20,21),
-(15, 6, 'ARIEL','ariel.JPG','','Dit product ','','',25,21),
-(16, 6, 'ARIEL HYDRACTIV','ariel_hydractiv.JPG','','Dit product ontgeurt en hygiëniseert met zijn frisse geur onder meer urinoirs, wc’s, burelen, scholen, gootstenen, riolen, …','','Vrijwaren tegen de koude.',25,21),
-(17, 6, 'ariel professional waspoeder','ariel_professional_waspoeder_15kg.JPG','','Dit product ontgeurt en hygiëniseert met zijn frisse geur onder meer urinoirs, wc’s, burelen, scholen, gootstenen, riolen, …','15 kg','Vrijwaren tegen de koude.',25,21),
-(18, 6, 'biotex blauw voorwas','biotex_blauw_voorwas_500gr','','Dit product ontgeurt en hygiëniseert met zijn frisse geur onder meer urinoirs, wc’s, burelen, scholen, gootstenen, riolen, …','500 gr','Vrijwaren tegen de koude.',25,21),
-(19, 1, 'borstelstelen','borstelstelen.JPG','','Dit product ontgeurt en hygiëniseert met zijn frisse geur onder meer urinoirs, wc’s, burelen, scholen, gootstenen, riolen, …','','Vrijwaren tegen de koude.',25,21),
-(20, 6, 'broxoMatic','broxoMatic.JPG','','Dit product ontgeurt en hygiëniseert met zijn frisse geur onder meer urinoirs, wc’s, burelen, scholen, gootstenen, riolen, …','','Vrijwaren tegen de koude.',25,21),
-(21, 6, 'dash','dash.JPG','','Dit product ontgeurt en hygiëniseert met zijn frisse geur onder meer urinoirs, wc’s, burelen, scholen, gootstenen, riolen, …','','Vrijwaren tegen de koude.',25,21);
+
+(1, 11, 'Ariel Professional','ariel_hydractiv.jpg','Ariel Professional Vloeibaar Wasmiddel - Regular 70 Wasbeurten <br>Ariel concentraat wasmiddel voor 70 wasbeurten, maximale waskracht voor fris wit linnen, een uitstekende verwijdering van moeilijke vlekken, voorkomt vergrijzing en laat je was er weer voor nieuw uitzien en geeft optimale bescherming. Zeer doeltreffend tegen hardnekkige vlekken zoals bloed, rode wijn, vet, koffie en thee, zelfs bij de laagste temperaturen.','Ariel Professional Vloeibaar Wasmiddel - Regular 70 Wasbeurten','4,55 liter','',25,21),
+(2, 11, 'Ariel Professional waspoeder','ariel_professional_waspoeder.JPG','Uitstekend wasmiddel voor alle soorten vlekken en textiel. Goed voor 150 dosissen. Procter &amp; Gamble','Uitstekend wasmiddel','13 kg','Opletten : Gevaarlijk product. Neem de voorzorgsmaatregelen voor gebruik in acht.
+H319 : Veroorzaakt ernstige oogirritatie.',25,21),
+(3, 11, 'Biotex blauw voorwas','biotex_blauw_voorwas_500gr.jpg','','','500 gr','',25,21),
+(4, 7, 'Borstelstelen','borstelstelen.jpg','Verschillende soorten borstelstelen in aluminium, hout, fiber of metaal – ook telescopische borstelstelen','','','',25,21),
+(5, 1, 'BroxoMatic','broxoMatic.jpg','','','','',0,21),
+(6, 11, 'Dash Vloeibaar','dash_vloeibaar_wasmiddel.jpg','','','','',0,21),
+(7, 11, 'Dash Professional waspoeder','dash_professional_waspoeder.jpg','','','','',0,21),
+(8, 3, 'Desinfecterend middel','desinfecterend_middel.jpg','','','','',0,21),
+(9, 3, 'Desinfecterende alcohol','desinfecterende_alcohol.jpg','','','','',0,21),
+(10, 5, 'Dispenser blauw','dispensers_blauw.jpg','','','','',0,21),
+(11, 11, 'Dreft','dreft.jpg','','','','',0,21),
+(12, 1, 'Dreft Professional','dreft_professional_afwasmiddel.jpg','','','','',0,21),
+(13, 11, 'Dreft Professional donker','dreft_professional_fine_lessive_donker.jpg','','','','',0,21),
+(14, 11, 'Dreft Professional fijnwas','dreft_professional_fijnwasmiddel.png','','','','',0,21),
+(15, 1, 'Dreft vaatwascapsules','dreft_vaatwascapsules.jpg','','','','',0,21),
+(16, 12, 'Dreumex handzeep','dreumex_handzeep.jpg','','','','',0,21),
+(17, 7, 'Assortiment dweilen','dweilen.jpg','','','','',0,21),
+(18, 10, 'Eau de javel','eau_de_javel.jpg','','','','',0,21),
+(19, 4, 'Elleboogdispenser','elleboogdispenser.jpg','','','','',0,21),
+(20, 7, 'Emmers','emmers.jpg','','','','',0,21),
+(21, 9, 'Gel fresh','gel_fresh.jpg','','','','',0,21),
+(22, 6, 'Gevouwen handpapier','gevouwen_handpapier.jpg','','','','',0,21),
+(23, 9, 'Glansspoelmiddel','glansspoelmiddel0.jpg','','','','',0,21),
+(24, 7, 'Handborstels met steel','handborstels_met_steel.jpg','','','','',0,21),
+(25, 6, 'Handpapier 1 laag grijs','handpapier_1_laag_grijs.jpg','','','','',0,21),
+(26, 6, 'Handpapier 1 laag wit','handpapier_1_laag_wit.jpg','','','','',0,21),
+(27, 6, 'Handpapier 1 laag celstof wit','handpapier_1_laags_celstof_wit.jpg','','','','',0,21),
+(28, 6, 'Handpapier 2 laags wit','handpapier_2_laags_wit.jpg','','','','',0,21),
+(29, 12, 'Handwascreme','handwascreme.jpg','','','','',0,21),
+(30, 7, 'Hygiënische borstels','hygiënische_borstels.jpg','','','','',0,21),
+(31, 7, 'Hugiënische trekkers','hygienische_trekkers.jpg','','','','',0,21),
+(32, 8, 'Javeltabletten','javeltabletten.jpg','','','','',0,21),
+(33, 6, 'Keukenpapier','keukenpapier_32_rollen.jpg','','','','',0,21),
+(34, 7, 'Krasvrije schuurspons','krasvrije_schuurspons.jpg','','','','',0,21),
+(35, 11, 'Lenor Professional wasverzachter','lenor_professional_wasverzachter.jpg','','','','',0,21),
+(36, 9, 'Loda sodakristallen','loda_sodakristallen.jpg','','','','',0,21),
+(37, 3, 'Mondmaskers','mondmaskers.jpg','','','','',0,21),
+(38, 9, 'Mosa ontsmettingsproduct','mosa_ontsmettingsproduct.jpg','','','','',0,21),
+(39, 2, 'Mr Proper Professional allesreiniger','mr_proper_professional_allesreiniger.jpg','','','','',0,21),
+(40, 9, 'Mr Proper spray anti-bacterieel','mr_Proper_spray_anti_bacterieel.jpg','','','','',0,21),
+(41, 2, 'Ontgeurder','ontgeurder_desodorisant.jpg','','','','',0,21),
+(42, 3, 'Ontsmettingspaal met sensor','ontsmettingspaal_met_sensor.jpg','','','','',0,21),
+(43, 9, 'Ontstopper','ontstopper_deboucheur.jpg','','','','',0,21),
+(44, 5, 'Ontvetter','ontvetter_degraissant.jpg','','','','',0,21),
+(45, 3, 'Reinigingsdoekjes','reiniginsdoekjes_met_75_alcohol.jpg','','','','',0,21),
+(46, 3, 'Reinigingsspray','Reiniginsspray_ontsmettend.jpg','','','','',0,21),
+(47, 8, 'Sanitair reiniger','sanitair_reiniger_nettoyant-sanitaire.jpg','','','','',0,21),
+(48, 7, 'Schuurborstels','schuurborstels.jpg','','','','',0,21),
+(49, 6, 'Servetten','servetten.jpg','','','','',0,21),
+(50, 7, 'Straatveger','straatveger.jpg','','','','',0,21),
+(51, 9, 'Grilo','tegen_groene_aanslag_contre_depots_verts.jpg','','','','',0,21),
+(52, 7, 'Toiletborstel','toiletborstel.jpg','','','','',0,21),
+(53, 6, 'Toiletpapier 42 rollen','toiletpapier_42_rollen.jpg','','','','',0,21),
+(54, 6, 'Toiletpapier 48 rollen','toiletpapier_48_rollen.jpg','','','','',0,21),
+(55, 6, 'Toiletpapier coreless','toiletpapier_coreless.jpg','','','','',0,21),
+(56, 6, 'Tork facial tissues','tork_facial_tissues.jpg','','','','',0,21),
+(57, 6, 'Tork toiletpapier','tork_toiletpapier_72_rollen.jpg','','','','',0,21),
+(58, 7, 'Vaatdoeken','vaatdoeken.jpg','','','','',0,21),
+(59, 13, 'Vuilzakken','vuilzakken.jpg','','','','',0,21),
+(60, 1, 'Wash vloeibaar','wash_vloeibaar_vaatwasmiddel_met_chloor.jpg','','','','',0,21),
+(61, 11, 'Vloeibaar wasmiddel','wasmiddel_lessive.jpg','','','','',0,21),
+(62, 8, 'WC-cleaner','wc-cleaner.jpg','','','','',0,21),
+(63, 3, 'Wegwerphandschoenen','wegwerphandschoenen.jpg','','','','',0,21),
+(64, 9, 'Vileda Wrapmaster','wrapmaster_vileda.jpg','','','','',0,21);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `users`
+--
+
+CREATE TABLE IF NOT EXISTS `product_opties` (
+                                                  `optie_id` int(4) NOT NULL,
+                                                  `optie_titel` varchar(255) NOT NULL,
+                                                  `optie_naam` varchar(255) NOT NULL,
+                                                  `eenheidsprijs` decimal(7,2) NOT NULL,
+                                                  `product_id` int(4) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+INSERT INTO `product_opties` (`optie_id`, `optie_titel`, `optie_naam`, `eenheidsprijs`, `product_id`) VALUES
+(1, 'Soort', 'Aluminium', '0.00', 4),
+(2, 'Soort', 'Hout', '0.00', 4),
+(3, 'Soort', 'Fiber', '9.99', 4),
+(4, 'Soort', 'Metaal', '32.99', 4),
+(5, 'Soort', 'Telescopisch', '29.99', 4),
+(6, 'Soort', 'Microvezel', '0.00', 17),
+(7, 'Soort', 'Katoen', '0.00', 17),
+(8, 'Soort', 'Polyamide', '0.00', 17),
+(9, 'Soort', 'Anker', '0.00', 48),
+(10, 'Soort', 'Linea', '0.00', 48),
+(11, 'Soort', 'PVC', '0.00', 50),
+(12, 'Soort', 'Bazine afrique', '0.00', 50),
+(13, 'Soort', 'Bahia pur', '0.00', 50);
+
+ALTER TABLE `product_opties`
+    ADD PRIMARY KEY (`optie_id`);
+
+ALTER TABLE `product_opties`
+    MODIFY `optie_id` int(4) NOT NULL AUTO_INCREMENT;
 -- --------------------------------------------------------
 
 --

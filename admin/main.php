@@ -26,7 +26,7 @@ function template_admin_header($title)
 	</head>
 	
 	<body class="admin d-flex flex-column h-100">
-	<nav class="navbar navbar-expand-lg navbar-light fixed-top bg-light">
+	<nav class="navbar navbar-expand-lg navbar-light fixed-top" style="background-color: #C5D3CE;">
     <a class="navbar-brand" href="../index.php"><img alt="" height="40" src="../images/delga_gif.gif" width="75"></a>
     <button aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler"
             data-target="#navbar" data-toggle="collapse" type="button"><span class="navbar-toggler-icon"></span>
@@ -36,9 +36,6 @@ function template_admin_header($title)
              <li class="nav-item active">
                   <a class="nav-link" href="../index.php"><i class="fas fa-home"></i> Home <span
                                     class="sr-only">(current)</span></a>
-             </li>
-             <li class="nav-item">
-                 <a class="nav-link" href="../info.php"><i class="fas fa-info-circle"></i> Info</a>
              </li>
                 <li class="nav-item">
                  <a class="nav-link" href="index.php"><i class="fas fa-users"></i> Accounts</a>
@@ -52,7 +49,7 @@ function template_admin_header($title)
         </ul>
 <form class="form-inline mt-2 mt-md-0">
 <div class="input-group mr-sm-2">
-        <input type="text" class="form-control" placeholder="Product zoeken" aria-label="Product zoeken" aria-describedby="button-addon">
+        <input type="text" class="form-control" placeholder="Account zoeken" aria-label="Product zoeken" aria-describedby="button-addon">
         <div class="input-group-append">
             <button class="btn btn-outline-success" type="submit"><i class="fas fa-search"></i></button>
         </div>

@@ -3,13 +3,11 @@ $menu = 3;
 include 'main.php';
 $msg = '';
 $msg2 = '';
-// Now we check if the data from the login form was submitted, isset() will check if the data exists.
+
 if (isset($_GET['email'], $_GET['code']) && !empty($_GET['code'])) {
-    // Prepare our SQL, preparing the SQL statement will prevent SQL injection.
     $stmt = $pdo->prepare('SELECT * FROM users WHERE email = ? AND reset_code = ?');
     $stmt->execute([$_GET['email'], $_GET['code']]);
     $account = $stmt->fetch(PDO::FETCH_ASSOC);
-    // Check if the account exists...
     if ($account) {
         if (isset($_POST['nwachtwoord'], $_POST['cwachtwoord'])) {
             if (strlen($_POST['nwachtwoord']) > 16 || strlen($_POST['nwachtwoord']) < 8) {

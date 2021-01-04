@@ -16,7 +16,7 @@ if ($categorie != 'all') {
 // Get the sort from GET request, will occur if the user changes an item in the select box
 $sort = isset($_GET['sort']) ? $_GET['sort'] : 'sort1';
 // The amounts of products to show on each page
-$num_products_on_each_page = 8;
+$num_products_on_each_page = 10;
 // The current page, in the URL this will appear as index.php?page=products&p=1, index.php?page=products&p=2, etc...
 $current_page = isset($_GET['p']) && is_numeric($_GET['p']) ? (int)$_GET['p'] : 1;
 // Select products ordered by the date added
@@ -72,7 +72,7 @@ $total_products = $stmt->fetchColumn();
                 <p><?= $total_products ?> product(en) gevonden</p>
             </div>
             <div class="row"><br></div>
-            <form action="" method="get" class="products-form">
+            <form action="" method="get" class="product-form">
                 <div class="input-group">
                     <div class="input-group-prepend">
                         <label class="input-group-text" for="categorie">Categorie</label>
@@ -92,9 +92,6 @@ $total_products = $stmt->fetchColumn();
                         </option>
                         <option value="sort2"<?= ($sort == 'sort2' ? ' selected' : '') ?>>Aflopend</option>
                     </select>
-                    <div class="input-group-append">
-                        <button class="btn btn-secondary" type="submit">Toepassen</button>
-                    </div>
                 </div>
             </form>
         </div>
@@ -132,8 +129,10 @@ $total_products = $stmt->fetchColumn();
                                     <div class="col-md-8">
                                         <h5 class="card-header text-uppercase"> <?= $product['product_naam'] ?></h5>
                                         <div class="card-body">
-                                            <p class="card-text"><?= $product['product_info'] ?></p>
-                                            <p class="card-text">Verpakking: <?= $product['verpakking'] ?></p>
+                                            <p class="card-text"><?= $product['omschrijving'] ?></p>
+                                            <?php if (!empty($product['verpakking'])): ?>
+                                                <p class="card-text">Verpakking: <?= $product['verpakking'] ?></p>
+                                            <?php endif; ?>
                                         </div>
                                     </div>
                                 </div>
@@ -141,7 +140,7 @@ $total_products = $stmt->fetchColumn();
                                     <p class="card-text text-secondary"> <?= '€ ' ?><?= number_format($product['eenheidsprijs'], 2) ?>
                                         <a href="#" class="btn btn-outline-success"><i
                                                     class="fas fa-shopping-basket"></i></a>
-                                        <a href="product.php?&product_id=<?= $product['product_id'] ?>" class="btn btn-outline-secondary"><i class="fas fa-info"></i></a>
+                                        <a href="product.php?&product_id=<?= $product['product_id'] ?>" class="btn btn-outline-secondary"><i class="fas fa-info"></i> Info</a>
                                     </p>
 
                                 </div>
@@ -186,7 +185,7 @@ $total_products = $stmt->fetchColumn();
                 <?php if ($current_page > 1): ?>
                     <li class="page-item">
                         <a class="page-link"
-                           href="producten.php?p=<?= $current_page - 1 ?>&categorie_id=<?= $categorie ?>&sort=<?= $sort ?>"
+                           href="producten.php?p=<?= $current_page - 1 ?>&categorie=<?= $categorie ?>&sort=<?= $sort ?>"
                            aria-label="Previous">
                             <span aria-hidden="true">&laquo;</span>
                         </a>
@@ -194,19 +193,19 @@ $total_products = $stmt->fetchColumn();
                 <?php endif; ?>
 
                 <li class="page-item"><a class="page-link"
-                                         href="producten.php?p=1&categorie_id=<?= $categorie ?>&sort=<?= $sort ?>">1</a>
+                                         href="producten.php?p=1&categorie=<?= $categorie ?>&sort=<?= $sort ?>">1</a>
                 </li>
                 <li class="page-item"><a class="page-link"
-                                         href="producten.php?p=2&categorie_id=<?= $categorie ?>&sort=<?= $sort ?>">2</a>
+                                         href="producten.php?p=2&categorie=<?= $categorie ?>&sort=<?= $sort ?>">2</a>
                 </li>
                 <li class="page-item"><a class="page-link"
-                                         href="producten.php?p=3&categorie_id=<?= $categorie ?>&sort=<?= $sort ?>">3</a>
+                                         href="producten.php?p=3&categorie=<?= $categorie ?>&sort=<?= $sort ?>">3</a>
                 </li>
 
                 <?php if ($total_products > ($current_page * $num_products_on_each_page) - $num_products_on_each_page + count($products)): ?>
                     <li class="page-item">
                         <a class="page-link"
-                           href="producten.php?p=<?= $current_page + 1 ?>&categorie_id=<?= $categorie ?>&sort=<?= $sort ?>"
+                           href="producten.php?p=<?= $current_page + 1 ?>&categorie=<?= $categorie ?>&sort=<?= $sort ?>"
                            aria-label="Next">
                             <span aria-hidden="true">&raquo;</span>
                         </a>
@@ -221,5 +220,11 @@ $total_products = $stmt->fetchColumn();
 </main>
 
 <?php include('includes/footer.php'); ?>
+<script>
+    if (document.querySelector(".product-form .input-group .custom-select")) {
+        document.querySelector("#sort").onchange = () => document.querySelector(".product-form").submit();
+        document.querySelector("#categorie").onchange = () => document.querySelector(".product-form").submit();
+    }
+</script>
 </body>
 </html>

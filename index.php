@@ -1,9 +1,8 @@
 <?php
 $menu = 1;
 include 'main.php';
-// No need for the user to see the login form if they're logged-in so redirect them to the home page
+
 if (isset($_SESSION['loggedin'])) {
-    // If the user is not logged in redirect to the home page.
     header('Location: home.php');
     exit;
 }
@@ -76,6 +75,18 @@ if (isset($_SESSION['loggedin'])) {
                 localStorage.setItem('cookieconsent', true);
             };
         }
-    })();</script>
+    })();
+
+    document.querySelector(".search i").onclick = function() {
+        this.style.display = "none";
+        this.parentElement.querySelector("input").style.display = "block";
+        this.parentElement.querySelector("input").focus();
+    };
+    document.querySelector(".search input").onkeyup = function(event) {
+        if (event.keyCode === 13 && this.value.length > 0) {
+            window.location.href = encodeURI("zoeken.php?query=" + this.value);
+        }
+    };
+</script>
 </body>
 </html>

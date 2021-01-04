@@ -3,25 +3,23 @@ $menu = 3;
 include 'main.php';
 $msg = '';
 $msg2 = '';
-// Now we check if the data from the login form was submitted, isset() will check if the data exists.
+
 if (isset($_POST['email'])) {
-    // Prepare our SQL, preparing the SQL statement will prevent SQL injection.
     $stmt = $pdo->prepare('SELECT * FROM users WHERE email = ?');
     $stmt->execute([$_POST['email']]);
     $account = $stmt->fetch(PDO::FETCH_ASSOC);
-    // Check if the email exists...
     if ($account) {
         $stmt = $pdo->prepare('UPDATE users SET reset_code = ? WHERE email = ?');
         $uniqid = uniqid();
         $stmt->execute([$uniqid, $_POST['email']]);
-        // Email to send below, customize this
+        // Email to send below, TODO
         $subject = 'Wachtwoord herstel Delga.be';
         $headers = 'From: ' . mail_from . "\r\n" . 'Reply-To: ' . mail_from . "\r\n" . 'Return-Path: ' . mail_from . "\r\n" . 'X-Mailer: PHP/' . phpversion() . "\r\n" . 'MIME-Version: 1.0' . "\r\n" . 'Content-Type: text/html; charset=UTF-8' . "\r\n";
         $reset_link = 'http://test.delga.be/wachtwoord_reset.php?email=' . $_POST['email'] . '&code=' . $uniqid;
         $message = '<p>Beste,</p>
                     <p>Please click the following link to reset your password: <a href="' . $reset_link . '">' . $reset_link . '</a></p>
                     <p>Met vriendelijke groeten</p>';
-        // Send email to the user
+        //
         mail($_POST['email'], $subject, $message, $headers);
         $msg2 = 'De link voor het opnieuw instellen van het wachtwoord is naar uw e-mailadres verstuurd!';
     } else {

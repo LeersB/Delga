@@ -2,16 +2,13 @@
 $menu = 4;
 include 'main.php';
 check_loggedin($pdo);
-//
 $msg = '';
-//
 $stmt = $pdo->prepare('SELECT * FROM users WHERE user_id = ?');
-// In this case we can use the account ID to get the account info.
 $stmt->execute([$_SESSION['user_id']]);
 $account = $stmt->fetch(PDO::FETCH_ASSOC);
-//
+
 if (isset($_POST['voornaam'], $_POST['achternaam'], $_POST['wachtwoord'], $_POST['cwachtwoord'], $_POST['email'])) {
-    //
+
     if (empty($_POST['voornaam']) || (empty($_POST['achternaam'])) || empty($_POST['email'])) {
         $msg = 'Vervolledig het formulier!';
     } else if (!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
@@ -26,28 +23,22 @@ if (isset($_POST['voornaam'], $_POST['achternaam'], $_POST['wachtwoord'], $_POST
         $msg = 'Passwords do not match!';
     }
     if (empty($msg)) {
-        // Check if new username or email already exists in database
         $stmt = $pdo->prepare('SELECT COUNT(*) FROM users WHERE (email = ?) AND email != ?');
         $stmt->execute([$_POST['email'], $_SESSION['email']]);
         if ($result = $stmt->fetchColumn()) {
             $msg = 'Een account met dit e-mailadres bestaat reeds!';
         } else {
-            // no errors occured, update the account...
+            // update profiel
             $uniqid = account_activatie && $account['email'] != $_POST['email'] ? uniqid() : $account['activatie_code'];
             $stmt = $pdo->prepare('UPDATE users SET email = ?, wachtwoord = ?, voornaam = ?, achternaam = ?, adres_straat = ?, adres_nr = ?, adres_postcode = ?, adres_plaats = ?, telefoon_nr = ?, bedrijfsnaam = ?, btw_nr = ?, activatie_code = ? WHERE user_id = ?');
-            // We do not want to expose passwords in our database, so hash the password and use password_verify when a user logs in.
             $wachtwoord = !empty($_POST['wachtwoord']) ? password_hash($_POST['wachtwoord'], PASSWORD_DEFAULT) : $account['wachtwoord'];
             $stmt->execute([$_POST['email'], $wachtwoord, $_POST['voornaam'], $_POST['achternaam'], $_POST['adres_straat'], $_POST['adres_nr'], $_POST['adres_postcode'], $_POST['adres_plaats'], $_POST['telefoon_nr'], $_POST['bedrijfsnaam'], $_POST['btw_nr'], $uniqid, $_SESSION['user_id']]);
-            // Update the session variables
             $_SESSION['email'] = $_POST['email'];
             if (account_activatie && $account['email'] != $_POST['email']) {
-                // Account activation required, send the user the activation email with the "send_activation_email" function from the "main.php" file
                 send_activation_email($_POST['email'], $uniqid);
-                // Log the user out
                 unset($_SESSION['loggedin']);
                 $msg = 'You have changed your email address, you need to re-activate your account!';
             } else {
-                // profile updated redirect the user back to the profile page and not the edit profile page
                 header('Location: profiel.php');
                 exit;
             }
@@ -278,7 +269,6 @@ if (isset($_POST['voornaam'], $_POST['achternaam'], $_POST['wachtwoord'], $_POST
                     </div>
                 </div>
             <?php endif; ?>
-
         </div>
     </div>
 </main>

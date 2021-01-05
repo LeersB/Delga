@@ -7,19 +7,18 @@ $pdo_function = pdo_connect_mysql();
 $stmt = $pdo_function->query('SELECT * FROM categorie');
 $stmt->execute();
 $categories = $stmt->fetchAll(PDO::FETCH_ASSOC);
-// Get the current category from the GET request, if none exists set the default selected category to: all
+// Selecteer de huidige categorie anders selecteer all
 $categorie = isset($_GET['categorie']) ? $_GET['categorie'] : 'all';
 $category_sql = '';
 if ($categorie != 'all') {
     $category_sql = 'WHERE categorie_id = :categorie';
 }
-// Get the sort from GET request, will occur if the user changes an item in the select box
 $sort = isset($_GET['sort']) ? $_GET['sort'] : 'sort1';
-// The amounts of products to show on each page
+// Totaal getoonde producten per pagina
 $num_products_on_each_page = 10;
-// The current page, in the URL this will appear as index.php?page=products&p=1, index.php?page=products&p=2, etc...
+// Huidige pagina
 $current_page = isset($_GET['p']) && is_numeric($_GET['p']) ? (int)$_GET['p'] : 1;
-// Select products ordered by the date added
+
 if ($sort == 'sort1') {
     $stmt = $pdo_function->prepare('SELECT p.* FROM producten p  ' . $category_sql . ' ORDER BY p.product_naam ASC LIMIT :page,:num_products');
 } elseif ($sort == 'sort2') {
@@ -27,23 +26,21 @@ if ($sort == 'sort1') {
 } else {
     $stmt = $pdo_function->prepare('SELECT p.* FROM producten p ' . $category_sql . ' LIMIT :page,:num_products');
 }
-// bindValue will allow us to use integer in the SQL statement, we need to use for LIMIT
 if ($categorie != 'all') {
     $stmt->bindValue(':categorie', $categorie, PDO::PARAM_INT);
 }
 $stmt->bindValue(':page', ($current_page - 1) * $num_products_on_each_page, PDO::PARAM_INT);
 $stmt->bindValue(':num_products', $num_products_on_each_page, PDO::PARAM_INT);
 $stmt->execute();
-// Fetch the products from the database and return the result as an Array
 $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
-// Get the total number of products
+// Totaal aantal producten
 $stmt = $pdo_function->prepare('SELECT COUNT(*) FROM producten p ' . $category_sql);
 if ($categorie != 'all') {
     $stmt->bindValue(':categorie', $categorie, PDO::PARAM_INT);
 }
 $stmt->execute();
 $total_products = $stmt->fetchColumn();
-//$total_pages = $total_products / $num_products_on_each_page;
+$total_pages = round($total_products / $num_products_on_each_page + 0.9, 1);
 ?>
 <!DOCTYPE html>
 <html class="h-100" lang="en">
@@ -106,116 +103,79 @@ $total_products = $stmt->fetchColumn();
         <div class="row mb-2">
             <?php foreach ($products as $product): ?>
                 <div class="col-md-6">
-                        <div class="no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
-                            <div class="card">
+                    <div class="no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+                        <div class="card">
 
-                                <div class="row no-gutters g-2">
-                                    <div class="col-md-4">
+                            <div class="row no-gutters g-2">
+                                <div class="col-md-4">
 
-                                        <?php if (empty($product['product_foto'])): ?>
-                                            <svg class="card-img-top" role="img">
-                                                <title>Placeholder</title>
-                                                <rect width="100%" height="100%" fill="#55595c"/>
-                                            </svg>
-                                        <?php endif; ?>
+                                    <?php if (empty($product['product_foto'])): ?>
+                                        <svg class="card-img-top" role="img">
+                                            <title>Placeholder</title>
+                                            <rect width="100%" height="100%" fill="#55595c"/>
+                                        </svg>
+                                    <?php endif; ?>
 
-                                        <?php if (!empty($product['product_foto']) && file_exists('images/producten/' . $product['product_foto'])): ?>
-                                            <img src="images/producten/<?= $product['product_foto'] ?>"
-                                                 class="card-img-top"
-                                                 alt="<?= $product['product_naam'] ?>">
-                                        <?php endif; ?>
-                                    </div>
-
-                                    <div class="col-md-8">
-                                        <h5 class="card-header text-uppercase"> <?= $product['product_naam'] ?></h5>
-                                        <div class="card-body">
-                                            <p class="card-text"><?= $product['omschrijving'] ?></p>
-                                            <?php if (!empty($product['verpakking'])): ?>
-                                                <p class="card-text">Verpakking: <?= $product['verpakking'] ?></p>
-                                            <?php endif; ?>
-                                        </div>
-                                    </div>
+                                    <?php if (!empty($product['product_foto']) && file_exists('images/producten/' . $product['product_foto'])): ?>
+                                        <img src="images/producten/<?= $product['product_foto'] ?>"
+                                             class="card-img-top"
+                                             alt="<?= $product['product_naam'] ?>">
+                                    <?php endif; ?>
                                 </div>
-                                <div class="card-footer">
-                                    <p class="card-text text-secondary"> <?= '€ ' ?><?= number_format($product['eenheidsprijs'], 2) ?>
-                                        <a href="#" class="btn btn-outline-success"><i
-                                                    class="fas fa-shopping-basket"></i></a>
-                                        <a href="product.php?&product_id=<?= $product['product_id'] ?>" class="btn btn-outline-secondary"><i class="fas fa-info"></i> Info</a>
-                                    </p>
 
+                                <div class="col-md-8">
+                                    <h5 class="card-header text-uppercase"> <?= $product['product_naam'] ?></h5>
+                                    <div class="card-body">
+                                        <p class="card-text"><?= $product['omschrijving'] ?></p>
+                                        <?php if (!empty($product['verpakking'])): ?>
+                                            <p class="card-text">Verpakking: <?= $product['verpakking'] ?></p>
+                                        <?php endif; ?>
+                                    </div>
                                 </div>
                             </div>
+                            <div class="card-footer">
+                                <p class="card-text text-secondary"> <?= '€ ' ?><?= number_format($product['eenheidsprijs'], 2) ?>
+                                    <a href="#" class="btn btn-outline-success"><i
+                                                class="fas fa-shopping-basket"></i></a>
+                                    <a href="product.php?&product_id=<?= $product['product_id'] ?>"
+                                       class="btn btn-outline-secondary"><i class="fas fa-info"></i> Info</a>
+                                </p>
+
+                            </div>
                         </div>
+                    </div>
                 </div>
             <?php endforeach; ?>
         </div>
 
-
-        <!-- <div class="products-wrapper">
-                <?php foreach ($products as $product): ?>
-                    <a href="product.php?page=&id=<?= $product['product_id'] ?>" class="product">
-                        <?php if (!empty($product['product_foto']) && file_exists('images/' . $product['product_foto'])): ?>
-                            <img src="images/<?= $product['product_foto'] ?>" width="200" height="200" alt="<?= $product['product_naam'] ?>">
-                        <?php endif; ?>
-                            <?php if ($product['btw'] > 0): ?>
-                                <span class="rrp"><?= '€ ' ?><?= number_format($product['btw'], 2) ?></span>
-                            <?php endif; ?>
-            </span>
-                    </a>
-                <?php endforeach; ?>
-            </div>
-        -->
-
-        <!--
-        <div class="btn-group" role="group" aria-label="Sorteren">
-            <?php if ($current_page > 1): ?>
-                <a type="button" class="btn btn-outline-success"
-                   href="producten.php?p=<?= $current_page - 1 ?>&categorie_id=<?= $categorie ?>&sort=<?= $sort ?>">Terug</a>
-            <?php endif; ?>
-
-            <?php if ($total_products > ($current_page * $num_products_on_each_page) - $num_products_on_each_page + count($products)): ?>
-                <a type="button" class="btn btn-outline-success"
-                   href="producten.php?p=<?= $current_page + 1 ?>&categorie_id=<?= $categorie ?>&sort=<?= $sort ?>">Volgende</a>
-            <?php endif; ?>
-        </div>
--->
-
         <nav aria-label="Sorteren">
             <ul class="pagination">
-                <?php if ($current_page > 1): ?>
-                    <li class="page-item">
-                        <a class="page-link"
-                           href="producten.php?p=<?= $current_page - 1 ?>&categorie=<?= $categorie ?>&sort=<?= $sort ?>"
-                           aria-label="Previous">
-                            <span aria-hidden="true">&laquo;</span>
-                        </a>
-                    </li>
-                <?php endif; ?>
-
-                <li class="page-item"><a class="page-link"
-                                         href="producten.php?p=1&categorie=<?= $categorie ?>&sort=<?= $sort ?>">1</a>
+                <li class="page-item <?php if ($current_page == 1): ?>disabled<?php endif; ?>">
+                    <a class="page-link"
+                       href="producten.php?p=<?= $current_page - 1 ?>&categorie=<?= $categorie ?>&sort=<?= $sort ?>"
+                       aria-label="Previous">
+                        <span aria-hidden="true"><i class="fas fa-angle-double-left"></i></span>
+                    </a>
                 </li>
-                <li class="page-item"><a class="page-link"
-                                         href="producten.php?p=2&categorie=<?= $categorie ?>&sort=<?= $sort ?>">2</a>
-                </li>
-                <li class="page-item"><a class="page-link"
-                                         href="producten.php?p=3&categorie=<?= $categorie ?>&sort=<?= $sort ?>">3</a>
-                </li>
-
-                <?php if ($total_products > ($current_page * $num_products_on_each_page) - $num_products_on_each_page + count($products)): ?>
-                    <li class="page-item">
+                    <?php for ($page = 1; $page <= $total_pages; $page++) { ?>
+                        <li class="page-item <?php if ($current_page == $page): ?>active"
+                            aria-current="page <?php endif; ?>">
+                            <a class="page-link"
+                               href="producten.php?p=<?= $page; ?>&categorie=<?= $categorie ?>&sort=<?= $sort ?>"><?= $page; ?></a>
+                        </li>
+                    <?php } ?>
+                    <li class="page-item <?php if ($total_products == ($current_page * $num_products_on_each_page) - $num_products_on_each_page + count($products)): ?>disabled<?php endif; ?>">
                         <a class="page-link"
                            href="producten.php?p=<?= $current_page + 1 ?>&categorie=<?= $categorie ?>&sort=<?= $sort ?>"
                            aria-label="Next">
-                            <span aria-hidden="true">&raquo;</span>
+                            <span aria-hidden="true"><i class="fas fa-angle-double-right"></i></span>
                         </a>
                     </li>
-                <?php endif; ?>
             </ul>
         </nav>
 
-
         <div class="row"><br></div>
+
     </div>
 </main>
 

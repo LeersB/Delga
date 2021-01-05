@@ -12,15 +12,15 @@ if (isset($_POST['voornaam'], $_POST['achternaam'], $_POST['wachtwoord'], $_POST
     if (empty($_POST['voornaam']) || (empty($_POST['achternaam'])) || empty($_POST['email'])) {
         $msg = 'Vervolledig het formulier!';
     } else if (!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
-        $msg = 'Please provide a valid email address!';
+        $msg = 'E-mailadres is niet geldig!';
     } else if (!preg_match('/^[a-zA-Z]+$/', $_POST['voornaam'])) {
         $msg = 'Voornaam mag alleen uit letters bestaan!';
     } else if (!preg_match('/^[a-zA-Z]+$/', $_POST['achternaam'])) {
         $msg = 'Achternaam mag alleen uit letters bestaan!';
     } else if (!empty($_POST['wachtwoord']) && (strlen($_POST['wachtwoord']) > 16 || strlen($_POST['wachtwoord']) < 8)) {
-        $msg = 'Password must be between 8 and 16 characters long!';
+        $msg = 'Wachtwoord moet tussen 8 en 16 karakters lang zijn!';
     } else if ($_POST['cwachtwoord'] != $_POST['wachtwoord']) {
-        $msg = 'Passwords do not match!';
+        $msg = 'Wachtwoorden komen niet overeen!';
     }
     if (empty($msg)) {
         $stmt = $pdo->prepare('SELECT COUNT(*) FROM users WHERE (email = ?) AND email != ?');
@@ -37,7 +37,7 @@ if (isset($_POST['voornaam'], $_POST['achternaam'], $_POST['wachtwoord'], $_POST
             if (account_activatie && $account['email'] != $_POST['email']) {
                 send_activation_email($_POST['email'], $uniqid);
                 unset($_SESSION['loggedin']);
-                $msg = 'You have changed your email address, you need to re-activate your account!';
+                $msg = 'U hebt het e-mailadres aangepast, u moet deze eerst terug activeren voor u kunt aanmelden!';
             } else {
                 header('Location: profiel.php');
                 exit;
@@ -91,10 +91,12 @@ if (isset($_POST['voornaam'], $_POST['achternaam'], $_POST['wachtwoord'], $_POST
                                 <dd class="col-md-9"><?= $account['adres_postcode'] ?></dd>
                                 <dt class="col-md-3">Plaats:</dt>
                                 <dd class="col-md-9"><?= $account['adres_plaats'] ?></dd>
-                                <dt class="col-md-3">Bedrijfsnaam:</dt>
-                                <dd class="col-md-9"><?= $account['bedrijfsnaam'] ?></dd>
-                                <dt class="col-md-3">BTW-nummer:</dt>
-                                <dd class="col-md-9"><?= $account['btw_nr'] ?></dd>
+                                <?php if ($account['user_level'] == 'Bedrijf'): ?>
+                                    <dt class="col-md-3">Bedrijfsnaam:</dt>
+                                    <dd class="col-md-9"><?= $account['bedrijfsnaam'] ?></dd>
+                                    <dt class="col-md-3">BTW-nummer:</dt>
+                                    <dd class="col-md-9"><?= $account['btw_nr'] ?></dd>
+                                <?php endif; ?>
                             </dl>
 
                             <a class="btn btn-secondary" href="profiel.php?action=edit" role="button"><i
@@ -144,6 +146,7 @@ if (isset($_POST['voornaam'], $_POST['achternaam'], $_POST['wachtwoord'], $_POST
                                 <div class="input-group col-md-12"><br></div>
 
                                 <legend class="legend col-md-12"><span>Adres Gegevens</span></legend>
+                                <?php if ($account['user_level'] == 'Bedrijf'): ?>
                                 <div class="input-group col-md-6">
                                     <label class="sr-only" for="bedrijfsnaam">Bedrijfsnaam</label>
                                     <div class="input-group mb-2">
@@ -151,11 +154,7 @@ if (isset($_POST['voornaam'], $_POST['achternaam'], $_POST['wachtwoord'], $_POST
                                             <div class="input-group-text"><i class="fas fa-industry"></i></div>
                                         </div>
                                         <input type="text" class="form-control" id="bedrijfsnaam" name="bedrijfsnaam"
-                                               value="<?= $account['bedrijfsnaam'] ?>" placeholder="Bedrijfsnaam"
-                                               aria-describedby="bedrijfsnaamHelpBlock">
-                                        <small id="bedrijfsnaamHelpBlock" class="form-text text-muted col-md-12">
-                                            Invullen enkel indien u zakelijke gebruiker bent!
-                                        </small>
+                                               value="<?= $account['bedrijfsnaam'] ?>" placeholder="Bedrijfsnaam" required>
                                     </div>
                                 </div>
                                 <div class="input-group col-md-6">
@@ -165,14 +164,11 @@ if (isset($_POST['voornaam'], $_POST['achternaam'], $_POST['wachtwoord'], $_POST
                                             <div class="input-group-text"><i class="fas fa-industry"></i></div>
                                         </div>
                                         <input type="text" class="form-control" id="btw_nr" name="btw_nr"
-                                               value="<?= $account['btw_nr'] ?>" placeholder="BTW-nummer"
-                                               aria-describedby="btw-nrHelpBlock">
-                                        <small id="btw_nrHelpBlock" class="form-text text-muted col-md-12">
-                                            Invullen enkel indien u zakelijke gebruiker bent!
-                                        </small>
+                                               value="<?= $account['btw_nr'] ?>" placeholder="BTW-nummer" required>
                                     </div>
                                 </div>
                                 <div class="input-group col-md-12"><br></div>
+                                <?php endif; ?>
                                 <div class="input-group col-md-9">
                                     <label class="sr-only" for="adres_straat">Adres</label>
                                     <div class="input-group mb-2">

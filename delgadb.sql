@@ -108,7 +108,7 @@ H319 : Veroorzaakt ernstige oogirritatie.',25,21),
 (7, 11, 'Dash Professional waspoeder','dash_professional_waspoeder.jpg','','','','',0,21),
 (8, 3, 'Desinfecterend middel','desinfecterend_middel.jpg','','','','',0,21),
 (9, 3, 'Desinfecterende alcohol','desinfecterende_alcohol.jpg','','','','',0,21),
-(10, 5, 'Dispenser blauw','dispensers_blauw.jpg','','','','',0,21),
+(10, 4, 'Dispenser blauw','dispensers_blauw.jpg','','','','',0,21),
 (11, 11, 'Dreft','dreft.jpg','','','','',0,21),
 (12, 1, 'Dreft Professional','dreft_professional_afwasmiddel.jpg','','','','',0,21),
 (13, 11, 'Dreft Professional donker','dreft_professional_fine_lessive_donker.jpg','','','','',0,21),
@@ -129,16 +129,16 @@ H319 : Veroorzaakt ernstige oogirritatie.',25,21),
 (28, 6, 'Handpapier 2 laags wit','handpapier_2_laags_wit.jpg','','','','',0,21),
 (29, 12, 'Handwascreme','handwascreme.jpg','','','','',0,21),
 (30, 7, 'Hygiënische borstels','hygiënische_borstels.jpg','','','','',0,21),
-(31, 7, 'Hugiënische trekkers','hygienische_trekkers.jpg','','','','',0,21),
-(32, 8, 'Javeltabletten','javeltabletten.jpg','','','','',0,21),
+(31, 7, 'Hygiënische trekkers','hygienische_trekkers.jpg','','','','',0,21),
+(32, 8, 'Javel tabletten','javeltabletten.jpg','','','','',0,21),
 (33, 6, 'Keukenpapier','keukenpapier_32_rollen.jpg','','','','',0,21),
 (34, 7, 'Krasvrije schuurspons','krasvrije_schuurspons.jpg','','','','',0,21),
 (35, 11, 'Lenor Professional wasverzachter','lenor_professional_wasverzachter.jpg','','','','',0,21),
 (36, 9, 'Loda sodakristallen','loda_sodakristallen.jpg','','','','',0,21),
 (37, 3, 'Mondmaskers','mondmaskers.jpg','','','','',0,21),
-(38, 9, 'Mosa ontsmettingsproduct','mosa_ontsmettingsproduct.jpg','','','','',0,21),
+(38, 3, 'Mosa ontsmettingsproduct','mosa_ontsmettingsproduct.jpg','','','','',0,21),
 (39, 2, 'Mr Proper Professional allesreiniger','mr_proper_professional_allesreiniger.jpg','','','','',0,21),
-(40, 9, 'Mr Proper spray anti-bacterieel','mr_Proper_spray_anti_bacterieel.jpg','','','','',0,21),
+(40, 2, 'Mr Proper spray anti-bacterieel','mr_Proper_spray_anti_bacterieel.jpg','','','','',0,21),
 (41, 2, 'Ontgeurder','ontgeurder_desodorisant.jpg','','','','',0,21),
 (42, 3, 'Ontsmettingspaal met sensor','ontsmettingspaal_met_sensor.jpg','','','','',0,21),
 (43, 9, 'Ontstopper','ontstopper_deboucheur.jpg','','','','',0,21),
@@ -171,11 +171,11 @@ H319 : Veroorzaakt ernstige oogirritatie.',25,21),
 --
 
 CREATE TABLE IF NOT EXISTS `product_opties` (
-                                                  `optie_id` int(4) NOT NULL,
+                                                  `optie_id` int(4) UNSIGNED NOT NULL,
                                                   `optie_titel` varchar(255) NOT NULL,
                                                   `optie_naam` varchar(255) NOT NULL,
                                                   `eenheidsprijs` decimal(7,2) NOT NULL,
-                                                  `product_id` int(4) NOT NULL
+                                                  `product_id` int(4) UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 INSERT INTO `product_opties` (`optie_id`, `optie_titel`, `optie_naam`, `eenheidsprijs`, `product_id`) VALUES
@@ -205,7 +205,7 @@ ALTER TABLE `product_opties`
 --
 
 CREATE TABLE `users` (
-                         `user_id` mediumint(6) UNSIGNED NOT NULL,
+                         `user_id` int(8) UNSIGNED NOT NULL,
                          `voornaam` varchar(50) NOT NULL,
                          `achternaam` varchar(50) NOT NULL,
                          `email` varchar(100) NOT NULL,

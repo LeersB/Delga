@@ -31,9 +31,9 @@ $menu = 3;
                     <legend class="legend col-md-12"><span>Persoonlijke informatie</span></legend>
                     <div class="input-group col-md-6">
 
-                        <select for="zakelijk" id="zakelijk" class="custom-select">
-                            <option value="prive" selected>Particuliere gebruiker</option>
-                            <option value="bedrijf">Zakelijke gebruiker</option>
+                        <select for="user_level" id="user_level" name="user_level" class="custom-select">
+                            <option value="User" selected>Particuliere gebruiker</option>
+                            <option value="Bedrijf">Zakelijke gebruiker</option>
                         </select>
 
                     </div>
@@ -190,8 +190,8 @@ $menu = 3;
 
 <?php include('includes/footer.php'); ?>
 <script type="text/javascript">
-    $("#zakelijk").change(function () {
-        if ($(this).val() === "bedrijf") {
+    $("#user_level").change(function () {
+        if ($(this).val() === "Bedrijf") {
             $('#zakelijkDiv').show();
             $('#bedrijfsnaam').attr('required', '');
             $('#btw_nr').attr('required', '');
@@ -201,7 +201,7 @@ $menu = 3;
             $('#btw_nr').removeAttr('required');
         }
     });
-    $("#zakelijk").trigger("change");
+    $("#user_level").trigger("change");
 </script>
 <script>
     var form = document.querySelector('.register form');

@@ -27,10 +27,10 @@ $account = $stmt->fetch(PDO::FETCH_ASSOC);
 if ($account) {
     echo 'Dit e-mailadres bestaat al!';
 } else {
-    $stmt = $pdo->prepare('INSERT INTO users (email, wachtwoord, activatie_code, registratie_datum, voornaam, achternaam, adres_straat, adres_nr, adres_postcode, adres_plaats, telefoon_nr, bedrijfsnaam, btw_nr) VALUES (?, ?, ?, NOW(), ?, ?, ?, ?, ?, ?, ?, ?, ?)');
+    $stmt = $pdo->prepare('INSERT INTO users (email, wachtwoord, activatie_code, registratie_datum, voornaam, achternaam, adres_straat, adres_nr, adres_postcode, adres_plaats, telefoon_nr, bedrijfsnaam, btw_nr, user_level) VALUES (?, ?, ?, NOW(), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
     $wachtwoord = password_hash($_POST['wachtwoord'], PASSWORD_DEFAULT);
     $uniqid = account_activatie ? uniqid() : 'activated';
-    $stmt->execute([ $_POST['email'], $wachtwoord, $uniqid, $_POST['voornaam'], $_POST['achternaam'], $_POST['adres_straat'], $_POST['adres_nr'], $_POST['adres_postcode'], $_POST['adres_plaats'], $_POST['telefoon_nr'], $_POST['bedrijfsnaam'], $_POST['btw_nr'] ]);
+    $stmt->execute([ $_POST['email'], $wachtwoord, $uniqid, $_POST['voornaam'], $_POST['achternaam'], $_POST['adres_straat'], $_POST['adres_nr'], $_POST['adres_postcode'], $_POST['adres_plaats'], $_POST['telefoon_nr'], $_POST['bedrijfsnaam'], $_POST['btw_nr'], $_POST['user_level'] ]);
     if (account_activatie) {
         send_activation_email($_POST['email'], $uniqid);
         echo 'Bekijk uw email voor het activeren van je account!';

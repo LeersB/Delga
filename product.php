@@ -54,60 +54,78 @@ if (isset($_GET['product_id'])) {
 
         <?php else: ?>
 
-        <div class="row" id="content-wrapper">
-            <div class="col-md">
-                <div class="card md-12">
-                    <div class="row no-gutters g-0">
-                        <div class="col-md-4">
-                            <?php if (!empty($product['product_foto']) && file_exists('images/producten/' . $product['product_foto'])): ?>
-                                <img src="images/producten/<?= $product['product_foto'] ?>" class="card-img-top"
-                                     alt="<?= $product['product_naam'] ?>">
-                            <?php endif; ?>
-                        </div>
-                        <div class="col-md-8">
-                            <h5 class="card-header text-uppercase"> <?= $product['product_naam'] ?></h5>
-                            <div class="card-body">
-                                <p class="card-text"><?= $product['omschrijving'] ?></p>
-                                <p class="card-text"><?= $product['product_info'] ?></p>
-                                <?php if (!empty($product['verpakking'])): ?>
-                                <p class="card-text">Verpakking: <?= $product['verpakking'] ?></p>
+            <div class="row" id="content-wrapper">
+                <div class="col-md">
+                    <div class="card md-12">
+                        <div class="row no-gutters g-0">
+                            <div class="col-md-4">
+                                <?php if (!empty($product['product_foto']) && file_exists('images/producten/' . $product['product_foto'])): ?>
+                                    <img src="images/producten/<?= $product['product_foto'] ?>" class="card-img-top"
+                                         alt="<?= $product['product_naam'] ?>">
                                 <?php endif; ?>
-                                <p class="text-danger"><?= $product['waarschuwing'] ?></p>
+                            </div>
+                            <div class="col-md-8">
+                                <h5 class="card-header text-uppercase"> <?= $product['product_naam'] ?></h5>
+                                <div class="card-body">
+                                    <p class="card-text"><?= $product['omschrijving'] ?></p>
+                                    <p class="card-text"><?= $product['product_info'] ?></p>
+                                    <?php if (!empty($product['verpakking'])): ?>
+                                        <p class="card-text">Verpakking: <?= $product['verpakking'] ?></p>
+                                    <?php endif; ?>
+                                    <p class="text-danger"><?= $product['waarschuwing'] ?></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <div class="col-md-4">
+                                <span class="eenheidsprijs">
+                                    <p class="card-text text-secondary"> <?= '€ ' ?><?= number_format($product['eenheidsprijs'], 2) ?></p>
+                                </span>
+                            </div>
+                            <div class="input-group">
+                                <form class="col-md-10" id="product-form" action="winkelmand.php" method="post">
+                                    <div class="form-row">
+                                        <?php foreach ($product_opties as $optie): ?>
+
+                                            <div class="col-6">
+                                                <select class="form-control" name="option-<?= $optie['optie_titel'] ?>"
+                                                        required>
+                                                    <option value="" selected disabled
+                                                            style="display:none"><?= $optie['optie_titel'] ?></option>
+                                                    <?php
+                                                    $optie_naam = explode(',', $optie['opties']);
+                                                    $optie_prijs = explode(',', $optie['prijzen']);
+                                                    ?>
+                                                    <?php foreach ($optie_naam as $k => $naam): ?>
+                                                        <option value="<?= $naam ?>"
+                                                                data-eenheidsprijs="<?= $optie_prijs[$k] ?>"><?= $naam ?></option>
+                                                    <?php endforeach; ?>
+                                                </select>
+                                            </div>
+                                        <?php endforeach; ?>
+
+                                        <div class="col-3">
+                                            <input type="number" class="form-control" name="quantity" value="1" min="1"
+                                                   placeholder="Quantity" required>
+                                            <input type="hidden" name="product_id"
+                                                   value="<?= $product['product_id'] ?>">
+                                        </div>
+
+                                        <div class="col-1">
+                                            <!--<input type="submit">-->
+                                            <a href="#" class="btn btn-outline-success" id="submit"><i
+                                                        class="fas fa-shopping-basket"></i></a></p>
+                                        </div>
+                                    </div>
+                                </form>
                             </div>
                         </div>
                     </div>
-                    <div class="card-footer">
-                                <span class="eenheidsprijs">
-                                    <p class="card-text text-secondary"> <?= '€ ' ?><?= number_format($product['eenheidsprijs'], 2) ?></p>
-                                      </span>
-
-                        <form id="product-form" action="winkelmand.php" method="post">
-                            <?php foreach ($product_opties as $optie): ?>
-                                <select name="option-<?= $optie['optie_titel'] ?>" required>
-                                    <option value="" selected disabled
-                                            style="display:none"><?= $optie['optie_titel'] ?></option>
-                                    <?php
-                                    $optie_naam = explode(',', $optie['opties']);
-                                    $optie_prijs = explode(',', $optie['prijzen']);
-                                    ?>
-                                    <?php foreach ($optie_naam as $k => $naam): ?>
-                                        <option value="<?= $naam ?>"
-                                                data-eenheidsprijs="<?= $optie_prijs[$k] ?>"><?= $naam ?></option>
-                                    <?php endforeach; ?>
-                                </select>
-                            <?php endforeach; ?>
-                            <input type="number" name="quantity" value="1" min="1" placeholder="Quantity" required>
-                            <input type="hidden" name="product_id" value="<?= $product['product_id'] ?>">
-                            <!--<input type="submit" value="Add To Cart">-->
-                            <a href="#" class="btn btn-outline-success" id="submit"><i class="fas fa-shopping-basket"></i></a></p>
-                        </form>
-                    </div>
                 </div>
-
             </div>
-            <?php endif; ?>
-            <div class="row"><br></div>
-        </div>
+        <?php endif; ?>
+        <div class="row"><br></div>
+    </div>
 
     </div>
 </main>
@@ -124,7 +142,7 @@ if (isset($_GET['product_id'])) {
                     }
                 });
                 if (eenheidsprijs > 0.00) {
-                    document.querySelector(".card-footer .eenheidsprijs").innerHTML = '<p class="card-text text-secondary">'+' € ' + eenheidsprijs.toFixed(2)+'</p>';
+                    document.querySelector(".card-footer .eenheidsprijs").innerHTML = '<p class="card-text text-secondary">' + ' € ' + eenheidsprijs.toFixed(2) + '</p>';
                 }
             };
         });

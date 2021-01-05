@@ -6,7 +6,7 @@
                                                                                         class="figure-img rounded"
                                                                                         alt="anti spam"
                                                                                         style="width:35%"></a></div>
-                <p><i class="far fa-edit"></i> 04/01/2021</p>
+                <p><i class="far fa-edit"></i> 05/01/2021</p>
                 <div class="col-auto">
                     <address>
                         <h5>Bart Leers <i class="far fa-copyright"></i> 2021 </h5>

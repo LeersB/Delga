@@ -13,6 +13,7 @@
     <file url="file://$PROJECT_DIR$/product.php" dialect="MariaDB" />
     <file url="file://$PROJECT_DIR$/producten.php" dialect="MariaDB" />
     <file url="file://$PROJECT_DIR$/profiel.php" dialect="MariaDB" />
+    <file url="file://$PROJECT_DIR$/test.php" dialect="MariaDB" />
     <file url="file://$PROJECT_DIR$/wachtwoord_aanvraag.php" dialect="MariaDB" />
     <file url="file://$PROJECT_DIR$/wachtwoord_reset.php" dialect="MariaDB" />
     <file url="file://$PROJECT_DIR$/winkelmand.php" dialect="MariaDB" />

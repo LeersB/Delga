@@ -11,13 +11,8 @@ if (isset($_GET['product_id'])) {
     if (!$product) {
         $error = 'Product bestaat niet!';
     }
-    // Select the product images (if any) from the products_images table
-    //$stmt = $pdo->prepare('SELECT * FROM products_images WHERE product_id = ?');
-    //$stmt->execute([$_GET['product_id']]);
-    // Fetch the product images from the database and return the result as an Array
-    //$product_imgs = $stmt->fetchAll(PDO::FETCH_ASSOC);
     // Select the product options (if any) from the products_options table
-    $stmt = $pdo_function->prepare('SELECT optie_titel, GROUP_CONCAT(optie_naam) AS opties, GROUP_CONCAT(eenheidsprijs) AS prijzen FROM product_opties WHERE product_id = ? GROUP BY optie_titel');
+    $stmt = $pdo_function->prepare('SELECT optie_titel, GROUP_CONCAT(optie_naam) AS opties, GROUP_CONCAT(eenheidsprijs) AS optie_eenheidsprijs FROM product_opties WHERE product_id = ? GROUP BY optie_titel');
     $stmt->execute([$_GET['product_id']]);
     // Fetch the product options from the database and return the result as an Array
     $product_opties = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -92,11 +87,11 @@ if (isset($_GET['product_id'])) {
                                                             style="display:none"><?= $optie['optie_titel'] ?></option>
                                                     <?php
                                                     $optie_naam = explode(',', $optie['opties']);
-                                                    $optie_prijs = explode(',', $optie['prijzen']);
+                                                    $optie_eenheidsprijs = explode(',', $optie['optie_eenheidsprijs']);
                                                     ?>
                                                     <?php foreach ($optie_naam as $k => $naam): ?>
                                                         <option value="<?= $naam ?>"
-                                                                data-eenheidsprijs="<?= $optie_prijs[$k] ?>"><?= $naam ?></option>
+                                                                data-eenheidsprijs="<?= $optie_eenheidsprijs[$k] ?>"><?= $naam ?></option>
                                                     <?php endforeach; ?>
                                                 </select>
                                             </label>

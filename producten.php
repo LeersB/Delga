@@ -1,8 +1,7 @@
 <?php
-//define('shoppingcart', true);
 $menu = 5;
 include 'main.php';
-//defined('shoppingcart') or exit;
+
 $pdo_function = pdo_connect_mysql();
 $stmt = $pdo_function->query('SELECT * FROM categorie');
 $stmt->execute();

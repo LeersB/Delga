@@ -2,7 +2,6 @@
 $menu = 5;
 $error = '';
 include 'main.php';
-defined('winkelmand') or exit;
 
 $pdo_function = pdo_connect_mysql();
 if (isset($_GET['product_id'])) {
@@ -33,7 +32,7 @@ if (isset($_GET['product_id'])) {
     <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
     <meta content="Delga contactgegevens" name="description">
     <meta content="Bart Leers" name="author">
-    <title>Delga home</title>
+    <title>Delga product info</title>
     <link href="css/bootstrap.css" rel="stylesheet" type="text/css">
     <link href="css/delga.css" rel="stylesheet">
 </head>
@@ -86,8 +85,7 @@ if (isset($_GET['product_id'])) {
                                 <form class="col-md-10" id="product-form" action="winkelmand.php" method="post">
                                     <div class="form-row">
                                         <?php foreach ($product_opties as $optie): ?>
-
-                                            <div class="col-6">
+                                            <label>
                                                 <select class="form-control" name="option-<?= $optie['optie_titel'] ?>"
                                                         required>
                                                     <option value="" selected disabled
@@ -101,21 +99,20 @@ if (isset($_GET['product_id'])) {
                                                                 data-eenheidsprijs="<?= $optie_prijs[$k] ?>"><?= $naam ?></option>
                                                     <?php endforeach; ?>
                                                 </select>
-                                            </div>
+                                            </label>
                                         <?php endforeach; ?>
 
                                         <div class="col-3">
-                                            <input type="number" class="form-control" name="quantity" value="1" min="1"
-                                                   placeholder="Quantity" required>
-                                            <input type="hidden" name="product_id"
-                                                   value="<?= $product['product_id'] ?>">
+                                            <label>
+                                                <input type="number" class="form-control" name="quantity" value="1"
+                                                       min="1" placeholder="Quantity" required>
+                                            </label>
                                         </div>
-
                                         <div class="col-1">
-                                            <!--<input type="submit">-->
-                                            <a href="#" class="btn btn-outline-success" id="submit"><i
-                                                        class="fas fa-shopping-basket"></i></a></p>
+                                            <button class="btn btn-outline-success" type="submit"><i
+                                                        class="fas fa-shopping-basket"></i></button>
                                         </div>
+                                        <input type="hidden" name="product_id" value="<?= $product['product_id'] ?>">
                                     </div>
                                 </form>
                             </div>

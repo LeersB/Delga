@@ -3,9 +3,9 @@ $menu = 3;
 include 'main.php';
 $msg = '';
 $msg2 = '';
-
+$pdo_function = pdo_connect_mysql();
 if (isset($_GET['email'], $_GET['code']) && !empty($_GET['code'])) {
-    $stmt = $pdo->prepare('SELECT * FROM users WHERE email = ? AND reset_code = ?');
+    $stmt = $pdo_function->prepare('SELECT * FROM users WHERE email = ? AND reset_code = ?');
     $stmt->execute([$_GET['email'], $_GET['code']]);
     $account = $stmt->fetch(PDO::FETCH_ASSOC);
     if ($account) {
@@ -15,7 +15,7 @@ if (isset($_GET['email'], $_GET['code']) && !empty($_GET['code'])) {
             } else if ($_POST['nwachtwoord'] != $_POST['cwachtwoord']) {
                 $msg = 'Wachtwoorden komen niet overeen!';
             } else {
-                $stmt = $pdo->prepare('UPDATE users SET wachtwoord = ?, reset_code = "" WHERE email = ?');
+                $stmt = $pdo_function->prepare('UPDATE users SET wachtwoord = ?, reset_code = "" WHERE email = ?');
                 $wachtwoord = password_hash($_POST['nwachtwoord'], PASSWORD_DEFAULT);
                 $stmt->execute([$wachtwoord, $_GET['email']]);
                 $msg2 = 'Uw wachtwoord is aangepast! U kan zich nu <a href="login.php">aanmelden</a>!';

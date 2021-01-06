@@ -3,13 +3,13 @@ $menu = 3;
 include 'main.php';
 $msg = '';
 $msg2 = '';
-
+$pdo_function = pdo_connect_mysql();
 if (isset($_POST['email'])) {
-    $stmt = $pdo->prepare('SELECT * FROM users WHERE email = ?');
+    $stmt = $pdo_function->prepare('SELECT * FROM users WHERE email = ?');
     $stmt->execute([$_POST['email']]);
     $account = $stmt->fetch(PDO::FETCH_ASSOC);
     if ($account) {
-        $stmt = $pdo->prepare('UPDATE users SET reset_code = ? WHERE email = ?');
+        $stmt = $pdo_function->prepare('UPDATE users SET reset_code = ? WHERE email = ?');
         $uniqid = uniqid();
         $stmt->execute([$uniqid, $_POST['email']]);
         // Email to send below, TODO

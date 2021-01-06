@@ -2,8 +2,9 @@
 // Include the root "main.php" file and check if user is logged-in...
 include_once '../config.php';
 include_once '../main.php';
-check_loggedin($pdo, '../index.php');
-$stmt = $pdo->prepare('SELECT * FROM users WHERE user_id = ?');
+$pdo_function = pdo_connect_mysql();
+check_loggedin($pdo_function, '../index.php');
+$stmt = $pdo_function->prepare('SELECT * FROM users WHERE user_id = ?');
 $stmt->execute([ $_SESSION['user_id'] ]);
 $account = $stmt->fetch(PDO::FETCH_ASSOC);
 // Check if the user is an admin...

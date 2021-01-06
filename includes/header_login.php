@@ -11,10 +11,9 @@
 
 <form class="form-inline mt-2 mt-sm-2">
     <div class="btn-group mr-2">
-        <button class="btn btn-outline-secondary my-2 my-sm-0" type="submit"><i class="fas fa-shopping-basket"></i>
-        </button>
+        <a class="btn btn-sm-0 btn-outline-secondary" href="winkelmand.php"><i class="fas fa-shopping-basket"></i> <?=$aantal_winkelmand?></a>
     </div>
     <div class="btn-group mr-2">
-        <a class="btn btn-outline-secondary" href="login.php"></span><i class="fas fa-sign-in-alt"></i> Aanmelden</a>
+        <a class="btn btn-sm-0 btn-outline-secondary" href="login.php"><i class="fas fa-sign-in-alt"></i> Aanmelden</a>
     </div>
 </form>

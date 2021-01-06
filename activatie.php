@@ -2,16 +2,13 @@
 $menu = 1;
 include 'main.php';
 $msg = '';
-// First we check if the email and code exists, these variables will appear as parameters in the URL
+$pdo_function = pdo_connect_mysql();
 if (isset($_GET['email'], $_GET['code']) && !empty($_GET['code'])) {
-    $stmt = $pdo->prepare('SELECT * FROM users WHERE email = ? AND activatie_code = ?');
+    $stmt = $pdo_function->prepare('SELECT * FROM users WHERE email = ? AND activatie_code = ?');
     $stmt->execute([ $_GET['email'], $_GET['code'] ]);
-    // Store the result so we can check if the account exists in the database.
     $account = $stmt->fetch(PDO::FETCH_ASSOC);
     if ($account) {
-        // Account exists with the requested email and code.
-        $stmt = $pdo->prepare('UPDATE users SET activatie_code = ? WHERE email = ? AND activatie_code = ?');
-        // Set the new activation code to 'activated', this is how we can check if the user has activated their account.
+        $stmt = $pdo_function->prepare('UPDATE users SET activatie_code = ? WHERE email = ? AND activatie_code = ?');
         $activated = 'activated';
         $stmt->execute([ $activated, $_GET['email'], $_GET['code'] ]);
         $msg = 'Uw account is geactiveerd, je kan zich nu aanmelden!<br><a href="index.php">Login</a>';

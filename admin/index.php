@@ -1,6 +1,7 @@
 <?php
 include 'main.php';
-$stmt = $pdo->prepare('SELECT * FROM users');
+$pdo_function = pdo_connect_mysql();
+$stmt = $pdo_function->prepare('SELECT * FROM users');
 $stmt->execute();
 $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>

@@ -3,10 +3,10 @@ $menu = 3;
 include 'main.php';
 $msg = '';
 $msg2 = '';
+$pdo_function = pdo_connect_mysql();
 // Now we check if the email from the resend activation form was submitted, isset() will check if the email exists.
 if (isset($_POST['email'])) {
-    // Prepare our SQL, preparing the SQL statement will prevent SQL injection.
-    $stmt = $pdo->prepare('SELECT * FROM users WHERE email = ? AND activatie_code != "" AND activatie_code != "activated"');
+    $stmt = $pdo_function->prepare('SELECT * FROM users WHERE email = ? AND activatie_code != "" AND activatie_code != "activated"');
     $stmt->execute([ $_POST['email'] ]);
     $account = $stmt->fetch(PDO::FETCH_ASSOC);
     // If the account exists with the email

@@ -1,7 +1,8 @@
 <?php
 $menu = 1;
 include 'main.php';
-check_loggedin($pdo);
+$pdo_function = pdo_connect_mysql();
+check_loggedin($pdo_function);
 ?>
 
 <!DOCTYPE html>

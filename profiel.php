@@ -1,9 +1,10 @@
 <?php
 $menu = 4;
 include 'main.php';
-check_loggedin($pdo);
+$pdo_function = pdo_connect_mysql();
+check_loggedin($pdo_function);
 $msg = '';
-$stmt = $pdo->prepare('SELECT * FROM users WHERE user_id = ?');
+$stmt = $pdo_function->prepare('SELECT * FROM users WHERE user_id = ?');
 $stmt->execute([$_SESSION['user_id']]);
 $account = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -23,14 +24,14 @@ if (isset($_POST['voornaam'], $_POST['achternaam'], $_POST['wachtwoord'], $_POST
         $msg = 'Wachtwoorden komen niet overeen!';
     }
     if (empty($msg)) {
-        $stmt = $pdo->prepare('SELECT COUNT(*) FROM users WHERE (email = ?) AND email != ?');
+        $stmt = $pdo_function->prepare('SELECT COUNT(*) FROM users WHERE (email = ?) AND email != ?');
         $stmt->execute([$_POST['email'], $_SESSION['email']]);
         if ($result = $stmt->fetchColumn()) {
             $msg = 'Een account met dit e-mailadres bestaat reeds!';
         } else {
             // update profiel
             $uniqid = account_activatie && $account['email'] != $_POST['email'] ? uniqid() : $account['activatie_code'];
-            $stmt = $pdo->prepare('UPDATE users SET email = ?, wachtwoord = ?, voornaam = ?, achternaam = ?, adres_straat = ?, adres_nr = ?, adres_postcode = ?, adres_plaats = ?, telefoon_nr = ?, bedrijfsnaam = ?, btw_nr = ?, activatie_code = ? WHERE user_id = ?');
+            $stmt = $pdo_function->prepare('UPDATE users SET email = ?, wachtwoord = ?, voornaam = ?, achternaam = ?, adres_straat = ?, adres_nr = ?, adres_postcode = ?, adres_plaats = ?, telefoon_nr = ?, bedrijfsnaam = ?, btw_nr = ?, activatie_code = ? WHERE user_id = ?');
             $wachtwoord = !empty($_POST['wachtwoord']) ? password_hash($_POST['wachtwoord'], PASSWORD_DEFAULT) : $account['wachtwoord'];
             $stmt->execute([$_POST['email'], $wachtwoord, $_POST['voornaam'], $_POST['achternaam'], $_POST['adres_straat'], $_POST['adres_nr'], $_POST['adres_postcode'], $_POST['adres_plaats'], $_POST['telefoon_nr'], $_POST['bedrijfsnaam'], $_POST['btw_nr'], $uniqid, $_SESSION['user_id']]);
             $_SESSION['email'] = $_POST['email'];

@@ -1,14 +1,6 @@
 <?php
 include_once 'config.php';
-define('winkelmand', true);
 session_start();
-// Connect to the MySQL database using PDO
-try {
-    $pdo = new PDO('mysql:host=' . db_host . ';dbname=' . db_name . ';db_port=' . db_port,db_user, db_password);
-} catch (PDOException $exception) {
-    exit('Failed to connect to database!');
-//exit("Connection failed - ".$exception->getMessage());
-}
 
 function pdo_connect_mysql() {
     try {
@@ -55,16 +47,29 @@ function send_activation_email($email, $code) {
     mail($email, $subject, $email_template, $headers);
 }
 // Function to retrieve a product from cart by the ID and options string
-function &get_cart_product($id, $options) {
+function get_cart_product($product_id, $opties) {
     $p = null;
     if (isset($_SESSION['cart'])) {
         foreach ($_SESSION['cart'] as &$product) {
-            if ($product['id'] == $id && $product['options'] == $options) {
+            if ($product['product_id'] == $product_id && $product['opties'] == $opties) {
                 $p = &$product;
                 return $p;
             }
         }
     }
     return $p;
+}
+$aantal_winkelmand = isset($_SESSION['cart']) ? count($_SESSION['cart']) : 0;
+// Send order details email function
+function send_order_details_email($email, $products, $first_name, $last_name, $address_street, $address_city, $address_state, $address_zip, $address_country, $subtotal, $order_id) {
+    if (!mail_enabled) {
+        return;
+    }
+    $subject = 'Order Details';
+    $headers = 'From: ' . mail_from . "\r\n" . 'Reply-To: ' . mail_from . "\r\n" . 'Return-Path: ' . mail_from . "\r\n" . 'X-Mailer: PHP/' . phpversion() . "\r\n" . 'MIME-Version: 1.0' . "\r\n" . 'Content-Type: text/html; charset=UTF-8' . "\r\n";
+    ob_start();
+    include 'order-details-template.php';
+    $order_details_template = ob_get_clean();
+    mail($email, $subject, $order_details_template, $headers);
 }
 ?>

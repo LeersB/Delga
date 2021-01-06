@@ -2,11 +2,12 @@
 $menu = 5;
 $error = '';
 include 'main.php';
+$pdo_function = pdo_connect_mysql();
 // Check for search query
 if (isset($_GET['query']) && $_GET['query'] != '') {
     // Escape the user query, prevent XSS attacks
     $search_query = htmlspecialchars($_GET['query'], ENT_QUOTES, 'UTF-8');
-    $stmt = $pdo->prepare('SELECT * FROM producten WHERE product_naam LIKE ?');
+    $stmt = $pdo_function->prepare('SELECT * FROM producten WHERE product_naam LIKE ?');
     $stmt->execute(['%' . $search_query . '%']);
     $producten = $stmt->fetchAll(PDO::FETCH_ASSOC);
     $total_products = count($producten);

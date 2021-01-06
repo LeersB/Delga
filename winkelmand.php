@@ -1,51 +1,43 @@
 <?php
+$menu = 5;
 include 'main.php';
-// Prevent direct access to file
-defined('winkelmand') or exit;
-// If the user clicked the add to cart button on the product page we can check for the form data
-if (isset($_POST['product_id'], $_POST['quantity']) && is_numeric($_POST['product_id'])){
-    //&& is_numeric($_POST['quantity'])) {
-    // Set the post variables so we easily identify them, also make sure they are integer
+$pdo_function = pdo_connect_mysql();
+
+if (isset($_POST['product_id'], $_POST['quantity']) && is_numeric($_POST['product_id']) && is_numeric($_POST['quantity'])) {
     $product_id = (int)$_POST['product_id'];
-    // abs() function will prevent minus quantity and (int) will make sure the value is an integer
-    //$quantity = abs((int)$_POST['quantity']);
+    $quantity = abs((int)$_POST['quantity']);
     // Get product options
     $opties = '';
-    $opties_price = 0.00;
+    $optie_eenheidsprijs = 0.00;
     foreach ($_POST as $k => $v) {
-        if (strpos($k, 'option-') !== false) {
-            $opties .= str_replace('option-', '', $k) . '-' . $v . ',';
-            $stmt = $pdo->prepare('SELECT * FROM product_opties WHERE optie_titel = ? AND optie_naam = ? AND product_id = ?');
-            $stmt->execute([ str_replace('option-', '', $k), $v, $product_id ]);
+        if (strpos($k, 'optie-') !== false) {
+            $opties .= str_replace('optie-', '', $k) . '-' . $v . ',';
+            $stmt = $pdo_function->prepare('SELECT * FROM product_opties WHERE optie_titel = ? AND optie_naam = ? AND product_id = ?');
+            $stmt->execute([str_replace('optie-', '', $k), $v, $product_id]);
             $opties = $stmt->fetch(PDO::FETCH_ASSOC);
-            $opties_price += $option['price'];
+            $optie_eenheidsprijs += $opties['eenheidsprijs'];
         }
     }
-    $options = rtrim($options, ',');
-    // Prepare the SQL statement, we basically are checking if the product exists in our database
-    $stmt = $pdo->prepare('SELECT * FROM producten WHERE product_id = ?');
-    $stmt->execute([ $_POST['product_id'] ]);
-    // Fetch the product from the database and return the result as an Array
+    $opties = rtrim($opties, ',');
+    $stmt = $pdo_function->prepare('SELECT * FROM producten WHERE product_id = ?');
+    $stmt->execute([$_POST['product_id']]);
     $product = $stmt->fetch(PDO::FETCH_ASSOC);
-    // Check if the product exists (array is not empty)
     if ($product > 0) {
-        // Product exists in database, now we can create/update the session variable for the cart
         if (!isset($_SESSION['cart'])) {
             // Shopping cart session variable doesnt exist, create it
             $_SESSION['cart'] = [];
         }
-        $cart_product = &get_cart_product($product_id, $options);
+        $cart_product = get_cart_product($product_id, $opties);
         if ($cart_product) {
             // Product exists in cart, update the quanity
             $cart_product['quantity'] += $quantity;
         } else {
             // Product is not in cart, add it
             $_SESSION['cart'][] = [
-                'id' => $product_id,
+                'product_id' => $product_id,
                 'quantity' => $quantity,
-                'options' => $options,
-                'options_price' => $options_price,
-                'shipping_price' => 0.00
+                'opties' => $opties,
+                'optie_eenheidsprijs' => $optie_eenheidsprijs,
             ];
         }
     }
@@ -82,10 +74,6 @@ if (isset($_POST['update']) && isset($_SESSION['cart'])) {
             }
         }
     }
-    // Update shipping method
-    if (isset($_POST['shipping_method'])) {
-        $_SESSION['shipping_method'] = $_POST['shipping_method'];
-    }
     header('location: winkelmand.php');
     exit;
 }
@@ -96,132 +84,171 @@ if (isset($_POST['checkout']) && isset($_SESSION['cart']) && !empty($_SESSION['c
 }
 // Check the session variable for products in cart
 $products_in_cart = isset($_SESSION['cart']) ? $_SESSION['cart'] : [];
-$subtotal = 0.00;
-$shippingtotal = 0.00;
-$selected_shipping_method = isset($_SESSION['shipping_method']) ? $_SESSION['shipping_method'] : null;
-$shipping_available = false;
+$subtotaal = 0.00;
+$shippingtotaal = 6.00;
 // If there are products in cart
 if ($products_in_cart) {
     // There are products in the cart so we need to select those products from the database
     // Products in cart array to question mark string array, we need the SQL statement to include: IN (?,?,?,...etc)
     $array_to_question_marks = implode(',', array_fill(0, count($products_in_cart), '?'));
-    $stmt = $pdo->prepare('SELECT * FROM producten WHERE producten.product_id IN (' . $array_to_question_marks . ')');
+    $stmt = $pdo_function->prepare('SELECT * FROM producten WHERE producten.product_id IN (' . $array_to_question_marks . ')');
     // We use the array_column to retrieve only the id's of the products
-    $stmt->execute(array_column($products_in_cart, 'id'));
+    $stmt->execute(array_column($products_in_cart, 'product_id'));
     // Fetch the products from the database and return the result as an Array
     $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    // Retrieve shipping methods
-    //$stmt = $pdo->query('SELECT * FROM shipping');
-    //$shipping_methods = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    //$selected_shipping_method = $selected_shipping_method == null && $shipping_methods ? $shipping_methods[0]['name'] : $selected_shipping_method;
     // Iterate the products in cart and add the meta data (product name, desc, etc)
     foreach ($products_in_cart as &$cart_product) {
         foreach ($products as $product) {
-            if ($cart_product['id'] == $product['id']) {
+            if ($cart_product['product_id'] == $product['product_id']) {
                 $cart_product['meta'] = $product;
                 // Calculate the subtotal
-                $product_price = $cart_product['options_price'] > 0 ? (float)$cart_product['options_price'] : (float)$product['price'];
-                $subtotal += $product_price * (int)$cart_product['quantity'];
-                // Calculate the shipping
-                //foreach ($shipping_methods as $shipping_method) {
-                    //if ($shipping_method['name'] == $selected_shipping_method && $product_price >= $shipping_method['price_from'] && $product_price <= $shipping_method['price_to']) {
-                    //    $shippingtotal += (float)$shipping_method['price'] * (int)$cart_product['quantity'];
-                    //    $shipping_available = true;
-                    //} else if ($product_price >= $shipping_method['price_from'] && $product_price <= $shipping_method['price_to']) {
-                     //   $shipping_available = true;
-                    //}
-               // }
+                $product_prijs = $cart_product['optie_eenheidsprijs'] > 0 ? (float)$cart_product['optie_eenheidsprijs'] : (float)$product['eenheidsprijs'];
+                $subtotaal += $product_prijs * (int)$cart_product['quantity'];
             }
         }
     }
 }
 ?>
+<!DOCTYPE html>
+<html class="h-100" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
+    <meta content="Delga winkelmand" name="description">
+    <meta content="Bart Leers" name="author">
+    <title>Delga</title>
+    <link href="css/bootstrap.css" rel="stylesheet" type="text/css">
+    <link href="css/delga.css" rel="stylesheet">
+</head>
 
+<body class="d-flex flex-column h-100">
 
+<header>
+    <?php include('includes/header.php'); ?>
+</header>
 
-<div class="cart content-wrapper">
+<main class="flex-shrink-0" role="main">
+    <div class="container">
 
-    <h1>Shopping Cart</h1>
+        <div class="cart content-wrapper">
 
-    <form action="index.php?page=cart" method="post">
-        <table>
-            <thead>
-            <tr>
-                <td colspan="2">Product</td>
-                <td></td>
-                <td class="rhide">Price</td>
-                <td>Quantity</td>
-                <td>Total</td>
-            </tr>
-            </thead>
-            <tbody>
-            <?php if (empty($products_in_cart)): ?>
-                <tr>
-                    <td colspan="6" style="text-align:center;">You have no products added in your Shopping Cart</td>
-                </tr>
-            <?php else: ?>
-                <?php foreach ($products_in_cart as $num => $product): ?>
+            <h4>Winkelmand</h4>
+
+            <form action="winkelmand.php" method="post">
+                <table>
+                    <thead>
                     <tr>
-                        <td class="img">
-                            <?php if (!empty($product['meta']['img']) && file_exists('imgs/' . $product['meta']['img'])): ?>
-                                <a href="index.php?page=product&id=<?=$product['id']?>">
-                                    <img src="imgs/<?=$product['meta']['img']?>" width="50" height="50" alt="<?=$product['meta']['name']?>">
-                                </a>
-                            <?php endif; ?>
-                        </td>
-                        <td>
-                            <a href="index.php?page=product&id=<?=$product['id']?>"><?=$product['meta']['name']?></a>
-                            <br>
-                            <a href="index.php?page=cart&remove=<?=$num?>" class="remove">Remove</a>
-                        </td>
-                        <td class="price">
-                            <?=$product['options']?>
-                            <input type="hidden" name="options" value="<?=$product['options']?>">
-                        </td>
-                        <?php if ($product['options_price'] > 0): ?>
-                            <td class="price rhide"><?='€ '?><?=number_format($product['options_price'],2)?></td>
-                        <?php else: ?>
-                            <td class="price rhide"><?='€ '?><?=number_format($product['meta']['price'],2)?></td>
-                        <?php endif; ?>
-                        <td class="quantity">
-                            <input type="number" name="quantity-<?=$num?>" value="<?=$product['quantity']?>" min="1" <?php if ($product['meta']['quantity'] != -1): ?>max="<?=$product['meta']['quantity']?>"<?php endif; ?> placeholder="Quantity" required>
-                        </td>
-                        <?php if ($product['options_price'] > 0): ?>
-                            <td class="price"><?='€ '?><?=number_format($product['options_price'] * $product['quantity'],2)?></td>
-                        <?php else: ?>
-                            <td class="price"><?='€ '?><?=number_format($product['meta']['price'] * $product['quantity'],2)?></td>
-                        <?php endif; ?>
+                        <td colspan="2">Product</td>
+                        <td></td>
+                        <td class="rhide">Prijs</td>
+                        <td>Aantal</td>
+                        <td>Totaal</td>
                     </tr>
-                <?php endforeach; ?>
-            <?php endif; ?>
-            </tbody>
-        </table>
+                    </thead>
+                    <tbody>
+                    <?php if (empty($products_in_cart)): ?>
+                        <tr>
+                            <td colspan="6" style="text-align:center;">Er zijn geen producten toegevoegd in uw
+                                winkelmand!
+                            </td>
+                        </tr>
+                    <?php else: ?>
+                        <?php foreach ($products_in_cart as $num => $product): ?>
+                            <tr>
+                                <td class="img">
+                                    <?php if (!empty($product['meta']['product_foto']) && file_exists('images/producten/' . $product['meta']['product_foto'])): ?>
+                                        <a href="product.php?id=<?= $product['product_id'] ?>">
+                                            <img src="images/producten/<?= $product['meta']['product_foto'] ?>"
+                                                 width="50" height="50" alt="<?= $product['meta']['product_naam'] ?>">
+                                        </a>
+                                    <?php endif; ?>
+                                </td>
+                                <td>
+                                    <a href="product.php?&id=<?= $product['product_id'] ?>"><?= $product['meta']['product_naam'] ?></a>
+                                    <br>
+                                    <a href="winkelmand.php?remove=<?= $num ?>" class="remove">Remove</a>
+                                </td>
+                                <td class="prijs">
+                                    <?= $product['opties'] ?>
+                                    <input type="hidden" name="opties" value="<?= $product['opties'] ?>">
+                                </td>
+                                <?php if ($product['optie_eenheidsprijs'] > 0): ?>
+                                    <td class="prijs rhide"><?= '€ ' ?><?= number_format($product['$optie_eenheidsprijs'], 2) ?></td>
+                                <?php else: ?>
+                                    <td class="prijs rhide"><?= '€ ' ?><?= number_format($product['meta']['eenheidsprijs'], 2) ?></td>
+                                <?php endif; ?>
+                                <td class="quantity">
+                                    <input type="number" name="quantity-<?= $num ?>" value="<?= $product['quantity'] ?>"
+                                           min="1" placeholder="Quantity" required>
+                                </td>
+                                <?php if ($product['optie_eenheidsprijs'] > 0): ?>
+                                    <td class="prijs"><?= '€ ' ?><?= number_format($product['$optie_eenheidsprijs'] * $product['quantity'], 2) ?></td>
+                                <?php else: ?>
+                                    <td class="prijs"><?= '€ ' ?><?= number_format($product['meta']['eenheidsprijs'] * $product['quantity'], 2) ?></td>
+                                <?php endif; ?>
+                            </tr>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+                    </tbody>
+                </table>
 
 
+                <div class="subtotaal">
+                    <span class="text">Subtotaal</span>
+                    <span class="prijs"><?= '€ ' ?><?= number_format($subtotaal, 2) ?></span>
+                </div>
 
-        <div class="subtotal">
-            <span class="text">Subtotal</span>
-            <span class="price"><?='€ '?><?=number_format($subtotal,2)?></span>
+                <div class="verzending">
+                    <span class="text">Verzending</span>
+                    <span class="prijs"><?= '€ ' ?><?= number_format($shippingtotaal, 2) ?></span>
+                </div>
+
+                <div class="totaal">
+                    <span class="text">Totaal</span>
+                    <span class="prijs"><?= '€ ' ?><?= number_format($subtotaal + $shippingtotaal, 2) ?></span>
+                </div>
+
+                <div class="buttons">
+                    <input type="submit" value="Winkelmand legen" name="emptycart">
+                    <input type="submit" value="Update" name="update">
+                    <input type="submit" value="Bestellen" name="checkout">
+                </div>
+
+            </form>
+
         </div>
 
-        <div class="shipping">
-            <span class="text">Shipping</span>
-            <span class="price"><?='€ '?><?=number_format($shippingtotal,2)?></span>
-        </div>
 
-        <div class="total">
-            <span class="text">Total</span>
-            <span class="price"><?='€ '?><?=number_format($subtotal+$shippingtotal,2)?></span>
-        </div>
+    </div>
+</main>
 
-        <div class="buttons">
-            <input type="submit" value="Empty Cart" name="emptycart">
-            <input type="submit" value="Update" name="update">
-            <input type="submit" value="Checkout" name="checkout">
-        </div>
-
-    </form>
-
-</div>
-
-
+<?php include('includes/footer.php'); ?>
+<script>
+    if (document.querySelector(".cart .ajax-update")) {
+        document.querySelectorAll(".cart .ajax-update").forEach(ele => {
+            ele.onchange = () => {
+                let formEle = document.querySelector("form");
+                let formData = new FormData(formEle);
+                formData.append("update", "Update");
+                fetch(formEle.action, {
+                    method: "POST",
+                    body: formData
+                }).then(function (response) {
+                    return response.text()
+                })
+                    .then(function (html) {
+                        let parser = new DOMParser();
+                        let doc = parser.parseFromString(html, "text/html");
+                        document.querySelector(".subtotaal").innerHTML = doc.querySelector(".subtotaal").innerHTML;
+                        document.querySelector(".verzending").innerHTML = doc.querySelector(".verzending").innerHTML;
+                        document.querySelector(".totaal").innerHTML = doc.querySelector(".totaal").innerHTML;
+                        document.querySelectorAll(".product-totaal").forEach((e, i) => {
+                            e.innerHTML = doc.querySelectorAll(".product-totaal")[i].innerHTML;
+                        })
+                    });
+            };
+        });
+    }
+</script>
+</body>
+</html>

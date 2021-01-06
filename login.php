@@ -7,7 +7,8 @@ if (isset($_SESSION['loggedin'])) {
 }
 if (isset($_COOKIE['rememberme']) && !empty($_COOKIE['rememberme'])) {
     // If the remember me cookie matches one in the database then we can update the session variables and the user will be logged-in.
-    $stmt = $pdo->prepare('SELECT * FROM users WHERE terugkeer_code = ?');
+    $pdo_function = pdo_connect_mysql();
+    $stmt = $pdo_function->prepare('SELECT * FROM users WHERE terugkeer_code = ?');
     $stmt->execute([ $_COOKIE['rememberme'] ]);
     $account = $stmt->fetch(PDO::FETCH_ASSOC);
     if ($account) {

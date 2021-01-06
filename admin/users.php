@@ -1,5 +1,6 @@
 <?php
 include 'main.php';
+$pdo_function = pdo_connect_mysql();
 // Default input product values
 $user = array(
     'email' => '',
@@ -20,14 +21,14 @@ $user = array(
 $user_levels = array('User', 'Admin');
 if (isset($_GET['user_id'])) {
     // Get the account from the database
-    $stmt = $pdo->prepare('SELECT * FROM users WHERE user_id = ?');
+    $stmt = $pdo_function->prepare('SELECT * FROM users WHERE user_id = ?');
     $stmt->execute([$_GET['user_id']]);
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
     // ID param exists, edit an existing account
     $page = 'Edit';
     if (isset($_POST['submit'])) {
         // Update the account
-        $stmt = $pdo->prepare('UPDATE users SET email = ?, wachtwoord = ?, voornaam = ?, achternaam = ?, adres_straat = ?, adres_nr = ?, adres_postcode = ?, adres_plaats = ?, telefoon_nr = ?, bedrijfsnaam = ?, btw_nr = ?, activatie_code = ?, terugkeer_code = ?, user_level = ? WHERE user_id = ?');
+        $stmt = $pdo_function->prepare('UPDATE users SET email = ?, wachtwoord = ?, voornaam = ?, achternaam = ?, adres_straat = ?, adres_nr = ?, adres_postcode = ?, adres_plaats = ?, telefoon_nr = ?, bedrijfsnaam = ?, btw_nr = ?, activatie_code = ?, terugkeer_code = ?, user_level = ? WHERE user_id = ?');
         $wachtwoord = $user['wachtwoord'] != $_POST['wachtwoord'] ? password_hash($_POST['wachtwoord'], PASSWORD_DEFAULT) : $user['wachtwoord'];
         $stmt->execute([$_POST['email'], $wachtwoord, $_POST['voornaam'], $_POST['achternaam'], $_POST['adres_straat'], $_POST['adres_nr'], $_POST['adres_postcode'], $_POST['adres_plaats'], $_POST['telefoon_nr'], $_POST['bedrijfsnaam'], $_POST['btw_nr'], $_POST['activatie_code'], $_POST['terugkeer_code'], $_POST['user_level'], $_GET['user_id']]);
         header('Location: index.php');
@@ -35,7 +36,7 @@ if (isset($_GET['user_id'])) {
     }
     if (isset($_POST['delete'])) {
         // Delete the account
-        $stmt = $pdo->prepare('DELETE FROM users WHERE user_id = ?');
+        $stmt = $pdo_function->prepare('DELETE FROM users WHERE user_id = ?');
         $stmt->execute([$_GET['user_id']]);
         header('Location: index.php');
         exit;
@@ -44,7 +45,7 @@ if (isset($_GET['user_id'])) {
     // Create a new account
     $page = 'Create';
     if (isset($_POST['submit'])) {
-        $stmt = $pdo->prepare('INSERT IGNORE INTO users (email, wachtwoord, user_level, activatie_code, registratie_datum, voornaam, achternaam, adres_straat, adres_nr, adres_postcode, adres_plaats, telefoon_nr, bedrijfsnaam, btw_nr) VALUES (?, ?, ?, ?, NOW(), ?, ?, ?, ?, ?, ?, ?, ?, ?)');
+        $stmt = $pdo_function->prepare('INSERT IGNORE INTO users (email, wachtwoord, user_level, activatie_code, registratie_datum, voornaam, achternaam, adres_straat, adres_nr, adres_postcode, adres_plaats, telefoon_nr, bedrijfsnaam, btw_nr) VALUES (?, ?, ?, ?, NOW(), ?, ?, ?, ?, ?, ?, ?, ?, ?)');
         $wachtwoord = password_hash($_POST['wachtwoord'], PASSWORD_DEFAULT);
         $stmt->execute([$_POST['email'], $wachtwoord, $_POST['user_level'], $_POST['activatie_code'], $_POST['voornaam'], $_POST['achternaam'], $_POST['adres_straat'], $_POST['adres_nr'], $_POST['adres_postcode'], $_POST['adres_plaats'], $_POST['telefoon_nr'], $_POST['bedrijfsnaam'], $_POST['btw_nr']]);
         header('Location: index.php');

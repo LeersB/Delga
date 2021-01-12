@@ -82,9 +82,7 @@ if (isset($_GET['query']) && $_GET['query'] != '') {
                                         </div>
                                     </div>
                                     <div class="card-footer">
-                                        <p class="card-text text-secondary"> <?= '€ ' ?><?= number_format($product['eenheidsprijs'], 2) ?>
-                                            <a href="#" class="btn btn-outline-success"><i
-                                                        class="fas fa-shopping-basket"></i></a>
+                                        <p class="card-text text-secondary">€&nbsp;<?= number_format($product['eenheidsprijs'], 2) ?>
                                             <a href="product.php?&product_id=<?= $product['product_id'] ?>"
                                                class="btn btn-outline-secondary"><i class="fas fa-info"></i> Info</a>
                                         </p>

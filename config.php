@@ -20,4 +20,6 @@ define('mail_from', 'Delga <noreply@delga.be>');
 define('activatie_link', 'https://test.delga.be/activatie.php');
 // Link to Reset file
 define('reset_link', 'https://test.delga.be/wachtwoord_reset.php');
+// Prijs levering
+define('leveringskost', 6);
 ?>

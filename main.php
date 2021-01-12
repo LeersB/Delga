@@ -47,10 +47,10 @@ function send_activation_email($email, $code) {
     mail($email, $subject, $email_template, $headers);
 }
 // Function to retrieve a product from cart by the ID and options string
-function get_cart_product($product_id, $opties) {
+function &get_delgashop_product($product_id, $opties) {
     $p = null;
-    if (isset($_SESSION['cart'])) {
-        foreach ($_SESSION['cart'] as &$product) {
+    if (isset($_SESSION['delgashop'])) {
+        foreach ($_SESSION['delgashop'] as &$product) {
             if ($product['product_id'] == $product_id && $product['opties'] == $opties) {
                 $p = &$product;
                 return $p;
@@ -59,7 +59,7 @@ function get_cart_product($product_id, $opties) {
     }
     return $p;
 }
-$aantal_winkelmand = isset($_SESSION['cart']) ? count($_SESSION['cart']) : 0;
+$aantal_winkelmand = isset($_SESSION['delgashop']) ? count($_SESSION['delgashop']) : 0;
 // Send order details email function
 function send_order_details_email($email, $products, $first_name, $last_name, $address_street, $address_city, $address_state, $address_zip, $address_country, $subtotal, $order_id) {
     if (!mail_enabled) {

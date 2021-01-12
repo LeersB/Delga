@@ -71,46 +71,41 @@ if (isset($_GET['product_id'])) {
                             </div>
                         </div>
                         <div class="card-footer">
-                            <div class="col-md-4">
-                                <span class="eenheidsprijs">
-                                    <p class="card-text text-secondary"> <?= '€ ' ?><?= number_format($product['eenheidsprijs'], 2) ?></p>
-                                </span>
-                            </div>
-                            <div class="input-group">
-                                <form class="col-md-10" id="product-form" action="winkelmand.php" method="post">
-                                    <div class="form-row">
-                                        <?php foreach ($product_opties as $optie): ?>
-                                            <label>
-                                                <select class="form-control" name="option-<?= $optie['optie_titel'] ?>"
-                                                        required>
-                                                    <option value="" selected disabled
-                                                            style="display:none"><?= $optie['optie_titel'] ?></option>
-                                                    <?php
-                                                    $optie_naam = explode(',', $optie['opties']);
-                                                    $optie_eenheidsprijs = explode(',', $optie['optie_eenheidsprijs']);
-                                                    ?>
-                                                    <?php foreach ($optie_naam as $k => $naam): ?>
-                                                        <option value="<?= $naam ?>"
-                                                                data-eenheidsprijs="<?= $optie_eenheidsprijs[$k] ?>"><?= $naam ?></option>
-                                                    <?php endforeach; ?>
-                                                </select>
-                                            </label>
-                                        <?php endforeach; ?>
-
-                                        <div class="col-3">
-                                            <label>
-                                                <input type="number" class="form-control" name="quantity" value="1"
-                                                       min="1" placeholder="Quantity" required>
-                                            </label>
-                                        </div>
-                                        <div class="col-1">
-                                            <button class="btn btn-outline-success" type="submit"><i
-                                                        class="fas fa-shopping-basket"></i></button>
-                                        </div>
-                                        <input type="hidden" name="product_id" value="<?= $product['product_id'] ?>">
+                            <form class="form-inline mt-2 mt-sm-2" id="product-form" action="winkelmand.php"
+                                  method="post">
+                                <div class="input-group mr-2">
+                                    <div class="input-group-prepend">
+                                    <span class="input-group-text eenheidsprijs" id="winkelmand">
+                                      €&nbsp;<?= number_format($product['eenheidsprijs'], 2) ?>
+                                    </span>
                                     </div>
-                                </form>
-                            </div>
+
+                                    <?php foreach ($product_opties as $optie): ?>
+                                        <select class="form-control" aria-label="optie"
+                                                name="optie-<?= $optie['optie_titel'] ?>" required>
+                                            <option value="" selected disabled
+                                                    style="display:none"><?= $optie['optie_titel'] ?></option>
+                                            <?php
+                                            $optie_naam = explode(',', $optie['opties']);
+                                            $optie_eenheidsprijs = explode(',', $optie['optie_eenheidsprijs']);
+                                            ?>
+                                            <?php foreach ($optie_naam as $k => $naam): ?>
+                                                <option value="<?= $naam ?>"
+                                                        data-eenheidsprijs="<?= $optie_eenheidsprijs[$k] ?>"><?= $naam ?></option>
+                                            <?php endforeach; ?>
+                                        </select>
+                                    <?php endforeach; ?>
+
+                                    <input type="number" class="form-control" name="aantal" id="aantal"
+                                           aria-describedby="winkelmand" aria-label="Aantal" value="1" min="1"
+                                           placeholder="Aantal" required>
+                                    <input type="hidden" name="product_id" value="<?= $product['product_id'] ?>">
+                                    <div class="input-group-append">
+                                        <button class="btn btn-outline-success" type="submit"><i
+                                                    class="fas fa-shopping-basket"></i></button>
+                                    </div>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -124,17 +119,17 @@ if (isset($_GET['product_id'])) {
 
 <?php include('includes/footer.php'); ?>
 <script>
-    if (document.querySelector(".card-footer #product-form")) {
-        document.querySelectorAll(".card-footer #product-form select").forEach(ele => {
+    if (document.querySelector(".card-footer #product-form .input-group")) {
+        document.querySelectorAll(".card-footer #product-form .input-group select").forEach(ele => {
             ele.onchange = () => {
                 let eenheidsprijs = 0.00;
-                document.querySelectorAll(".card-footer #product-form select").forEach(e => {
+                document.querySelectorAll(".card-footer #product-form .input-group select").forEach(e => {
                     if (e.value) {
                         eenheidsprijs += parseFloat(e.options[e.selectedIndex].dataset.eenheidsprijs);
                     }
                 });
                 if (eenheidsprijs > 0.00) {
-                    document.querySelector(".card-footer .eenheidsprijs").innerHTML = '<p class="card-text text-secondary">' + ' € ' + eenheidsprijs.toFixed(2) + '</p>';
+                    document.querySelector(".card-footer .eenheidsprijs").innerHTML = '€&nbsp;' + eenheidsprijs.toFixed(2);
                 }
             };
         });

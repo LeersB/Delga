@@ -132,10 +132,9 @@ $total_pages = round($total_products / $num_products_on_each_page + 0.9, 1);
                                     </div>
                                 </div>
                             </div>
+
                             <div class="card-footer">
-                                <p class="card-text text-secondary"> <?= '€ ' ?><?= number_format($product['eenheidsprijs'], 2) ?>
-                                    <a href="#" class="btn btn-outline-success"><i
-                                                class="fas fa-shopping-basket"></i></a>
+                                <p class="card-text text-secondary">€&nbsp;<?= number_format($product['eenheidsprijs'], 2) ?>
                                     <a href="product.php?&product_id=<?= $product['product_id'] ?>"
                                        class="btn btn-outline-secondary"><i class="fas fa-info"></i> Info</a>
                                 </p>
@@ -156,20 +155,20 @@ $total_pages = round($total_products / $num_products_on_each_page + 0.9, 1);
                         <span aria-hidden="true"><i class="fas fa-angle-double-left"></i></span>
                     </a>
                 </li>
-                    <?php for ($page = 1; $page <= $total_pages; $page++) { ?>
-                        <li class="page-item <?php if ($current_page == $page): ?>active"
-                            aria-current="page <?php endif; ?>">
-                            <a class="page-link"
-                               href="producten.php?p=<?= $page; ?>&categorie=<?= $categorie ?>&sort=<?= $sort ?>"><?= $page; ?></a>
-                        </li>
-                    <?php } ?>
-                    <li class="page-item <?php if ($total_products == ($current_page * $num_products_on_each_page) - $num_products_on_each_page + count($products)): ?>disabled<?php endif; ?>">
+                <?php for ($page = 1; $page <= $total_pages; $page++) { ?>
+                    <li class="page-item <?php if ($current_page == $page): ?>active"
+                        aria-current="page <?php endif; ?>">
                         <a class="page-link"
-                           href="producten.php?p=<?= $current_page + 1 ?>&categorie=<?= $categorie ?>&sort=<?= $sort ?>"
-                           aria-label="Next">
-                            <span aria-hidden="true"><i class="fas fa-angle-double-right"></i></span>
-                        </a>
+                           href="producten.php?p=<?= $page; ?>&categorie=<?= $categorie ?>&sort=<?= $sort ?>"><?= $page; ?></a>
                     </li>
+                <?php } ?>
+                <li class="page-item <?php if ($total_products == ($current_page * $num_products_on_each_page) - $num_products_on_each_page + count($products)): ?>disabled<?php endif; ?>">
+                    <a class="page-link"
+                       href="producten.php?p=<?= $current_page + 1 ?>&categorie=<?= $categorie ?>&sort=<?= $sort ?>"
+                       aria-label="Next">
+                        <span aria-hidden="true"><i class="fas fa-angle-double-right"></i></span>
+                    </a>
+                </li>
             </ul>
         </nav>
 

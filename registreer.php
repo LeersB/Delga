@@ -3,7 +3,7 @@ $menu = 3;
 ?>
 
 <!DOCTYPE html>
-<html class="h-100" lang="en">
+<html class="h-100" lang="nl">
 <head>
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
@@ -11,7 +11,6 @@ $menu = 3;
     <meta content="Bart Leers" name="author">
     <title>Delga account aanmaken</title>
     <link href="css/bootstrap.css" rel="stylesheet" type="text/css">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
     <link href="css/delga.css" rel="stylesheet">
 </head>
 

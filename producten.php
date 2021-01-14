@@ -42,7 +42,7 @@ $total_products = $stmt->fetchColumn();
 $total_pages = round($total_products / $num_products_on_each_page + 0.9, 1);
 ?>
 <!DOCTYPE html>
-<html class="h-100" lang="en">
+<html class="h-100" lang="nl">
 <head>
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">

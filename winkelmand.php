@@ -74,7 +74,7 @@ if ((isset($_POST['update']) || isset($_POST['checkout'])) && isset($_SESSION['d
     }
     // Send the user to the place order page if they click the Place Order button, also the cart should not be empty
     if (isset($_POST['checkout']) && !empty($_SESSION['delgashop'])) {
-        header('Location: index.php?page=checkout');
+        header('Location: bestellen.php');
         exit;
     }
     header('location: winkelmand.php');
@@ -87,7 +87,7 @@ $levering = leveringskost;
 // If there are products in cart
 if ($products_in_cart) {
     $array_to_question_marks = implode(',', array_fill(0, count($products_in_cart), '?'));
-    $stmt = $pdo_function->prepare('SELECT * FROM producten WHERE producten.product_id IN (' . $array_to_question_marks . ')');
+    $stmt = $pdo_function->prepare('SELECT * FROM producten WHERE product_id IN (' . $array_to_question_marks . ')');
     $stmt->execute(array_column($products_in_cart, 'product_id'));
     $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -97,8 +97,8 @@ if ($products_in_cart) {
             if ($delgashop_product['product_id'] == $product['product_id']) {
                 $delgashop_product['meta'] = $product;
                 // Calculate the subtotal
-                $product_price = $delgashop_product['optie_eenheidsprijs'] > 0 ? (float)$delgashop_product['optie_eenheidsprijs'] : (float)$product['eenheidsprijs'];
-                $subtotaal += $product_price * (int)$delgashop_product['aantal'];
+                $product_prijs = $delgashop_product['optie_eenheidsprijs'] > 0 ? (float)$delgashop_product['optie_eenheidsprijs'] : (float)$product['eenheidsprijs'];
+                $subtotaal += $product_prijs * (int)$delgashop_product['aantal'];
 
             }
         }
@@ -106,7 +106,7 @@ if ($products_in_cart) {
 }
 ?>
 <!DOCTYPE html>
-<html class="h-100" lang="en">
+<html class="h-100" lang="nl">
 <head>
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">

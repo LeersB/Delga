@@ -61,14 +61,11 @@ function &get_delgashop_product($product_id, $opties) {
 }
 $aantal_winkelmand = isset($_SESSION['delgashop']) ? count($_SESSION['delgashop']) : 0;
 // Send order details email function
-function send_order_details_email($email, $products, $first_name, $last_name, $address_street, $address_city, $address_state, $address_zip, $address_country, $subtotal, $order_id) {
-    if (!mail_enabled) {
-        return;
-    }
+function send_order_details_email($email, $products, $voornaam, $achternaam, $adres_straat, $adres_nr, $adres_postcode, $adres_plaats, $subtotaal, $order_id) {
     $subject = 'Order Details';
     $headers = 'From: ' . mail_from . "\r\n" . 'Reply-To: ' . mail_from . "\r\n" . 'Return-Path: ' . mail_from . "\r\n" . 'X-Mailer: PHP/' . phpversion() . "\r\n" . 'MIME-Version: 1.0' . "\r\n" . 'Content-Type: text/html; charset=UTF-8' . "\r\n";
     ob_start();
-    include 'order-details-template.php';
+    include 'bestel_email.php';
     $order_details_template = ob_get_clean();
     mail($email, $subject, $order_details_template, $headers);
 }

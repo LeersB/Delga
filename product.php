@@ -21,7 +21,7 @@ if (isset($_GET['product_id'])) {
 }
 ?>
 <!DOCTYPE html>
-<html class="h-100" lang="en">
+<html class="h-100" lang="nl">
 <head>
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">

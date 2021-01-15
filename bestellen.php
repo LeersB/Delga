@@ -22,25 +22,26 @@ if (isset($_SESSION['loggedin'])) {
     $account = $stmt->fetch(PDO::FETCH_ASSOC);
 }
 
-// Process the order
-$products_in_cart = isset($_SESSION['delgashop']) ? $_SESSION['delgashop'] : [];
+// controle sessie variabelen voor producten in winkelmand delgashop
+$producten_winkelmand = isset($_SESSION['delgashop']) ? $_SESSION['delgashop'] : [];
 $subtotaal = 0.00;
 $levering = leveringskost;
-// If there are products in cart
-if ($products_in_cart) {
-    $array_to_question_marks = implode(',', array_fill(0, count($products_in_cart), '?'));
-    $stmt = $pdo_function->prepare('SELECT * FROM producten WHERE product_id IN (' . $array_to_question_marks . ')');
-    $stmt->execute(array_column($products_in_cart, 'product_id'));
+// If functie voor producten in winkelmand
+if ($producten_winkelmand) {
+    $lijst_delgashop = implode(',', array_fill(0, count($producten_winkelmand), '?'));
+    $stmt = $pdo_function->prepare('SELECT * FROM producten WHERE product_id IN (' . $lijst_delgashop . ')');
+    $stmt->execute(array_column($producten_winkelmand, 'product_id'));
     $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    // Iterate the products in cart and add the meta data (product name, desc, etc)
-    foreach ($products_in_cart as &$delgashop_product) {
+    // Overloop de producten in winkelmand en voeg meta data toe (product_naam, eenheidsprijs, ...)
+    foreach ($producten_winkelmand as &$delgashop_product) {
         foreach ($products as $product) {
             if ($delgashop_product['product_id'] == $product['product_id']) {
                 $delgashop_product['meta'] = $product;
-                // Calculate the subtotal
+                // Bereken subtotaal
                 $product_prijs = $delgashop_product['optie_eenheidsprijs'] > 0 ? (float)$delgashop_product['optie_eenheidsprijs'] : (float)$product['eenheidsprijs'];
                 $subtotaal += $product_prijs * (int)$delgashop_product['aantal'];
+
             }
         }
     }
@@ -48,24 +49,22 @@ if ($products_in_cart) {
 
 // Make sure when the user submits the form all data was submitted and shopping cart is not empty
 if (isset($_POST['voornaam'], $_POST['achternaam'], $_POST['adres_straat'], $_POST['adres_nr'], $_POST['adres_postcode'], $_POST['adres_plaats'], $_SESSION['delgashop'])) {
-    $user_id = null;
-
+    // $user_id = null;
     // If the user is already logged in
     if (isset($_SESSION['loggedin'])) {
         $user_id = $_SESSION['user_id'];
     } else {
-        $errors[] = 'Account login required!';
+        $errors[] = 'Login verplicht!';
     }
-    if (!$errors) {
+    //if (!$errors) {
 
-        if (isset($_POST['checkout']) && $products_in_cart) {
-            // Process Normal Checkout
+        if (isset($_POST['bestellen']) && $producten_winkelmand) {
             // Iterate each product in the user's shopping cart
-            // Unique transaction ID
-            $transaction_id = strtoupper(uniqid('2021-') . substr(md5(mt_rand()), 0, 2));
+            // Uniek ID genereren
+            $order_nr = strtoupper(uniqid('2021-') . substr(md5(mt_rand()), 0, 2));
             $stmt = $pdo_function->prepare('INSERT INTO orders (order_nr, totaal_prijs, order_status, order_datum, order_email, order_voornaam, order_achternaam, order_adres, gebruiker_id) VALUES (?,?,?,?,?,?,?,?,?)');
             $stmt->execute([
-                $transaction_id,
+                $order_nr,
                 $subtotaal + $levering,
                 '1',
                 date('Y-m-d H:i:s'),
@@ -75,15 +74,14 @@ if (isset($_POST['voornaam'], $_POST['achternaam'], $_POST['adres_straat'], $_PO
                 $_POST['order_adres'],
                 $user_id
             ]);
-            $order_id = $pdo_function->lastInsertId();
-            foreach ($products_in_cart as $product) {
+            foreach ($producten_winkelmand as $product) {
                 // For every product in the shopping cart insert a new transaction into our database
                 $stmt = $pdo_function->prepare('INSERT INTO order_details (order_nr, product_id, product_prijs, product_aantal, product_optie) VALUES (?,?,?,?,?)');
-                $stmt->execute([$transaction_id, $product['product_id'], $product['optie_eenheidsprijs'] > 0 ? $product['optie_eenheidsprijs'] : $product['meta']['eenheidsprijs'], $product['aantal'], $product['opties']]);
+                $stmt->execute([$order_nr, $product['product_id'], $product['optie_eenheidsprijs'] > 0 ? $product['optie_eenheidsprijs'] : $product['meta']['eenheidsprijs'], $product['aantal'], $product['opties']]);
             }
-            send_order_details_email(
+            send_order_detail_email(
                 isset($account['email']) && !empty($account['email']) ? $account['email'] : $_POST['email'],
-                $products_in_cart,
+                $producten_winkelmand,
                 $_POST['voornaam'],
                 $_POST['achternaam'],
                 $_POST['adres_straat'],
@@ -91,25 +89,26 @@ if (isset($_POST['voornaam'], $_POST['achternaam'], $_POST['adres_straat'], $_PO
                 $_POST['adres_postcode'],
                 $_POST['adres_plaats'],
                 $subtotaal + $levering,
-                $order_id
+                $order_nr
             );
             header('Location: besteld.php');
             exit;
         }
-    }
+    //}
     // Preserve form details if the user encounters an error
-    $account = [
-        'voornaam' => $_POST['voornaam'],
-        'achternaam' => $_POST['achternaam'],
-        'adres_straat' => $_POST['adres_straat'],
-        'adres_nr' => $_POST['adres_nr'],
-        'adres_postcode' => $_POST['adres_postcode'],
-        'adres_plaats' => $_POST['adres_plaats']
-    ];
+    //$account = [
+      //  'voornaam' => $_POST['voornaam'],
+      //  'achternaam' => $_POST['achternaam'],
+      //  'adres_straat' => $_POST['adres_straat'],
+      //  'adres_nr' => $_POST['adres_nr'],
+      //  'adres_postcode' => $_POST['adres_postcode'],
+      //  'adres_plaats' => $_POST['adres_plaats']
+    //];
 }
+
 // Redirect the user if the shopping cart is empty
 if (empty($_SESSION['delgashop'])) {
-    header('Location: winkelmand.php');
+    header('Location: producten.php');
     exit;
 }
 
@@ -302,7 +301,7 @@ if (empty($_SESSION['delgashop'])) {
                             </tr>
                             </thead>
                             <tbody>
-                            <?php foreach ($products_in_cart as $num => $product): ?>
+                            <?php foreach ($producten_winkelmand as $num => $product): ?>
                                 <tr>
                                     <td class="img">
                                         <?php if (!empty($product['meta']['product_foto']) && file_exists('images/producten/' . $product['meta']['product_foto'])): ?>
@@ -363,7 +362,8 @@ if (empty($_SESSION['delgashop'])) {
 
 
                 </div>
-                <button type="submit" name="checkout">Plaats Order</button>
+                <div><br></div>
+                <button class="btn btn-success" type="submit" name="bestellen"><i class="fas fa-check"></i> Plaats bestelling</button>
             </form>
         </div>
 

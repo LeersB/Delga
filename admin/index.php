@@ -15,7 +15,7 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
 </div>
 
 <div class="content-block">
-    <div class="table">
+    <div class="table table-hover">
 
         <table class="table">
             <thead class="thead-light">

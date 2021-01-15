@@ -1,5 +1,6 @@
 <?php
 $menu = 3;
+include 'main.php';
 ?>
 
 <!DOCTYPE html>

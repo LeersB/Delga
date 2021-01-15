@@ -39,10 +39,10 @@ function template_admin_header($title)
                                     class="sr-only">(current)</span></a>
              </li>
                 <li class="nav-item">
-                 <a class="nav-link" href="index.php"><i class="fas fa-users"></i> Accounts</a>
+                 <a class="nav-link" href="index.php"><i class="fas fa-users"></i> Users</a>
              </li>
-                <li class="nav-item">
-                 <a class="nav-link" href="emailtemplate.php"><i class="fas fa-envelope"></i> Email Template</a>
+                  <li class="nav-item">
+                 <a class="nav-link" href="producten.php"> Producten</a>
              </li>
                 <li class="nav-item">
                  <a class="nav-link" href="settings.php"><i class="fas fa-tools"></i> Settings</a>
@@ -69,7 +69,6 @@ function template_admin_header($title)
 
      <main class="flex-shrink-0" role="main">
     <div class="container">
- <h2>Administrator Pagina</h2>
 
 EOT;
 }

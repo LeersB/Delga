@@ -10,7 +10,7 @@ if (isset($_POST['product_id'], $_POST['aantal']) && is_numeric($_POST['product_
     $optie_eenheidsprijs = 0.00;
     foreach ($_POST as $k => $v) {
         if (strpos($k, 'optie-') !== false) {
-            $opties .= str_replace('optie-', '', $k) . '-' . $v . ',';
+            $opties .= str_replace('optie-', '', $k) . ' - ' . $v . ',';
             $stmt = $pdo_function->prepare('SELECT * FROM product_opties WHERE optie_titel = ? AND optie_naam = ? AND product_id = ?');
             $stmt->execute([str_replace('optie-', '', $k), $v, $product_id]);
             $optie = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -43,60 +43,59 @@ if (isset($_POST['product_id'], $_POST['aantal']) && is_numeric($_POST['product_
     header('location: winkelmand.php');
     exit;
 }
-// Remove product from cart
-if (isset($_GET['remove']) && is_numeric($_GET['remove']) && isset($_SESSION['delgashop']) && isset($_SESSION['delgashop'][$_GET['remove']])) {
+// Verwijder product uit winkelmand
+if (isset($_GET['verwijder']) && is_numeric($_GET['verwijder']) && isset($_SESSION['delgashop']) && isset($_SESSION['delgashop'][$_GET['verwijder']])) {
     // Remove the product from the shopping cart
-    unset($_SESSION['delgashop'][$_GET['remove']]);
+    unset($_SESSION['delgashop'][$_GET['verwijder']]);
     header('location: winkelmand.php');
     exit;
 }
-// Empty the cart
-if (isset($_POST['emptycart']) && isset($_SESSION['delgashop'])) {
+// Leegmaken winkelmand
+if (isset($_POST['leegmaken']) && isset($_SESSION['delgashop'])) {
     // Remove all products from the shopping cart
     unset($_SESSION['delgashop']);
     header('location: winkelmand.php');
     exit;
 }
-// Update product quantities in cart if the user clicks the "Update" button on the shopping cart page
-if ((isset($_POST['update']) || isset($_POST['checkout'])) && isset($_SESSION['delgashop'])) {
-    // Loop through the post data so we can update the quantities for every product in cart
+// Updaten product aantal in winkelmand
+if ((isset($_POST['updaten']) || isset($_POST['bestellen'])) && isset($_SESSION['delgashop'])) {
+    // Overloop de producten voor het updaten van de aantallen in winkelmand
     foreach ($_POST as $k => $v) {
         if (strpos($k, 'aantal') !== false && is_numeric($v)) {
             $product_id = str_replace('aantal-', '', $k);
-            // abs() function will prevent minus quantity and (int) will make sure the number is an integer
+            // abs() function will prevent minus and (int) will make sure the number is an integer
             $aantal = abs((int)$v);
-            // Always do checks and validation
             if (is_numeric($product_id) && isset($_SESSION['delgashop'][$product_id]) && $aantal > 0) {
-                // Update new quantity
+                // Updaten nieuw aantal
                 $_SESSION['delgashop'][$product_id]['aantal'] = $aantal;
             }
         }
     }
-    // Send the user to the place order page if they click the Place Order button, also the cart should not be empty
-    if (isset($_POST['checkout']) && !empty($_SESSION['delgashop'])) {
+    // Bestellen van de producten door gebruiker te sturen naar besteld.php, winkelmand mag niet leeg zijn
+    if (isset($_POST['bestellen']) && !empty($_SESSION['delgashop'])) {
         header('Location: bestellen.php');
         exit;
     }
     header('location: winkelmand.php');
     exit;
 }
-// Check the session variable for products in cart
-$products_in_cart = isset($_SESSION['delgashop']) ? $_SESSION['delgashop'] : [];
+// controle sessie variabelen voor producten in winkelmand delgashop
+$producten_winkelmand = isset($_SESSION['delgashop']) ? $_SESSION['delgashop'] : [];
 $subtotaal = 0.00;
 $levering = leveringskost;
-// If there are products in cart
-if ($products_in_cart) {
-    $array_to_question_marks = implode(',', array_fill(0, count($products_in_cart), '?'));
-    $stmt = $pdo_function->prepare('SELECT * FROM producten WHERE product_id IN (' . $array_to_question_marks . ')');
-    $stmt->execute(array_column($products_in_cart, 'product_id'));
+// If functie voor producten in winkelmand
+if ($producten_winkelmand) {
+    $lijst_delgashop = implode(',', array_fill(0, count($producten_winkelmand), '?'));
+    $stmt = $pdo_function->prepare('SELECT * FROM producten WHERE product_id IN (' . $lijst_delgashop . ')');
+    $stmt->execute(array_column($producten_winkelmand, 'product_id'));
     $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    // Iterate the products in cart and add the meta data (product name, desc, etc)
-    foreach ($products_in_cart as &$delgashop_product) {
+    // Overloop de producten in winkelmand en voeg meta data toe (product_naam, eenheidsprijs, ...)
+    foreach ($producten_winkelmand as &$delgashop_product) {
         foreach ($products as $product) {
             if ($delgashop_product['product_id'] == $product['product_id']) {
                 $delgashop_product['meta'] = $product;
-                // Calculate the subtotal
+                // Bereken subtotaal
                 $product_prijs = $delgashop_product['optie_eenheidsprijs'] > 0 ? (float)$delgashop_product['optie_eenheidsprijs'] : (float)$product['eenheidsprijs'];
                 $subtotaal += $product_prijs * (int)$delgashop_product['aantal'];
 
@@ -131,27 +130,28 @@ if ($products_in_cart) {
 
             <h2>Winkelmand</h2>
 
+            <?php if (empty($producten_winkelmand)): $levering = 0 ?>
+                <tr>
+                    <td colspan="7" style="text-align:center;">Er zijn geen producten toegevoegd aan uw winkelmand!</td>
+                </tr>
+            <?php else: ?>
             <form action="" method="post">
                 <div class="table-responsive-md">
-                <table class="table table-hover">
-                    <thead class="thead-light">
-                    <tr>
-                        <th scope="col" colspan="2"></th>
-                        <th scope="col" colspan="2">Product</th>
-                        <th scope="col" class="rhide">Prijs</th>
-                        <th scope="col">Aantal</th>
-                        <th scope="col">Totaal</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <?php if (empty($products_in_cart)): $levering = 0 ?>
+                    <table class="table table-hover">
+                        <thead class="thead-light">
                         <tr>
-                            <td colspan="7" style="text-align:center;">Er zijn geen producten toegevoegd aan uw winkelmand!</td>
+                            <th scope="col" colspan="2"></th>
+                            <th scope="col" colspan="2">Product</th>
+                            <th scope="col" class="rhide">Prijs</th>
+                            <th scope="col">Aantal</th>
+                            <th scope="col">Totaal</th>
                         </tr>
-                    <?php else: ?>
-                        <?php foreach ($products_in_cart as $num => $product): ?>
+                        </thead>
+                        <tbody>
+                        <?php foreach ($producten_winkelmand as $num => $product): ?>
                             <tr>
-                                <td class="text-secondary"><a href="winkelmand.php?remove=<?= $num ?>" class="remove"><i class="fas fa-trash-alt"></i></a></td>
+                                <td class="text-secondary"><a href="winkelmand.php?verwijder=<?= $num ?>" class="verwijder"><i
+                                                class="fas fa-trash-alt"></i></a></td>
                                 <td class="img">
                                     <?php if (!empty($product['meta']['product_foto']) && file_exists('images/producten/' . $product['meta']['product_foto'])): ?>
                                         <a href="product.php?product_id=<?= $product['product_id'] ?>">
@@ -168,31 +168,30 @@ if ($products_in_cart) {
                                     <input type="hidden" name="opties" value="<?= $product['opties'] ?>">
                                 </td>
                                 <?php if ($product['optie_eenheidsprijs'] > 0): ?>
-                                    <td class="price rhide">
+                                    <td class="prijs rhide">
                                         € <?= number_format($product['optie_eenheidsprijs'], 2) ?></td>
                                 <?php else: ?>
-                                    <td class="price rhide">
+                                    <td class="prijs rhide">
                                         € <?= number_format($product['meta']['eenheidsprijs'], 2) ?></td>
                                 <?php endif; ?>
                                 <td class="aantal">
-                                    <input type="number" class="form-control ajax-update" aria-label="Aantal" name="aantal-<?= $num ?>"
+                                    <input type="number" class="form-control ajax-update" aria-label="Aantal"
+                                           name="aantal-<?= $num ?>"
                                            value="<?= $product['aantal'] ?>" min="1" placeholder="Aantal" required>
                                 </td>
                                 <?php if ($product['optie_eenheidsprijs'] > 0): ?>
-                                    <td class="price product-totaal">
+                                    <td class="prijs product-totaal">
                                         € <?= number_format($product['optie_eenheidsprijs'] * $product['aantal'], 2) ?></td>
                                 <?php else: ?>
-                                    <td class="price product-totaal">
+                                    <td class="prijs product-totaal">
                                         € <?= number_format($product['meta']['eenheidsprijs'] * $product['aantal'], 2) ?></td>
                                 <?php endif; ?>
                             </tr>
                         <?php endforeach; ?>
-                    <?php endif; ?>
-                    </tbody>
-                </table>
-
+                        </tbody>
+                    </table>
                 </div>
-
+                <div><br></div>
                 <div class="subtotaal">
                     <span class="text">Subtotaal</span>
                     <span class="prijs">€ <?= number_format($subtotaal, 2) ?></span>
@@ -205,15 +204,16 @@ if ($products_in_cart) {
                     <span class="text">Totaal</span>
                     <span class="prijs">€ <?= number_format($subtotaal + $levering, 2) ?></span>
                 </div>
+                <div><br></div>
                 <div class="buttons">
-                    <input type="submit" value="Leegmaken" name="emptycart">
-                    <input type="submit" value="Updaten" name="update">
-                    <input type="submit" value="Bestellen" name="checkout">
+                    <button class="btn btn-secondary" type="submit" name="leegmaken"><i class="fas fa-trash-alt"></i> Leegmaken</button>
+                    <button class="btn btn-secondary" type="submit" name="updaten"><i class="fas fa-redo-alt"></i> updaten</button>
+                    <button class="btn btn-success" type="submit" name="bestellen"><i class="fas fa-check"></i> Bestellen</button>
                 </div>
 
             </form>
+            <?php endif; ?>
         </div>
-
 
     </div>
 </main>

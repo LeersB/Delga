@@ -255,10 +255,8 @@ if (isset($_POST['voornaam'], $_POST['achternaam'], $_POST['wachtwoord'], $_POST
                                 <div class="col-md-12 text-danger msg"><?= $msg ?></div>
                                 <div class="input-group col-md-12"><br></div>
                                 <div class="col-12">
-                                    <button type="submit" class="btn btn-primary"><i class="fas fa-check"></i> Opslaan
-                                    </button>
-                                    <a class="btn btn-secondary" href="profiel.php" role="button"><i
-                                                class="fas fa-times"></i> Annuleer</a>
+                                    <a class="btn btn-secondary" href="profiel.php" role="button"><i class="fas fa-times"></i> Annuleer</a>
+                                <button type="submit" class="btn btn-success"><i class="fas fa-check"></i> Opslaan</button>
                                 </div>
                                 <div class="input-group col-md-12"><br></div>
                             </div>

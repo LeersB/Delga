@@ -5,6 +5,7 @@
     <file url="file://$PROJECT_DIR$/activatie_resend.php" dialect="MariaDB" />
     <file url="file://$PROJECT_DIR$/admin/index.php" dialect="MariaDB" />
     <file url="file://$PROJECT_DIR$/admin/main.php" dialect="MariaDB" />
+    <file url="file://$PROJECT_DIR$/admin/producten.php" dialect="MariaDB" />
     <file url="file://$PROJECT_DIR$/admin/users.php" dialect="MariaDB" />
     <file url="file://$PROJECT_DIR$/bestellen.php" dialect="MariaDB" />
     <file url="file://$PROJECT_DIR$/login.php" dialect="MariaDB" />

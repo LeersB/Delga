@@ -61,7 +61,6 @@ if (isset($_GET['product_id'])) {
                             <div class="col-md-8">
                                 <h5 class="card-header text-uppercase"> <?= $product['product_naam'] ?></h5>
                                 <div class="card-body">
-                                    <p class="card-text"><?= $product['omschrijving'] ?></p>
                                     <p class="card-text"><?= $product['product_info'] ?></p>
                                     <?php if (!empty($product['verpakking'])): ?>
                                         <p class="card-text">Verpakking: <?= $product['verpakking'] ?></p>

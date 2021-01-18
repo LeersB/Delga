@@ -38,11 +38,12 @@ function check_loggedin($pdo, $redirect_file = 'login.php') {
     }
 }
 // Functie verzenden activatie email
-function send_activation_email($email, $code) {
-    $subject = 'Account activatie vereist';
+function send_activation_email($email, $activatie_link, $voornaam, $achternaam) {
+    $subject = 'Account activatie delga.be';
     $headers = 'From: ' . mail_from . "\r\n" . 'Reply-To: ' . mail_from . "\r\n" . 'Return-Path: ' . mail_from . "\r\n" . 'X-Mailer: PHP/' . phpversion() . "\r\n" . 'MIME-Version: 1.0' . "\r\n" . 'Content-Type: text/html; charset=UTF-8' . "\r\n";
-    $activate_link = activatie_link . '?email=' . $email . '&code=' . $code;
-    $email_template = str_replace('%link%', $activate_link, file_get_contents('activatie_email.html'));
+    ob_start();
+    include 'activatie_email.php';
+    $email_template = ob_get_clean();
     mail($email, $subject, $email_template, $headers);
 }
 // Functie om een product te verkrijgen via product_id en opties string
@@ -62,7 +63,7 @@ function &get_delgashop_product($product_id, $opties) {
 $aantal_winkelmand = isset($_SESSION['delgashop']) ? count($_SESSION['delgashop']) : 0;
 
 // Functie verzenden order details email
-function send_order_detail_email($email, $producten_winkelmand, $voornaam, $achternaam, $adres_straat, $adres_nr, $adres_postcode, $adres_plaats, $subtotaal, $order_nr) {
+function send_order_detail_email($email, $producten_winkelmand, $voornaam, $achternaam, $order_adres, $order_adres_2, $subtotaal, $order_nr) {
     $subject = 'Bestelling delga.be';
     $headers = 'From: ' . mail_from . "\r\n" . 'Reply-To: ' . mail_from . "\r\n" . 'Return-Path: ' . mail_from . "\r\n" . 'X-Mailer: PHP/' . phpversion() . "\r\n" . 'MIME-Version: 1.0' . "\r\n" . 'Content-Type: text/html; charset=UTF-8' . "\r\n";
     ob_start();

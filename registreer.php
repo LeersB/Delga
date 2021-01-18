@@ -58,7 +58,7 @@ include 'main.php';
                                    placeholder="Achternaam" required>
                         </div>
                     </div>
-                    <div class="input-group col-md-12"><br></div>
+
                     <div class="input-group col-md-6">
                         <label class="sr-only" for="telefoon_nr">Telefoonnummer</label>
                         <div class="input-group mb-2">
@@ -70,7 +70,6 @@ include 'main.php';
                         </div>
                     </div>
                     <div class="input-group col-md-12"><br></div>
-                    <legend class="legend col-md-12"><span>Adres Gegevens</span></legend>
                     <div class="form-group col-md-12" id="zakelijkDiv">
                         <div class="row">
                             <div class="input-group col-md-6">
@@ -95,14 +94,16 @@ include 'main.php';
                             </div>
                         </div>
                     </div>
+                    <legend class="legend col-md-12"><span>Adres Gegevens</span></legend>
+                    <h5 class="legend col-md-12"><span>Facturatieadres</span></h5>
                     <div class="input-group col-md-9">
-                        <label class="sr-only" for="adres_straat">Adres</label>
+                        <label class="sr-only" for="adres_straat">Facturatieadres</label>
                         <div class="input-group mb-2">
                             <div class="input-group-prepend">
                                 <div class="input-group-text"><i class="fas fa-house-user"></i></div>
                             </div>
                             <input type="text" class="form-control" id="adres_straat" name="adres_straat"
-                                   placeholder="Adres" required>
+                                   placeholder="Facturatieadres" required>
                         </div>
                     </div>
                     <div class="input-group col-md-3">
@@ -115,7 +116,7 @@ include 'main.php';
                                    placeholder="Nr. / Bus" required>
                         </div>
                     </div>
-                    <div class="input-group col-md-12"><br></div>
+
                     <div class="input-group col-md-6">
                         <label class="sr-only" for="adres_postcode">Postcode</label>
                         <div class="input-group mb-2">
@@ -133,6 +134,49 @@ include 'main.php';
                                 <div class="input-group-text"><i class="fas fa-house-user"></i></div>
                             </div>
                             <input type="text" class="form-control" id="adres_plaats" name="adres_plaats"
+                                   placeholder="Plaats" required>
+                        </div>
+                    </div>
+                    <div class="input-group col-md-12"><br></div>
+                    <h5 class="legend col-md-12"><span>Leveringsadres</span></h5>
+                    <div class="input-group col-md-9">
+                        <label class="sr-only" for="adres_straat_2">Leveringsadres</label>
+                        <div class="input-group mb-2">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text"><i class="fas fa-house-user"></i></div>
+                            </div>
+                            <input type="text" class="form-control" id="adres_straat_2" name="adres_straat_2"
+                                   placeholder="Leveringsadres" required>
+                        </div>
+                    </div>
+                    <div class="input-group col-md-3">
+                        <label class="sr-only" for="adres_nr_2">Nr. / Bus</label>
+                        <div class="input-group mb-2">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text"><i class="fas fa-house-user"></i></div>
+                            </div>
+                            <input type="text" class="form-control" id="adres_nr_2" name="adres_nr_2"
+                                   placeholder="Nr. / Bus" required>
+                        </div>
+                    </div>
+
+                    <div class="input-group col-md-6">
+                        <label class="sr-only" for="adres_postcode_2">Postcode</label>
+                        <div class="input-group mb-2">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text"><i class="fas fa-house-user"></i></div>
+                            </div>
+                            <input type="text" class="form-control" id="adres_postcode_2" name="adres_postcode_2"
+                                   placeholder="Postcode" required>
+                        </div>
+                    </div>
+                    <div class="input-group col-md-6">
+                        <label class="sr-only" for="adres_plaats_2">Plaats</label>
+                        <div class="input-group mb-2">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text"><i class="fas fa-house-user"></i></div>
+                            </div>
+                            <input type="text" class="form-control" id="adres_plaats_2" name="adres_plaats_2"
                                    placeholder="Plaats" required>
                         </div>
                     </div>

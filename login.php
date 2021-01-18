@@ -6,13 +6,11 @@ if (isset($_SESSION['loggedin'])) {
     exit;
 }
 if (isset($_COOKIE['rememberme']) && !empty($_COOKIE['rememberme'])) {
-    // If the remember me cookie matches one in the database then we can update the session variables and the user will be logged-in.
     $pdo_function = pdo_connect_mysql();
     $stmt = $pdo_function->prepare('SELECT * FROM users WHERE terugkeer_code = ?');
     $stmt->execute([ $_COOKIE['rememberme'] ]);
     $account = $stmt->fetch(PDO::FETCH_ASSOC);
     if ($account) {
-        // Found a match, user is "remembered" log them in automatically
         session_regenerate_id();
         $_SESSION['loggedin'] = TRUE;
         $_SESSION['email'] = $account['email'];
@@ -69,11 +67,11 @@ if (isset($_COOKIE['rememberme']) && !empty($_COOKIE['rememberme'])) {
                         <div class="row">
                             <div class="col">
                                 <label id="rememberme">
-                                    <input type="checkbox" name="rememberme"> Onthoud mij
+                                    <input type="checkbox" name="rememberme"> Mij onthouden
                                 </label>
                             </div>
                             <div class="col">
-                                <a href="wachtwoord_aanvraag.php">Wachtwoord vergeten?</a>
+                                <a href="wachtwoord_aanvraag.php">Wachtwoord vergeten</a>
                             </div>
                         </div>
 

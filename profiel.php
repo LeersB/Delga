@@ -31,9 +31,9 @@ if (isset($_POST['voornaam'], $_POST['achternaam'], $_POST['wachtwoord'], $_POST
         } else {
             // update profiel
             $uniqid = account_activatie && $account['email'] != $_POST['email'] ? uniqid() : $account['activatie_code'];
-            $stmt = $pdo_function->prepare('UPDATE users SET email = ?, wachtwoord = ?, voornaam = ?, achternaam = ?, adres_straat = ?, adres_nr = ?, adres_postcode = ?, adres_plaats = ?, telefoon_nr = ?, bedrijfsnaam = ?, btw_nr = ?, activatie_code = ? WHERE user_id = ?');
+            $stmt = $pdo_function->prepare('UPDATE users SET email = ?, wachtwoord = ?, voornaam = ?, achternaam = ?, adres_straat = ?, adres_nr = ?, adres_postcode = ?, adres_plaats = ?, adres_straat_2 = ?, adres_nr_2 = ?, adres_postcode_2 = ?, adres_plaats_2 = ?, telefoon_nr = ?, bedrijfsnaam = ?, btw_nr = ?, activatie_code = ? WHERE user_id = ?');
             $wachtwoord = !empty($_POST['wachtwoord']) ? password_hash($_POST['wachtwoord'], PASSWORD_DEFAULT) : $account['wachtwoord'];
-            $stmt->execute([$_POST['email'], $wachtwoord, $_POST['voornaam'], $_POST['achternaam'], $_POST['adres_straat'], $_POST['adres_nr'], $_POST['adres_postcode'], $_POST['adres_plaats'], $_POST['telefoon_nr'], $_POST['bedrijfsnaam'], $_POST['btw_nr'], $uniqid, $_SESSION['user_id']]);
+            $stmt->execute([$_POST['email'], $wachtwoord, $_POST['voornaam'], $_POST['achternaam'], $_POST['adres_straat'], $_POST['adres_nr'], $_POST['adres_postcode'], $_POST['adres_plaats'], $_POST['adres_straat_2'], $_POST['adres_nr_2'], $_POST['adres_postcode_2'], $_POST['adres_plaats_2'], $_POST['telefoon_nr'], $_POST['bedrijfsnaam'], $_POST['btw_nr'], $uniqid, $_SESSION['user_id']]);
             $_SESSION['email'] = $_POST['email'];
             if (account_activatie && $account['email'] != $_POST['email']) {
                 send_activation_email($_POST['email'], $uniqid);
@@ -84,20 +84,20 @@ if (isset($_POST['voornaam'], $_POST['achternaam'], $_POST['wachtwoord'], $_POST
                                 <dd class="col-md-9"><?= $account['telefoon_nr'] ?></dd>
                                 <dt class="col-md-3">E-mailadres:</dt>
                                 <dd class="col-md-9"><?= $_SESSION['email'] ?></dd>
-                                <dt class="col-md-3">Adres:</dt>
-                                <dd class="col-md-9"><?= $account['adres_straat'] ?></dd>
-                                <dt class="col-md-3">Huisnummer / Bus:</dt>
-                                <dd class="col-md-9"><?= $account['adres_nr'] ?></dd>
-                                <dt class="col-md-3">Postcode:</dt>
-                                <dd class="col-md-9"><?= $account['adres_postcode'] ?></dd>
-                                <dt class="col-md-3">Plaats:</dt>
-                                <dd class="col-md-9"><?= $account['adres_plaats'] ?></dd>
                                 <?php if ($account['user_level'] == 'Bedrijf'): ?>
                                     <dt class="col-md-3">Bedrijfsnaam:</dt>
                                     <dd class="col-md-9"><?= $account['bedrijfsnaam'] ?></dd>
                                     <dt class="col-md-3">BTW-nummer:</dt>
                                     <dd class="col-md-9"><?= $account['btw_nr'] ?></dd>
                                 <?php endif; ?>
+                                <dt class="col-md-3">Facturatieadres:</dt>
+                                <dd class="col-md-9"><?= $account['adres_straat'],' ', $account['adres_nr']?></dd>
+                                <dt class="col-md-3"></dt>
+                                <dd class="col-md-9"><?= $account['adres_postcode'],' ', $account['adres_plaats']?></dd>
+                                <dt class="col-md-3">Leveringsadres:</dt>
+                                <dd class="col-md-9"><?= $account['adres_straat_2'],' ', $account['adres_nr_2']?></dd>
+                                <dt class="col-md-3"></dt>
+                                <dd class="col-md-9"><?= $account['adres_postcode_2'],' ', $account['adres_plaats_2']?></dd>
                             </dl>
 
                             <a class="btn btn-secondary" href="profiel.php?action=edit" role="button"><i
@@ -133,7 +133,6 @@ if (isset($_POST['voornaam'], $_POST['achternaam'], $_POST['wachtwoord'], $_POST
                                                value="<?= $account['achternaam'] ?>" placeholder="Achternaam" required>
                                     </div>
                                 </div>
-                                <div class="input-group col-md-12"><br></div>
                                 <div class="input-group col-md-6">
                                     <label class="sr-only" for="telefoon_nr">Telefoonnummer</label>
                                     <div class="input-group mb-2">
@@ -145,8 +144,6 @@ if (isset($_POST['voornaam'], $_POST['achternaam'], $_POST['wachtwoord'], $_POST
                                     </div>
                                 </div>
                                 <div class="input-group col-md-12"><br></div>
-
-                                <legend class="legend col-md-12"><span>Adres Gegevens</span></legend>
                                 <?php if ($account['user_level'] == 'Bedrijf'): ?>
                                 <div class="input-group col-md-6">
                                     <label class="sr-only" for="bedrijfsnaam">Bedrijfsnaam</label>
@@ -170,6 +167,8 @@ if (isset($_POST['voornaam'], $_POST['achternaam'], $_POST['wachtwoord'], $_POST
                                 </div>
                                 <div class="input-group col-md-12"><br></div>
                                 <?php endif; ?>
+                                <legend class="legend col-md-12"><span>Adres Gegevens</span></legend>
+                                <h5 class="legend col-md-12"><span>Facturatieadres</span></h5>
                                 <div class="input-group col-md-9">
                                     <label class="sr-only" for="adres_straat">Adres</label>
                                     <div class="input-group mb-2">
@@ -192,7 +191,6 @@ if (isset($_POST['voornaam'], $_POST['achternaam'], $_POST['wachtwoord'], $_POST
                                         <div class="invalid-feedback">Dit veld is verplicht.</div>
                                     </div>
                                 </div>
-                                <div class="input-group col-md-12"><br></div>
                                 <div class="input-group col-md-6">
                                     <label class="sr-only" for="adres_postcode">Postcode</label>
                                     <div class="input-group mb-2">
@@ -213,6 +211,52 @@ if (isset($_POST['voornaam'], $_POST['achternaam'], $_POST['wachtwoord'], $_POST
                                         </div>
                                         <input type="text" class="form-control" id="adres_plaats" name="adres_plaats"
                                                value="<?= $account['adres_plaats'] ?>" placeholder="Plaats" required>
+                                    </div>
+                                </div>
+                                <div class="input-group col-md-12"><br></div>
+                                <h5 class="legend col-md-12"><span>Leveringsadres</span></h5>
+                                <div class="input-group col-md-9">
+                                    <label class="sr-only" for="adres_straat_2">Adres</label>
+                                    <div class="input-group mb-2">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text"><i class="fas fa-house-user"></i></div>
+                                        </div>
+                                        <input type="text" class="form-control" id="adres_straat_2" name="adres_straat_2"
+                                               value="<?= $account['adres_straat_2'] ?>" placeholder="Adres" required>
+                                    </div>
+                                </div>
+                                <div class="input-group col-md-3">
+                                    <label class="sr-only" for="adres_nr_2">Huisnummer / Bus</label>
+                                    <div class="input-group mb-2">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text"><i class="fas fa-house-user"></i></div>
+                                        </div>
+                                        <input type="text" class="form-control" id="adres_nr_2" name="adres_nr_2"
+                                               value="<?= $account['adres_nr_2'] ?>" placeholder="Huisnummer / Bus"
+                                               required>
+                                        <div class="invalid-feedback">Dit veld is verplicht.</div>
+                                    </div>
+                                </div>
+                                <div class="input-group col-md-6">
+                                    <label class="sr-only" for="adres_postcode_2">Postcode</label>
+                                    <div class="input-group mb-2">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text"><i class="fas fa-house-user"></i></div>
+                                        </div>
+                                        <input type="text" class="form-control" id="adres_postcode_2"
+                                               name="adres_postcode_2"
+                                               value="<?= $account['adres_postcode_2'] ?>" placeholder="Postcode"
+                                               required>
+                                    </div>
+                                </div>
+                                <div class="input-group col-md-6">
+                                    <label class="sr-only" for="adres_plaats_2">Plaats</label>
+                                    <div class="input-group mb-2">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text"><i class="fas fa-house-user"></i></div>
+                                        </div>
+                                        <input type="text" class="form-control" id="adres_plaats_2" name="adres_plaats_2"
+                                               value="<?= $account['adres_plaats_2'] ?>" placeholder="Plaats" required>
                                     </div>
                                 </div>
                                 <div class="input-group col-md-12"><br></div>

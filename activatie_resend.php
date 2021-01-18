@@ -4,16 +4,14 @@ include 'main.php';
 $msg = '';
 $msg2 = '';
 $pdo_function = pdo_connect_mysql();
-// Now we check if the email from the resend activation form was submitted, isset() will check if the email exists.
 if (isset($_POST['email'])) {
     $stmt = $pdo_function->prepare('SELECT * FROM users WHERE email = ? AND activatie_code != "" AND activatie_code != "activated"');
-    $stmt->execute([ $_POST['email'] ]);
+    $stmt->execute([ $_POST['email']]);
     $account = $stmt->fetch(PDO::FETCH_ASSOC);
-    // If the account exists with the email
     if ($account) {
-        // Account exist, the $msg variable will be used to show the output message (on the HTML form)
-        send_activation_email($_POST['email'], $account['activatie_code']);
-        $msg = 'De link voor het activeren van uw account is naar uw e-mailadres verstuurd!';
+        $activatie_link = activatie_link . '?email=' . $_POST['email'] . '&code=' . $account['activatie_code'];
+        send_activation_email($_POST['email'], $activatie_link, $account['voornaam'], $account['achternaam']);
+        $msg2 = 'De link voor het activeren van uw account is naar uw e-mailadres verstuurd!';
     } else {
         $msg = 'Er is geen account gevonden met dit e-mailadres!';
     }
@@ -56,10 +54,10 @@ if (isset($_POST['email'])) {
                     </div>
                 </div>
                 <div class="col-md-12 text-danger msg"><?= $msg ?></div>
-                <div class="col-md-12 text-success msg"><?= $msg2 ?></div>
+                <div class="col-md-12 text-success msg2"><?= $msg2 ?></div>
                 <div class="input-group col-md-12"><br></div>
                 <div class="col-md-12">
-                    <button type="submit" value="submit" class="btn btn-primary"><i class="far fa-envelope"></i> Verstuur</button>
+                    <button type="submit" value="submit" class="btn btn-success"><i class="far fa-envelope"></i> Verstuur</button>
                 </div>
             </form>
         </div>

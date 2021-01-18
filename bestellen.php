@@ -3,25 +3,12 @@ $menu = 5;
 include 'main.php';
 $pdo_function = pdo_connect_mysql();
 check_loggedin($pdo_function);
-// Default values for the input form elements
-$account = [
-    'voornaam' => '',
-    'achternaam' => '',
-    'adres_straat' => '',
-    'adres_nr' => '',
-    'adres_postcode' => '',
-    'adres_plaats' => ''
-];
-
-// Error array, output errors on the form
-$errors = [];
 // Check if user is logged in
 if (isset($_SESSION['loggedin'])) {
     $stmt = $pdo_function->prepare('SELECT * FROM users WHERE user_id = ?');
     $stmt->execute([$_SESSION['user_id']]);
     $account = $stmt->fetch(PDO::FETCH_ASSOC);
 }
-
 // controle sessie variabelen voor producten in winkelmand delgashop
 $producten_winkelmand = isset($_SESSION['delgashop']) ? $_SESSION['delgashop'] : [];
 $subtotaal = 0.00;
@@ -32,7 +19,6 @@ if ($producten_winkelmand) {
     $stmt = $pdo_function->prepare('SELECT * FROM producten WHERE product_id IN (' . $lijst_delgashop . ')');
     $stmt->execute(array_column($producten_winkelmand, 'product_id'));
     $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
     // Overloop de producten in winkelmand en voeg meta data toe (product_naam, eenheidsprijs, ...)
     foreach ($producten_winkelmand as &$delgashop_product) {
         foreach ($products as $product) {
@@ -47,22 +33,14 @@ if ($producten_winkelmand) {
     }
 }
 
-// Make sure when the user submits the form all data was submitted and shopping cart is not empty
-if (isset($_POST['voornaam'], $_POST['achternaam'], $_POST['adres_straat'], $_POST['adres_nr'], $_POST['adres_postcode'], $_POST['adres_plaats'], $_SESSION['delgashop'])) {
-    // $user_id = null;
-    // If the user is already logged in
+if (isset($_POST['voornaam'], $_POST['order_adres'], $_POST['order_adres_2'], $_SESSION['delgashop'])) {
     if (isset($_SESSION['loggedin'])) {
         $user_id = $_SESSION['user_id'];
-    } else {
-        $errors[] = 'Login verplicht!';
     }
-    //if (!$errors) {
-
         if (isset($_POST['bestellen']) && $producten_winkelmand) {
-            // Iterate each product in the user's shopping cart
             // Uniek ID genereren
             $order_nr = strtoupper(uniqid('2021-') . substr(md5(mt_rand()), 0, 2));
-            $stmt = $pdo_function->prepare('INSERT INTO orders (order_nr, totaal_prijs, order_status, order_datum, order_email, order_voornaam, order_achternaam, order_adres, gebruiker_id) VALUES (?,?,?,?,?,?,?,?,?)');
+            $stmt = $pdo_function->prepare('INSERT INTO orders (order_nr, totaal_prijs, order_status, order_datum, order_email, order_voornaam, order_achternaam, order_adres, order_adres_2, gebruiker_id) VALUES (?,?,?,?,?,?,?,?,?,?)');
             $stmt->execute([
                 $order_nr,
                 $subtotaal + $levering,
@@ -72,10 +50,10 @@ if (isset($_POST['voornaam'], $_POST['achternaam'], $_POST['adres_straat'], $_PO
                 $_POST['voornaam'],
                 $_POST['achternaam'],
                 $_POST['order_adres'],
+                $_POST['order_adres_2'],
                 $user_id
             ]);
             foreach ($producten_winkelmand as $product) {
-                // For every product in the shopping cart insert a new transaction into our database
                 $stmt = $pdo_function->prepare('INSERT INTO order_details (order_nr, product_id, product_prijs, product_aantal, product_optie) VALUES (?,?,?,?,?)');
                 $stmt->execute([$order_nr, $product['product_id'], $product['optie_eenheidsprijs'] > 0 ? $product['optie_eenheidsprijs'] : $product['meta']['eenheidsprijs'], $product['aantal'], $product['opties']]);
             }
@@ -84,34 +62,20 @@ if (isset($_POST['voornaam'], $_POST['achternaam'], $_POST['adres_straat'], $_PO
                 $producten_winkelmand,
                 $_POST['voornaam'],
                 $_POST['achternaam'],
-                $_POST['adres_straat'],
-                $_POST['adres_nr'],
-                $_POST['adres_postcode'],
-                $_POST['adres_plaats'],
+                $_POST['order_adres'],
+                $_POST['order_adres_2'],
                 $subtotaal + $levering,
                 $order_nr
             );
             header('Location: besteld.php');
             exit;
         }
-    //}
-    // Preserve form details if the user encounters an error
-    //$account = [
-      //  'voornaam' => $_POST['voornaam'],
-      //  'achternaam' => $_POST['achternaam'],
-      //  'adres_straat' => $_POST['adres_straat'],
-      //  'adres_nr' => $_POST['adres_nr'],
-      //  'adres_postcode' => $_POST['adres_postcode'],
-      //  'adres_plaats' => $_POST['adres_plaats']
-    //];
 }
 
-// Redirect the user if the shopping cart is empty
 if (empty($_SESSION['delgashop'])) {
     header('Location: producten.php');
     exit;
 }
-
 ?>
 <!DOCTYPE html>
 <html class="h-100" lang="nl">
@@ -134,24 +98,12 @@ if (empty($_SESSION['delgashop'])) {
 <main class="flex-shrink-0" role="main">
     <div class="container">
 
-
         <div class="checkout content-wrapper">
 
-
-            <p class="error"><?= implode('<br>', $errors) ?></p>
-
-            <?php if (!isset($_SESSION['loggedin'])): ?>
-                <p>Already have an account? <a href="login.php">Log In</a></p>
-            <?php endif; ?>
-
             <form class="needs-validation" novalidate action="" method="post">
-
-
                     <h2>Details bestelling</h2>
 
                     <div class="row">
-
-
                         <div class="input-group col-md-6">
                             <label class="sr-only" for="voornaam">Voornaam</label>
                             <div class="input-group mb-2">
@@ -225,69 +177,30 @@ if (empty($_SESSION['delgashop'])) {
                         <?php endif; ?>
 
                         <div class="input-group col-md-12">
-                            <label class="sr-only" for="order_adres">Adres</label>
+                            <label class="sr-only" for="order_adres">Facturatieadres</label>
                             <div class="input-group mb-2">
                                 <div class="input-group-prepend">
-                                    <div class="input-group-text"><i class="fas fa-house-user"></i></div>
+                                    <div class="input-group-text"><i class="fas fa-house-user"></i>&nbsp;Facturatieadres</div>
                                 </div>
                                 <input type="text" class="form-control"
                                        value="<?= $account['adres_straat'], ' ', $account['adres_nr'], ' - ', $account['adres_postcode'], ' ', $account['adres_plaats'] ?>"
-                                       id="order_adres" name="order_adres" placeholder="Adres" required>
+                                       id="order_adres" name="order_adres" placeholder="Facturatieadres" required>
                             </div>
                         </div>
-
-                        <div class="input-group col-md-9 sr-only">
-                            <label class="sr-only" for="adres_straat">Adres</label>
+                        <div class="input-group col-md-12">
+                            <label class="sr-only" for="order_adres_2">Leveringsadres</label>
                             <div class="input-group mb-2">
                                 <div class="input-group-prepend">
-                                    <div class="input-group-text"><i class="fas fa-house-user"></i></div>
+                                    <div class="input-group-text"><i class="fas fa-house-user"></i>&nbsp;Leveringsadres</div>
                                 </div>
-                                <input type="text" class="form-control" value="<?= $account['adres_straat'] ?>"
-                                       id="adres_straat" name="adres_straat"
-                                       placeholder="Adres" required>
+                                <input type="text" class="form-control"
+                                       value="<?= $account['adres_straat_2'], ' ', $account['adres_nr_2'], ' - ', $account['adres_postcode_2'], ' ', $account['adres_plaats_2'] ?>"
+                                       id="order_adres_2" name="order_adres_2" placeholder="Leveringsadres" required>
                             </div>
                         </div>
-                        <div class="input-group col-md-3 sr-only">
-                            <label class="sr-only" for="adres_nr">Nr. / Bus</label>
-                            <div class="input-group mb-2">
-                                <div class="input-group-prepend">
-                                    <div class="input-group-text"><i class="fas fa-house-user"></i></div>
-                                </div>
-                                <input type="text" class="form-control" value="<?= $account['adres_nr'] ?>"
-                                       id="adres_nr" name="adres_nr"
-                                       placeholder="Nr. / Bus" required>
-                            </div>
-                        </div>
-                        <div class="input-group col-md-6 sr-only">
-                            <label class="sr-only" for="adres_postcode">Postcode</label>
-                            <div class="input-group mb-2">
-                                <div class="input-group-prepend">
-                                    <div class="input-group-text"><i class="fas fa-house-user"></i></div>
-                                </div>
-                                <input type="text" class="form-control" value="<?= $account['adres_postcode'] ?>"
-                                       id="adres_postcode" name="adres_postcode"
-                                       placeholder="Postcode" required>
-                            </div>
-                        </div>
-                        <div class="input-group col-md-6 sr-only">
-                            <label class="sr-only" for="adres_plaats">Plaats</label>
-                            <div class="input-group mb-2">
-                                <div class="input-group-prepend">
-                                    <div class="input-group-text"><i class="fas fa-house-user"></i></div>
-                                </div>
-                                <input type="text" class="form-control" value="<?= $account['adres_plaats'] ?>"
-                                       id="adres_plaats" name="adres_plaats"
-                                       placeholder="Plaats" required>
-                            </div>
-                        </div>
-
-
                     </div>
 
-
-
                 <div class="cart content-wrapper">
-
 
                     <div class="table-responsive-md">
                         <table class="table table-hover">
@@ -327,10 +240,8 @@ if (empty($_SESSION['delgashop'])) {
                                             € <?= number_format($product['meta']['eenheidsprijs'], 2) ?></td>
                                     <?php endif; ?>
                                     <td class="aantal">
-                                        <input type="number" class="form-control ajax-update" disabled
-                                               aria-label="Aantal"
-                                               name="aantal-<?= $num ?>"
-                                               value="<?= $product['aantal'] ?>" min="1" placeholder="Aantal" required>
+                                        <?= $product['aantal'] ?>
+                                        <input type="hidden" name="aantal-<?= $num ?>" aria-label="Aantal" value="<?= $product['aantal'] ?>">
                                     </td>
                                     <?php if ($product['optie_eenheidsprijs'] > 0): ?>
                                         <td class="prijs product-totaal">
@@ -359,7 +270,6 @@ if (empty($_SESSION['delgashop'])) {
                         <span class="text">Totaal</span>
                         <span class="prijs">€ <?= number_format($subtotaal + $levering, 2) ?></span>
                     </div>
-
 
                 </div>
                 <div><br></div>

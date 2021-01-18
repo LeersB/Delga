@@ -11,7 +11,7 @@ if (isset($_GET['email'], $_GET['code']) && !empty($_GET['code'])) {
         $stmt = $pdo_function->prepare('UPDATE users SET activatie_code = ? WHERE email = ? AND activatie_code = ?');
         $activated = 'activated';
         $stmt->execute([ $activated, $_GET['email'], $_GET['code'] ]);
-        $msg = 'Uw account is geactiveerd, je kan zich nu aanmelden!<br><a href="index.php">Login</a>';
+        $msg = 'Uw account is geactiveerd, je kan zich nu <a href="login.php">aanmelden</a>.';
     } else {
         $msg = 'Uw account is reeds geactiveerd of bestaat niet!';
     }

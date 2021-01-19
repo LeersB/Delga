@@ -1,53 +1,35 @@
 <?php
 include 'main.php';
 $pdo_function = pdo_connect_mysql();
-$stmt = $pdo_function->prepare('SELECT * FROM users');
-$stmt->execute();
-$users = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
 ?>
+<!DOCTYPE html>
+<html class="h-100" lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
+    <meta content="Delga contactgegevens" name="description">
+    <meta content="Bart Leers" name="author">
+    <title>Delga</title>
+    <link href="../css/bootstrap.css" rel="stylesheet" type="text/css">
+    <link href="../css/delga.css" rel="stylesheet">
+</head>
 
-<?= template_admin_header('Accounts') ?>
+<body class="d-flex flex-column h-100">
 
-<h2>Accounts</h2>
+<header>
+    <?php include('includes/header.php'); ?>
+</header>
 
-<div class="links">
-    <a href="users.php">Create Account</a>
-</div>
 
-<div class="content-block">
-    <div class="table table-hover">
+<main class="flex-shrink-0" role="main">
+    <div class="container">
 
-        <table class="table">
-            <thead class="thead-light">
-            <tr>
-                <th scope="col">#</th>
-                <th scope="col">E-mailadres</th>
-                <th scope="col">Naam</th>
-                <th scope="col">Adres</th>
-                <th scope="col">Activatie</th>
-                <th scope="col">Level</th>
-            </tr>
-            </thead>
-            <tbody>
-            <?php if (empty($users)): ?>
-                <tr>
-                    <td colspan="8" style="text-align:center;">There are no accounts</td>
-                </tr>
-            <?php else: ?>
-     <?php foreach ($users as $user): ?>
-                    <tr class="details" onclick="location.href='users.php?user_id=<?= $user['user_id']?>'">
-                        <td><?= $user['user_id'] ?></td>
-                        <td><?= $user['email'] ?></td>
-                        <td class="responsive-hidden"><?= $user['voornaam']," ", $user['achternaam'] ?></td>
-                        <td class="responsive-hidden"><?= $user['adres_straat'], " ",$user['adres_nr'], " ", $user['adres_postcode'], " ", $user['adres_plaats']?></td>
-                        <td class="responsive-hidden"><?= $user['activatie_code'] ?></td>
-                        <td class="responsive-hidden"><?= $user['user_level'] ?></td>
-                    </tr>
-                <?php endforeach; ?>
-            <?php endif; ?>
-            </tbody>
-        </table>
+
     </div>
-</div>
+</main>
 
-<?= template_admin_footer() ?>
+<?php include('includes/footer.php'); ?>
+
+</body>
+</html>

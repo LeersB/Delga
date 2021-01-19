@@ -10,18 +10,22 @@ $categories = $stmt->fetchAll(PDO::FETCH_ASSOC);
 $categorie = isset($_GET['categorie']) ? $_GET['categorie'] : 'all';
 $category_sql = '';
 if ($categorie != 'all') {
-    $category_sql = 'WHERE categorie_id = :categorie';
+    $category_sql = 'WHERE p.categorie_id = :categorie';
 }
 $sort = isset($_GET['sort']) ? $_GET['sort'] : 'sort1';
 // Totaal getoonde producten per pagina
-$num_products_on_each_page = 10;
+$num_products_on_each_page = 12;
 // Huidige pagina
 $current_page = isset($_GET['p']) && is_numeric($_GET['p']) ? (int)$_GET['p'] : 1;
 
 if ($sort == 'sort1') {
-    $stmt = $pdo_function->prepare('SELECT p.* FROM producten p  ' . $category_sql . ' ORDER BY p.product_naam ASC LIMIT :page,:num_products');
+    $stmt = $pdo_function->prepare('SELECT p.* FROM producten p ' . $category_sql . ' ORDER BY p.categorie_id, p.product_naam ASC LIMIT :page,:num_products');
 } elseif ($sort == 'sort2') {
+    $stmt = $pdo_function->prepare('SELECT p.* FROM producten p ' . $category_sql . ' ORDER BY p.product_naam ASC LIMIT :page,:num_products');
+} elseif ($sort == 'sort3') {
     $stmt = $pdo_function->prepare('SELECT p.* FROM producten p ' . $category_sql . ' ORDER BY p.product_naam DESC LIMIT :page,:num_products');
+//} elseif ($sort == 'sort4') {
+//    $stmt = $pdo_function->prepare('SELECT p.* FROM producten p inner join categorie c on p.categorie_id = c.categorie_id ' . $category_sql . ' ORDER BY p.categorie_id, p.product_naam ASC LIMIT :page,:num_products');
 } else {
     $stmt = $pdo_function->prepare('SELECT p.* FROM producten p ' . $category_sql . ' LIMIT :page,:num_products');
 }
@@ -84,9 +88,9 @@ $total_pages = round($total_products / $num_products_on_each_page + 0.9, 1);
                         <label class="input-group-text" for="sort">Sorteren</label>
                     </div>
                     <select class="custom-select" name="sort" id="sort">
-                        <option value="sort1"<?= ($sort == 'sort1' ? ' selected' : '') ?> selected>Oplopend
-                        </option>
-                        <option value="sort2"<?= ($sort == 'sort2' ? ' selected' : '') ?>>Aflopend</option>
+                        <option value="sort1"<?= ($sort == 'sort1' ? ' selected' : '') ?> selected>Categorie</option>
+                        <option value="sort2"<?= ($sort == 'sort2' ? ' selected' : '') ?>>Oplopend</option>
+                        <option value="sort3"<?= ($sort == 'sort3' ? ' selected' : '') ?>>Aflopend</option>
                     </select>
                 </div>
             </form>

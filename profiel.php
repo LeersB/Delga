@@ -36,7 +36,8 @@ if (isset($_POST['voornaam'], $_POST['achternaam'], $_POST['wachtwoord'], $_POST
             $stmt->execute([$_POST['email'], $wachtwoord, $_POST['voornaam'], $_POST['achternaam'], $_POST['adres_straat'], $_POST['adres_nr'], $_POST['adres_postcode'], $_POST['adres_plaats'], $_POST['adres_straat_2'], $_POST['adres_nr_2'], $_POST['adres_postcode_2'], $_POST['adres_plaats_2'], $_POST['telefoon_nr'], $_POST['bedrijfsnaam'], $_POST['btw_nr'], $uniqid, $_SESSION['user_id']]);
             $_SESSION['email'] = $_POST['email'];
             if (account_activatie && $account['email'] != $_POST['email']) {
-                send_activation_email($_POST['email'], $uniqid);
+                $activatie_link = activatie_link . '?email=' . $_POST['email'] . '&code=' . $uniqid;
+                send_activation_email($_POST['email'], $activatie_link, $_POST['voornaam'], $_POST['achternaam']);
                 unset($_SESSION['loggedin']);
                 $msg = 'U hebt het e-mailadres aangepast, u moet deze eerst terug activeren voor u kunt aanmelden!';
             } else {

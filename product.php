@@ -11,10 +11,8 @@ if (isset($_GET['product_id'])) {
     if (!$product) {
         $error = 'Product bestaat niet!';
     }
-    // Select the product options (if any) from the products_options table
     $stmt = $pdo_function->prepare('SELECT optie_titel, GROUP_CONCAT(optie_naam) AS opties, GROUP_CONCAT(eenheidsprijs) AS optie_eenheidsprijs FROM product_opties WHERE product_id = ? GROUP BY optie_titel');
     $stmt->execute([$_GET['product_id']]);
-    // Fetch the product options from the database and return the result as an Array
     $product_opties = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } else {
     $error = 'Product bestaat niet!';

@@ -19,7 +19,7 @@ include 'main.php';
 
 <header>
     <?php include('includes/header.php'); ?>
-</header>
+</header>categorie_id
 
 <main class="flex-shrink-0" role="main">
     <div class="container">
@@ -32,7 +32,7 @@ include 'main.php';
                     <div class="input-group col-md-6">
 
                         <select for="user_level" id="user_level" name="user_level" class="custom-select">
-                            <option value="User" selected>Particuliere gebruiker</option>
+                            <option value="Prive" selected>Particuliere gebruiker</option>
                             <option value="Bedrijf">Zakelijke gebruiker</option>
                         </select>
 

@@ -1,4 +1,5 @@
 <?php
+$menuadmin = 3;
 include 'main.php';
 $pdo_function = pdo_connect_mysql();
 // Default input product values
@@ -14,15 +15,21 @@ $product = array(
     'btw' => ''
 );
 
+// Get categories van database
+$stmt = $pdo_function->prepare('SELECT * FROM categorie');
+$stmt->execute();
+$categories = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
 if (isset($_GET['product_id'])) {
     // Get product van database
     $stmt = $pdo_function->prepare('SELECT * FROM producten WHERE product_id = ?');
     $stmt->execute([$_GET['product_id']]);
     $product = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    $stmt = $pdo_function->prepare('SELECT optie_titel, GROUP_CONCAT(optie_naam) AS opties, GROUP_CONCAT(eenheidsprijs) AS optie_eenheidsprijs FROM product_opties WHERE product_id = ? GROUP BY optie_titel');
-    $stmt->execute([$_GET['product_id']]);
-    $product_opties = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    //$stmt = $pdo_function->prepare('SELECT optie_titel, GROUP_CONCAT(optie_naam) AS opties, GROUP_CONCAT(eenheidsprijs) AS optie_eenheidsprijs FROM product_opties WHERE product_id = ? GROUP BY optie_titel');
+    //$stmt->execute([$_GET['product_id']]);
+    //$product_opties = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
     $page = 'Edit';
     if (isset($_POST['submit'])) {
         // Update product
@@ -44,6 +51,8 @@ if (isset($_GET['product_id'])) {
     if (isset($_POST['submit'])) {
         $stmt = $pdo_function->prepare('INSERT IGNORE INTO producten (categorie_id, product_naam, product_foto, product_info, omschrijving, verpakking, waarschuwing, eenheidsprijs, btw) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)');
         $stmt->execute([$_POST['categorie_id'], $_POST['product_naam'], $_POST['product_foto'], $_POST['product_info'], $_POST['omschrijving'], $_POST['verpakking'], $_POST['waarschuwing'], $_POST['eenheidsprijs'], $_POST['btw']]);
+        //$stmt = $pdo_function->prepare('INSERT IGNORE INTO product_opties (optie_titel, optie_naam, eenheidsprijs, product_id) VALUES (?, ?, ?, ?)');
+        //$stmt->execute([$_POST['product_id'], $_POST['optie_naam'], $_POST['eenheidsprijs'], $_POST['product_id']]);
         header('Location: producten.php');
         exit;
     }
@@ -111,7 +120,18 @@ if (isset($_GET['product_id'])) {
                                                    placeholder="Prijs" required>
                                         </div>
                                     </div>
-
+                                    <div class="input-group col-md-2">
+                                        <label class="sr-only" for="btw">btw</label>
+                                        <div class="input-group mb-2">
+                                            <div class="input-group-prepend">
+                                                <div class="input-group-text"><i class="fas fa-receipt"></i></div>
+                                            </div>
+                                            <input type="text" class="form-control" id="btw" name="btw"
+                                                   value="<?= $product['btw'] ?>"
+                                                   placeholder="btw" required>
+                                        </div>
+                                    </div>
+<!--
                                     <?php foreach ($product_opties as $optie): ?>
                                         <select multiple class="form-control" aria-label="optie"
                                                 name="optie-<?= $optie['optie_titel'] ?>" required>
@@ -127,7 +147,7 @@ if (isset($_GET['product_id'])) {
                                             <?php endforeach; ?>
                                         </select>
                                     <?php endforeach; ?>
-
+-->
 
                                 </div>
                             </div>
@@ -164,17 +184,20 @@ if (isset($_GET['product_id'])) {
                 </div>
                 <div class="input-group col-md-12"><br></div>
 
-
                 <div class="input-group col-md-6">
-                    <label class="sr-only" for="product_foto">Categorie</label>
                     <div class="input-group mb-2">
+                        <label class="sr-only" for="categorie_id">Categorie</label>
                         <div class="input-group-prepend">
                             <div class="input-group-text"><i class="fas fa-list-ol"></i></div>
                         </div>
-                        <input type="text" class="form-control" id="categorie_id" name="categorie_id"
-                               value="<?= $product['categorie_id'] ?>">
+                        <select class="custom-select" id="categorie_id" name="categorie_id">
+                            <?php foreach ($categories as $categorie): ?>
+                                <option value="<?= $categorie['categorie_id'] ?>"<?= $categorie['categorie_id'] == $product['categorie_id'] ? ' selected' : '' ?>><?= $categorie["categorie_naam"] ?></option>
+                            <?php endforeach; ?>
+                        </select>
                     </div>
                 </div>
+
                 <div class="input-group col-md-6">
                     <label class="sr-only" for="product_foto">Verpakking</label>
                     <div class="input-group mb-2">

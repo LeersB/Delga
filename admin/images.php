@@ -1,13 +1,13 @@
 <?php
+$menuadmin = 3;
 include 'main.php';
 $error = '';
-//TODO rechten van server bekijken wegens error
 if (isset($_FILES['upload_images'])) {
     $upload_images = $_FILES['upload_images'];
     $fileCount = count($upload_images['name']);
     for ($i = 0; $i < $fileCount; $i++) {
         if (file_exists('../images/producten/' . $upload_images['name'][$i])) {
-            $error .= 'Image already exists with this name: <b>' . $upload_images['name'][$i] . '</b><br>';
+            $error .= 'Er bestaat reeds een afbeelding met deze naam: <b>' . $upload_images['name'][$i] . '</b><br>';
         } else {
             move_uploaded_file($upload_images['tmp_name'][$i], '../images/producten/' . $upload_images['name'][$i]);
         }

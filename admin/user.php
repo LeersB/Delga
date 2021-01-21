@@ -1,7 +1,8 @@
 <?php
+$menuadmin = 2;
 include 'main.php';
 $pdo_function = pdo_connect_mysql();
-// Default input product values
+// Default input user array
 $user = array(
     'email' => '',
     'wachtwoord' => '',
@@ -73,7 +74,6 @@ if (isset($_GET['user_id'])) {
     <?php include('includes/header.php'); ?>
 </header>
 
-
 <main class="flex-shrink-0" role="main">
     <div class="container">
 
@@ -81,7 +81,7 @@ if (isset($_GET['user_id'])) {
 
     <form class="needs-validation" novalidate action="" method="post" autocomplete="off">
         <div class="row">
-            <legend class="legend col-md-12"><span>Persoonlijke informatie ID:<?= $user['user_id']?></span></legend>
+            <legend class="legend col-md-12"><span>Persoonlijke informatie</span></legend>
             <div class="input-group col-md-6">
                 <label class="sr-only" for="voornaam">Voornaam</label>
                 <div class="input-group mb-2">

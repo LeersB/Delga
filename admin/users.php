@@ -1,4 +1,5 @@
 <?php
+$menuadmin = 2;
 include 'main.php';
 $pdo_function = pdo_connect_mysql();
 $stmt = $pdo_function->prepare('SELECT * FROM users');
@@ -27,45 +28,40 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <main class="flex-shrink-0" role="main">
     <div class="container">
 
-<div class="links">
-    <a href="user.php">Create Account</a>
-</div>
+        <h2>Users</h2>
 
-<div class="content-block">
-    <div class="table table-hover">
-
-        <table class="table">
-            <thead class="thead-light">
-            <tr>
-                <th scope="col">E-mailadres</th>
-                <th scope="col">Naam</th>
-                <th scope="col">Facturatieadres</th>
-                <th scope="col">Leveringsadres</th>
-                <th scope="col">Level</th>
-            </tr>
-            </thead>
-            <tbody>
-            <?php if (empty($users)): ?>
+        <div class="content-block">
+            <table class="table table-hover">
+                <thead class="thead-light">
                 <tr>
-                    <td colspan="8" style="text-align:center;">There are no accounts</td>
+                    <th scope="col">E-mailadres</th>
+                    <th scope="col">Naam</th>
+                    <th scope="col">Facturatieadres</th>
+                    <th scope="col">Leveringsadres</th>
+                    <th scope="col">Level</th>
                 </tr>
-            <?php else: ?>
-                <?php foreach ($users as $user): ?>
-                    <tr class="details" onclick="location.href='user.php?user_id=<?= $user['user_id']?>'">
-                        <td><?= $user['email'] ?></td>
-                        <td class="responsive-hidden"><?= $user['voornaam']," ", $user['achternaam'] ?></td>
-                        <td class="responsive-hidden"><?= $user['adres_straat'], " ",$user['adres_nr'], " ", $user['adres_postcode'], " ", $user['adres_plaats']?></td>
-                        <td class="responsive-hidden"><?= $user['adres_straat_2'], " ",$user['adres_nr_2'], " ", $user['adres_postcode_2'], " ", $user['adres_plaats_2']?></td>
-                        <td class="responsive-hidden"><?= $user['user_level'] ?></td>
+                </thead>
+                <tbody>
+                <?php if (empty($users)): ?>
+                    <tr>
+                        <td colspan="8" style="text-align:center;">There are no accounts</td>
                     </tr>
-                <?php endforeach; ?>
-            <?php endif; ?>
-            </tbody>
-        </table>
-    </div>
-</div>
+                <?php else: ?>
+                    <?php foreach ($users as $user): ?>
+                        <tr class="details" onclick="location.href='user.php?user_id=<?= $user['user_id'] ?>'">
+                            <td><?= $user['email'] ?></td>
+                            <td class="responsive-hidden"><?= $user['voornaam'], " ", $user['achternaam'] ?></td>
+                            <td class="responsive-hidden"><?= $user['adres_straat'], " ", $user['adres_nr'], " ", $user['adres_postcode'], " ", $user['adres_plaats'] ?></td>
+                            <td class="responsive-hidden"><?= $user['adres_straat_2'], " ", $user['adres_nr_2'], " ", $user['adres_postcode_2'], " ", $user['adres_plaats_2'] ?></td>
+                            <td class="responsive-hidden"><?= $user['user_level'] ?></td>
+                        </tr>
+                    <?php endforeach; ?>
+                <?php endif; ?>
+                </tbody>
+            </table>
+        </div>
 
-</div>
+    </div>
 </main>
 
 <?php include('includes/footer.php'); ?>

@@ -8,8 +8,10 @@
     <file url="file://$PROJECT_DIR$/admin/main.php" dialect="MariaDB" />
     <file url="file://$PROJECT_DIR$/admin/product.php" dialect="MariaDB" />
     <file url="file://$PROJECT_DIR$/admin/producten.php" dialect="MariaDB" />
+    <file url="file://$PROJECT_DIR$/admin/test.php" dialect="MariaDB" />
     <file url="file://$PROJECT_DIR$/admin/user.php" dialect="MariaDB" />
     <file url="file://$PROJECT_DIR$/admin/users.php" dialect="MariaDB" />
+    <file url="file://$PROJECT_DIR$/admin/zoeken.php" dialect="MariaDB" />
     <file url="file://$PROJECT_DIR$/bestellen.php" dialect="MariaDB" />
     <file url="file://$PROJECT_DIR$/delgadb.sql" dialect="MariaDB" />
     <file url="file://$PROJECT_DIR$/login.php" dialect="MariaDB" />

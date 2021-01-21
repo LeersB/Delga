@@ -1,4 +1,5 @@
 <?php
+$menuadmin = 1;
 include 'main.php';
 $pdo_function = pdo_connect_mysql();
 

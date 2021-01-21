@@ -39,7 +39,7 @@ $producten = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <thead class="thead-light">
                 <tr>
                     <th scope="col">
-                        <a href="producten.php?order_by=product_id>&order_sort=<?= $order_sort == 'ASC' ? 'DESC' : 'ASC' ?>">
+                        <a href="test.php?order_by=product_id>&order_sort=<?= $order_sort == 'ASC' ? 'DESC' : 'ASC' ?>">
                             #
                             <?php if ($order_by == 'product_id'): ?>
                                 <i class="fas fa-sort-numeric-<?= str_replace(array('ASC', 'DESC'), array('down', 'down-alt'), $order_sort) ?>"></i>
@@ -47,7 +47,7 @@ $producten = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         </a>
                     </th>
                     <th scope="col">
-                        <a href="producten.php?order_by=categorie_naam&order_sort=<?= $order_sort == 'ASC' ? 'DESC' : 'ASC' ?>">
+                        <a href="test.php?order_by=categorie_naam&order_sort=<?= $order_sort == 'ASC' ? 'DESC' : 'ASC' ?>">
                             Categorie
                             <?php if ($order_by == 'categorie_naam'): ?>
                                 <i class="fas fa-sort-alpha-<?= str_replace(array('ASC', 'DESC'), array('down', 'down-alt'), $order_sort) ?>"></i>
@@ -55,7 +55,7 @@ $producten = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         </a>
                     </th>
                     <th scope="col">
-                        <a href="producten.php?order_by=product_naam&order_sort=<?= $order_sort == 'ASC' ? 'DESC' : 'ASC' ?>">
+                        <a href="test.php?order_by=product_naam&order_sort=<?= $order_sort == 'ASC' ? 'DESC' : 'ASC' ?>">
                             Naam
                             <?php if ($order_by == 'product_naam'): ?>
                                 <i class="fas fa-sort-alpha-<?= str_replace(array('ASC', 'DESC'), array('down', 'down-alt'), $order_sort) ?>"></i>
@@ -63,7 +63,7 @@ $producten = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         </a>
                     </th>
                     <th scope="col">
-                        <a href="producten.php?order_by=verpakking&order_sort=<?= $order_sort == 'ASC' ? 'DESC' : 'ASC' ?>">
+                        <a href="test.php?order_by=verpakking&order_sort=<?= $order_sort == 'ASC' ? 'DESC' : 'ASC' ?>">
                             Verpakking
                             <?php if ($order_by == 'verpakking'): ?>
                                 <i class="fas fa-sort-alpha-<?= str_replace(array('ASC', 'DESC'), array('down', 'down-alt'), $order_sort) ?>"></i>
@@ -71,7 +71,7 @@ $producten = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         </a>
                     </th>
                     <th scope="col">
-                        <a href="producten.php?order_by=eenheidsprijs&order_sort=<?= $order_sort == 'ASC' ? 'DESC' : 'ASC' ?>">
+                        <a href="test.php?order_by=eenheidsprijs&order_sort=<?= $order_sort == 'ASC' ? 'DESC' : 'ASC' ?>">
                             Prijs
                             <?php if ($order_by == 'eenheidsprijs'): ?>
                                 <i class="fas fa-sort-numeric-<?= str_replace(array('ASC', 'DESC'), array('down', 'down-alt'), $order_sort) ?>"></i>

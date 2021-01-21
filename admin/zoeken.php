@@ -26,7 +26,7 @@ if (isset($_GET['query']) && $_GET['query'] != '') {
     <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
     <meta content="Delga contactgegevens" name="description">
     <meta content="Bart Leers" name="author">
-    <title>Delga zoek resultaat</title>
+    <title>Delga admin resultaat</title>
     <link href="../css/bootstrap.css" rel="stylesheet" type="text/css">
     <link href="../css/delga.css" rel="stylesheet">
 </head>
@@ -54,44 +54,44 @@ if (isset($_GET['query']) && $_GET['query'] != '') {
 
                 <h2>Producten</h2>
 
-                <div class="content">
+                <div class="content table-responsive-lg">
                     <table class="table table-hover">
                         <thead class="thead-light">
                         <tr>
-                            <th scope="col">
-                                <a href="zoeken.php?order_by=product_id>&order_sort=<?= $order_sort == 'ASC' ? 'DESC' : 'ASC' ?><?=isset($_GET['query']) ? '&query=' . htmlentities($_GET['query'], ENT_QUOTES) : ''?>">
-                                    #
+                            <th>
+                                <a href="zoeken.php?order_by=product_id&order_sort=<?= $order_sort == 'ASC' ? 'DESC' : 'ASC' ?><?= isset($_GET['query']) ? '&query=' . htmlentities($_GET['query'], ENT_QUOTES) : '' ?>">
+                                    <i class="fas fa-hashtag"></i>
                                     <?php if ($order_by == 'product_id'): ?>
                                         <i class="fas fa-sort-numeric-<?= str_replace(array('ASC', 'DESC'), array('down', 'down-alt'), $order_sort) ?>"></i>
                                     <?php endif; ?>
                                 </a>
                             </th>
-                            <th scope="col">
-                                <a href="zoeken.php?order_by=categorie_naam&order_sort=<?= $order_sort == 'ASC' ? 'DESC' : 'ASC' ?><?=isset($_GET['query']) ? '&query=' . htmlentities($_GET['query'], ENT_QUOTES) : ''?>">
+                            <th>
+                                <a href="zoeken.php?order_by=categorie_naam&order_sort=<?= $order_sort == 'ASC' ? 'DESC' : 'ASC' ?><?= isset($_GET['query']) ? '&query=' . htmlentities($_GET['query'], ENT_QUOTES) : '' ?>">
                                     Categorie
                                     <?php if ($order_by == 'categorie_naam'): ?>
                                         <i class="fas fa-sort-alpha-<?= str_replace(array('ASC', 'DESC'), array('down', 'down-alt'), $order_sort) ?>"></i>
                                     <?php endif; ?>
                                 </a>
                             </th>
-                            <th scope="col">
-                                <a href="zoeken.php?order_by=product_naam&order_sort=<?= $order_sort == 'ASC' ? 'DESC' : 'ASC' ?><?=isset($_GET['query']) ? '&query=' . htmlentities($_GET['query'], ENT_QUOTES) : ''?>">
+                            <th>
+                                <a href="zoeken.php?order_by=product_naam&order_sort=<?= $order_sort == 'ASC' ? 'DESC' : 'ASC' ?><?= isset($_GET['query']) ? '&query=' . htmlentities($_GET['query'], ENT_QUOTES) : '' ?>">
                                     Naam
                                     <?php if ($order_by == 'product_naam'): ?>
                                         <i class="fas fa-sort-alpha-<?= str_replace(array('ASC', 'DESC'), array('down', 'down-alt'), $order_sort) ?>"></i>
                                     <?php endif; ?>
                                 </a>
                             </th>
-                            <th scope="col">
-                                <a href="zoeken.php?order_by=verpakking&order_sort=<?= $order_sort == 'ASC' ? 'DESC' : 'ASC' ?><?=isset($_GET['query']) ? '&query=' . htmlentities($_GET['query'], ENT_QUOTES) : ''?>">
+                            <th>
+                                <a href="zoeken.php?order_by=verpakking&order_sort=<?= $order_sort == 'ASC' ? 'DESC' : 'ASC' ?><?= isset($_GET['query']) ? '&query=' . htmlentities($_GET['query'], ENT_QUOTES) : '' ?>">
                                     Verpakking
                                     <?php if ($order_by == 'verpakking'): ?>
                                         <i class="fas fa-sort-alpha-<?= str_replace(array('ASC', 'DESC'), array('down', 'down-alt'), $order_sort) ?>"></i>
                                     <?php endif; ?>
                                 </a>
                             </th>
-                            <th scope="col">
-                                <a href="zoeken.php?order_by=eenheidsprijs&order_sort=<?= $order_sort == 'ASC' ? 'DESC' : 'ASC' ?><?=isset($_GET['query']) ? '&query=' . htmlentities($_GET['query'], ENT_QUOTES) : ''?>">
+                            <th>
+                                <a href="zoeken.php?order_by=eenheidsprijs&order_sort=<?= $order_sort == 'ASC' ? 'DESC' : 'ASC' ?><?= isset($_GET['query']) ? '&query=' . htmlentities($_GET['query'], ENT_QUOTES) : '' ?>">
                                     Prijs
                                     <?php if ($order_by == 'eenheidsprijs'): ?>
                                         <i class="fas fa-sort-numeric-<?= str_replace(array('ASC', 'DESC'), array('down', 'down-alt'), $order_sort) ?>"></i>

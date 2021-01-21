@@ -3,7 +3,7 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-auto mr-auto"></div>
-                <p><i class="far fa-edit"></i> 19/01/2021</p>
+                <p><i class="far fa-edit"></i> 21/01/2021</p>
                 <div class="col-auto">
                     <address>
                         <h5>Bart Leers <i class="far fa-copyright"></i> 2021 </h5>

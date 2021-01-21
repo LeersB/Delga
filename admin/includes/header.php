@@ -17,7 +17,7 @@
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" id="userDropdown" role="button" data-toggle="dropdown"
                            aria-haspopup="true" aria-expanded="false">
-                            <i class="fas fa-users-cog"></i> Users
+                            <i class="fas fa-users"></i> Users
                         </a>
                         <div class="dropdown-menu" aria-labelledby="userDropdown">
                             <a class="dropdown-item" href="users.php"><i class="fas fa-users"></i> Raadplegen</a>
@@ -34,6 +34,7 @@
                             <a class="dropdown-item" href="product.php"><i class="fas fa-pump-soap"></i> Toevoegen</a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="images.php"><i class="far fa-image"></i> Afbeeldingen</a>
+                            <a class="dropdown-item" href="opties.php"><i class="fas fa-cart-plus"></i> Opties</a>
                         </div>
                     </li>
                     <li class="nav-item">
@@ -49,7 +50,7 @@
                     <li class="nav-item dropdown active">
                         <a class="nav-link dropdown-toggle" id="userDropdown" role="button" data-toggle="dropdown"
                            aria-haspopup="true" aria-expanded="false">
-                            <i class="fas fa-users-cog"></i> Users<span
+                            <i class="fas fa-users"></i> Users<span
                                     class="sr-only">(current)</span>
                         </a>
                         <div class="dropdown-menu" aria-labelledby="userDropdown">
@@ -67,6 +68,7 @@
                             <a class="dropdown-item" href="product.php"><i class="fas fa-pump-soap"></i> Toevoegen</a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="images.php"><i class="far fa-image"></i> Afbeeldingen</a>
+                            <a class="dropdown-item" href="opties.php"><i class="fas fa-cart-plus"></i> Opties</a>
                         </div>
                     </li>
                     <?php
@@ -79,7 +81,7 @@
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" id="userDropdown" role="button" data-toggle="dropdown"
                            aria-haspopup="true" aria-expanded="false">
-                            <i class="fas fa-users-cog"></i> Users
+                            <i class="fas fa-users"></i> Users
                         </a>
                         <div class="dropdown-menu" aria-labelledby="userDropdown">
                             <a class="dropdown-item" href="users.php"><i class="fas fa-users"></i> Raadplegen</a>
@@ -97,6 +99,7 @@
                             <a class="dropdown-item" href="product.php"><i class="fas fa-pump-soap"></i> Toevoegen</a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="images.php"><i class="far fa-image"></i> Afbeeldingen</a>
+                            <a class="dropdown-item" href="opties.php"><i class="fas fa-cart-plus"></i> Opties</a>
                         </div>
                     </li>
             <?php
@@ -115,10 +118,6 @@
             </div>
         </form>
         <form class="form-inline mt-2 mt-sm-2">
-            <div class="btn-group mr-2">
-                <a class="btn btn-sm-0 btn-outline-secondary" href="../profiel.php"></span><i
-                            class="fas fa-user-circle"></i> Profiel</a>
-            </div>
             <div class="btn-group mr-2">
                 <a class="btn btn-sm-0 btn-outline-secondary" href="../logout.php"></span><i
                             class="fas fa-sign-out-alt"></i> Afmelden</a>

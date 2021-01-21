@@ -11,7 +11,7 @@ $pdo_function = pdo_connect_mysql();
     <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
     <meta content="Delga contactgegevens" name="description">
     <meta content="Bart Leers" name="author">
-    <title>Delga</title>
+    <title>Delga admin</title>
     <link href="../css/bootstrap.css" rel="stylesheet" type="text/css">
     <link href="../css/delga.css" rel="stylesheet">
 </head>

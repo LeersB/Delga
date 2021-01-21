@@ -3,13 +3,13 @@ $menuadmin = 3;
 include 'main.php';
 $pdo_function = pdo_connect_mysql();
 
-$order_by_list = array('product_id', 'categorie_naam', 'product_naam', 'verpakking', 'eenheidsprijs');
-$order_by = isset($_GET['order_by']) && in_array($_GET['order_by'], $order_by_list) ? $_GET['order_by'] : 'product_id';
+$order_by_list = array('optie_id', 'product_naam', 'optie_titel', 'optie_naam', 'eenheidsprijs');
+$order_by = isset($_GET['order_by']) && in_array($_GET['order_by'], $order_by_list) ? $_GET['order_by'] : 'optie_id';
 $order_sort = isset($_GET['order_sort']) && $_GET['order_sort'] == 'DESC' ? 'DESC' : 'ASC';
 
-$stmt = $pdo_function->prepare('SELECT * FROM producten p inner join categorie c on p.categorie_id = c.categorie_id ORDER BY ' . $order_by . ' ' . $order_sort);
+$stmt = $pdo_function->prepare('SELECT * FROM  product_opties o inner join producten p on o.product_id = p.product_id ORDER BY ' . $order_by . ' ' . $order_sort);
 $stmt->execute();
-$producten = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$product_opties = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 <!DOCTYPE html>
 <html class="h-100" lang="nl">
@@ -18,7 +18,7 @@ $producten = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
     <meta content="Delga contactgegevens" name="description">
     <meta content="Bart Leers" name="author">
-    <title>Delga admin product</title>
+    <title>Delga admin product_optie</title>
     <link href="../css/bootstrap.css" rel="stylesheet" type="text/css">
     <link href="../css/delga.css" rel="stylesheet">
 </head>
@@ -32,46 +32,46 @@ $producten = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <main class="flex-shrink-0" role="main">
     <div class="container">
 
-        <h2>Producten</h2>
+        <h2>Product opties</h2>
 
         <div class="content table-responsive-lg">
             <table class="table table-hover">
                 <thead class="thead-light">
                 <tr>
                     <th>
-                        <a href="producten.php?order_by=product_id&order_sort=<?= $order_sort == 'ASC' ? 'DESC' : 'ASC' ?>">
+                        <a href="opties.php?order_by=optie_id&order_sort=<?= $order_sort == 'ASC' ? 'DESC' : 'ASC' ?>">
                             <i class="fas fa-hashtag"></i>
-                            <?php if ($order_by == 'product_id'): ?>
+                            <?php if ($order_by == 'optie_id'): ?>
                                 <i class="fas fa-sort-numeric-<?= str_replace(array('ASC', 'DESC'), array('down', 'down-alt'), $order_sort) ?>"></i>
                             <?php endif; ?>
                         </a>
                     </th>
                     <th>
-                        <a href="producten.php?order_by=categorie_naam&order_sort=<?= $order_sort == 'ASC' ? 'DESC' : 'ASC' ?>">
-                            Categorie
-                            <?php if ($order_by == 'categorie_naam'): ?>
-                                <i class="fas fa-sort-alpha-<?= str_replace(array('ASC', 'DESC'), array('down', 'down-alt'), $order_sort) ?>"></i>
-                            <?php endif; ?>
-                        </a>
-                    </th>
-                    <th>
-                        <a href="producten.php?order_by=product_naam&order_sort=<?= $order_sort == 'ASC' ? 'DESC' : 'ASC' ?>">
-                            Naam
+                        <a href="opties.php?order_by=product_naam&order_sort=<?= $order_sort == 'ASC' ? 'DESC' : 'ASC' ?>">
+                            Productnaam
                             <?php if ($order_by == 'product_naam'): ?>
                                 <i class="fas fa-sort-alpha-<?= str_replace(array('ASC', 'DESC'), array('down', 'down-alt'), $order_sort) ?>"></i>
                             <?php endif; ?>
                         </a>
                     </th>
                     <th>
-                        <a href="producten.php?order_by=verpakking&order_sort=<?= $order_sort == 'ASC' ? 'DESC' : 'ASC' ?>">
-                            Verpakking
-                            <?php if ($order_by == 'verpakking'): ?>
+                        <a href="opties.php?order_by=optie_titel&order_sort=<?= $order_sort == 'ASC' ? 'DESC' : 'ASC' ?>">
+                            Titel
+                            <?php if ($order_by == 'optie_titel'): ?>
                                 <i class="fas fa-sort-alpha-<?= str_replace(array('ASC', 'DESC'), array('down', 'down-alt'), $order_sort) ?>"></i>
                             <?php endif; ?>
                         </a>
                     </th>
                     <th>
-                        <a href="producten.php?order_by=eenheidsprijs&order_sort=<?= $order_sort == 'ASC' ? 'DESC' : 'ASC' ?>">
+                        <a href="opties.php?order_by=optie_naam&order_sort=<?= $order_sort == 'ASC' ? 'DESC' : 'ASC' ?>">
+                            Naam
+                            <?php if ($order_by == 'optie_naam'): ?>
+                                <i class="fas fa-sort-alpha-<?= str_replace(array('ASC', 'DESC'), array('down', 'down-alt'), $order_sort) ?>"></i>
+                            <?php endif; ?>
+                        </a>
+                    </th>
+                    <th>
+                        <a href="opties.php?order_by=eenheidsprijs&order_sort=<?= $order_sort == 'ASC' ? 'DESC' : 'ASC' ?>">
                             Prijs
                             <?php if ($order_by == 'eenheidsprijs'): ?>
                                 <i class="fas fa-sort-numeric-<?= str_replace(array('ASC', 'DESC'), array('down', 'down-alt'), $order_sort) ?>"></i>
@@ -81,19 +81,18 @@ $producten = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 </tr>
                 </thead>
                 <tbody>
-                <?php if (empty($producten)): ?>
+                <?php if (empty($product_opties)): ?>
                     <tr>
                         <td colspan="8" style="text-align:center;">Er zijn geen producten aanwezig</td>
                     </tr>
                 <?php else: ?>
-                    <?php foreach ($producten as $product): ?>
-                        <tr class="details"
-                            onclick="location.href='product.php?product_id=<?= $product['product_id'] ?>'">
-                            <td><?= $product['product_id'] ?></td>
-                            <td><?= $product['categorie_naam'] ?></td>
-                            <td><?= $product['product_naam'] ?></td>
-                            <td><?= $product['verpakking'] ?></td>
-                            <td><?= $product['eenheidsprijs'] ?></td>
+                    <?php foreach ($product_opties as $product_optie): ?>
+                        <tr class="details">
+                            <td><?= $product_optie['optie_id'] ?></td>
+                            <td><?= $product_optie['product_naam'] ?></td>
+                            <td><?= $product_optie['optie_titel'] ?></td>
+                            <td><?= $product_optie['optie_naam'] ?></td>
+                            <td><?= $product_optie['eenheidsprijs'] ?></td>
                         </tr>
                     <?php endforeach; ?>
                 <?php endif; ?>

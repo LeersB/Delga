@@ -13,7 +13,7 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
     <meta content="Delga contactgegevens" name="description">
     <meta content="Bart Leers" name="author">
-    <title>Delga</title>
+    <title>Delga admin user</title>
     <link href="../css/bootstrap.css" rel="stylesheet" type="text/css">
     <link href="../css/delga.css" rel="stylesheet">
 </head>
@@ -30,7 +30,7 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         <h2>Users</h2>
 
-        <div class="content-block">
+        <div class="content table-responsive-lg">
             <table class="table table-hover">
                 <thead class="thead-light">
                 <tr>

@@ -40,7 +40,7 @@ if (isset($_POST['voornaam'], $_POST['order_adres'], $_POST['order_adres_2'], $_
         if (isset($_POST['bestellen']) && $producten_winkelmand) {
             // Uniek ID genereren
             $order_nr = strtoupper(uniqid('2021-') . substr(md5(mt_rand()), 0, 2));
-            $stmt = $pdo_function->prepare('INSERT INTO orders (order_nr, totaal_prijs, order_status, order_datum, order_email, order_voornaam, order_achternaam, order_adres, order_adres_2, gebruiker_id) VALUES (?,?,?,?,?,?,?,?,?,?)');
+            $stmt = $pdo_function->prepare('INSERT INTO orders (order_nr, totaal_prijs, order_status, order_datum, order_email, order_voornaam, order_achternaam, order_adres, order_adres_2, gebruiker_id, opmerking) VALUES (?,?,?,?,?,?,?,?,?,?,?)');
             $stmt->execute([
                 $order_nr,
                 $subtotaal + $levering,
@@ -51,7 +51,8 @@ if (isset($_POST['voornaam'], $_POST['order_adres'], $_POST['order_adres_2'], $_
                 $_POST['achternaam'],
                 $_POST['order_adres'],
                 $_POST['order_adres_2'],
-                $user_id
+                $user_id,
+                $_POST['opmerking']
             ]);
             foreach ($producten_winkelmand as $product) {
                 $stmt = $pdo_function->prepare('INSERT INTO order_details (order_nr, product_id, product_prijs, product_aantal, product_optie) VALUES (?,?,?,?,?)');
@@ -196,6 +197,16 @@ if (empty($_SESSION['delgashop'])) {
                                 <input type="text" class="form-control"
                                        value="<?= $account['adres_straat_2'], ' ', $account['adres_nr_2'], ' - ', $account['adres_postcode_2'], ' ', $account['adres_plaats_2'] ?>"
                                        id="order_adres_2" name="order_adres_2" placeholder="Leveringsadres" required>
+                            </div>
+                        </div>
+                        <div class="input-group col-md-12">
+                            <label class="sr-only" for="opmerking">Opmerking</label>
+                            <div class="input-group mb-2">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text"><i class="fas fa-pencil-alt"></i></div>
+                                </div>
+                                <textarea class="form-control" id="opmerking" name="opmerking"
+                                          rows="3" maxlength="300" placeholder="Uw opmerking of suggestie kunt u hier plaatsen"></textarea>
                             </div>
                         </div>
                     </div>

@@ -71,9 +71,10 @@ $total_pages = round($total_products / $num_products_on_each_page + 0.9, 1);
             <div class="products-header">
                 <p><?= $total_products ?> product(en) gevonden</p>
             </div>
-            <div class="row"><br></div>
+
             <form action="" method="get" class="product-form">
-                <div class="input-group">
+                <div class="row no-gutters">
+                <div class="input-group col-md-6 mb-2">
                     <div class="input-group-prepend">
                         <label class="input-group-text" for="categorie">Categorie</label>
                     </div>
@@ -84,6 +85,8 @@ $total_pages = round($total_products / $num_products_on_each_page + 0.9, 1);
                             <option value="<?= $c['categorie_id'] ?>"<?= ($categorie == $c['categorie_id'] ? ' selected' : '') ?>><?= $c['categorie_naam'] ?></option>
                         <?php endforeach; ?>
                     </select>
+                </div>
+                    <div class="input-group col-md-6 mb-2">
                     <div class="input-group-prepend">
                         <label class="input-group-text" for="sort">Sorteren</label>
                     </div>
@@ -92,6 +95,7 @@ $total_pages = round($total_products / $num_products_on_each_page + 0.9, 1);
                         <option value="sort2"<?= ($sort == 'sort2' ? ' selected' : '') ?>>Oplopend</option>
                         <option value="sort3"<?= ($sort == 'sort3' ? ' selected' : '') ?>>Aflopend</option>
                     </select>
+                </div>
                 </div>
             </form>
         </div>

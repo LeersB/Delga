@@ -12,7 +12,7 @@ $product = array(
     'verpakking' => '',
     'waarschuwing' => '',
     'eenheidsprijs' => '',
-    'btw' => ''
+    'btw' => '21'
 );
 
 // Get categories van database
@@ -167,7 +167,7 @@ if (isset($_GET['product_id'])) {
                             <div class="input-group-text"><i class="fas fa-store"></i></div>
                         </div>
                         <input type="text" class="form-control" id="product_naam" name="product_naam"
-                               value="<?= $product['product_naam'] ?>" placeholder="Product naam" required>
+                               value="<?= $product['product_naam'] ?>" placeholder="Product naam" maxlength="60" required>
                         <div class="invalid-feedback">Dit veld is verplicht.</div>
                     </div>
                 </div>
@@ -178,7 +178,7 @@ if (isset($_GET['product_id'])) {
                             <div class="input-group-text"><i class="far fa-image"></i></div>
                         </div>
                         <input type="text" class="form-control" id="product_foto" name="product_foto"
-                               value="<?= $product['product_foto'] ?>" placeholder="Product foto" required>
+                               value="<?= $product['product_foto'] ?>" placeholder="Product foto" maxlength="60" required>
                         <div class="invalid-feedback">Dit veld is verplicht.</div>
                     </div>
                 </div>
@@ -206,7 +206,7 @@ if (isset($_GET['product_id'])) {
                         </div>
                         <input type="text" class="form-control" id="verpakking" name="verpakking"
                                value="<?= $product['verpakking'] ?>"
-                               placeholder="Verpakking">
+                               placeholder="Verpakking" maxlength="60">
                     </div>
                 </div>
 
@@ -218,7 +218,7 @@ if (isset($_GET['product_id'])) {
                             <div class="input-group-text"><i class="fas fa-pencil-ruler"></i></div>
                         </div>
                         <textarea class="form-control" id="omschrijving" name="omschrijving"
-                                  rows="3"><?= $product['omschrijving'] ?></textarea>
+                                  rows="3" maxlength="300"><?= $product['omschrijving'] ?></textarea>
                     </div>
                 </div>
                 <div class="input-group col-md-6">
@@ -228,7 +228,7 @@ if (isset($_GET['product_id'])) {
                             <div class="input-group-text"><i class="fas fa-exclamation"></i></div>
                         </div>
                         <textarea class="form-control" id="waarschuwing" name="waarschuwing"
-                                  rows="3"><?= $product['waarschuwing'] ?></textarea>
+                                  rows="3" maxlength="400"><?= $product['waarschuwing'] ?></textarea>
                     </div>
                 </div>
                 <div class="input-group col-md-12"><br></div>
@@ -239,10 +239,9 @@ if (isset($_GET['product_id'])) {
                             <div class="input-group-text"><i class="fas fa-info"></i></div>
                         </div>
                         <textarea class="form-control" id="product_info" name="product_info"
-                                  rows="6"><?= $product['product_info'] ?></textarea>
+                                  rows="6" maxlength="600"><?= $product['product_info'] ?></textarea>
                     </div>
                 </div>
-
 
                 <div class="input-group col-md-12"><br></div>
                 <div class="col-12">
@@ -250,7 +249,6 @@ if (isset($_GET['product_id'])) {
                     <button type="submit" name="submit" class="btn btn-success"><i class="fas fa-check"></i> Opslaan</button>
                     <!--<button type="submit" name="delete" class="btn btn-danger">Verwijder</button>-->
                 </div>
-
                 <div class="input-group col-md-12"><br></div>
             </div>
         </form>

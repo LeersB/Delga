@@ -44,7 +44,7 @@ include 'main.php';
                             <div class="input-group-prepend">
                                 <div class="input-group-text"><i class="fas fa-user"></i></div>
                             </div>
-                            <input type="text" class="form-control" id="voornaam" name="voornaam" placeholder="Voornaam"
+                            <input type="text" class="form-control" id="voornaam" name="voornaam" placeholder="Voornaam" maxlength="50"
                                    required>
                         </div>
                     </div>
@@ -55,7 +55,7 @@ include 'main.php';
                                 <div class="input-group-text"><i class="fas fa-user"></i></div>
                             </div>
                             <input type="text" class="form-control" id="achternaam" name="achternaam"
-                                   placeholder="Achternaam" required>
+                                   placeholder="Achternaam" maxlength="50" required>
                         </div>
                     </div>
 
@@ -79,7 +79,7 @@ include 'main.php';
                                         <div class="input-group-text"><i class="fas fa-industry"></i></div>
                                     </div>
                                     <input type="text" class="form-control" id="bedrijfsnaam" name="bedrijfsnaam"
-                                           placeholder="Bedrijfsnaam">
+                                           placeholder="Bedrijfsnaam" maxlength="50">
                                 </div>
                             </div>
                             <div class="input-group col-md-6">
@@ -103,7 +103,7 @@ include 'main.php';
                                 <div class="input-group-text"><i class="fas fa-house-user"></i></div>
                             </div>
                             <input type="text" class="form-control" id="adres_straat" name="adres_straat"
-                                   placeholder="Facturatieadres" required>
+                                   placeholder="Facturatieadres" maxlength="80" required>
                         </div>
                     </div>
                     <div class="input-group col-md-3">
@@ -113,7 +113,7 @@ include 'main.php';
                                 <div class="input-group-text"><i class="fas fa-house-user"></i></div>
                             </div>
                             <input type="text" class="form-control" id="adres_nr" name="adres_nr"
-                                   placeholder="Nr. / Bus" required>
+                                   placeholder="Nr. / Bus" maxlength="20" required>
                         </div>
                     </div>
 
@@ -124,7 +124,7 @@ include 'main.php';
                                 <div class="input-group-text"><i class="fas fa-house-user"></i></div>
                             </div>
                             <input type="text" class="form-control" id="adres_postcode" name="adres_postcode"
-                                   placeholder="Postcode" required>
+                                   placeholder="Postcode" maxlength="4" required>
                         </div>
                     </div>
                     <div class="input-group col-md-6">
@@ -134,7 +134,7 @@ include 'main.php';
                                 <div class="input-group-text"><i class="fas fa-house-user"></i></div>
                             </div>
                             <input type="text" class="form-control" id="adres_plaats" name="adres_plaats"
-                                   placeholder="Plaats" required>
+                                   placeholder="Plaats" maxlength="50" required>
                         </div>
                     </div>
                     <div class="input-group col-md-12"><br></div>
@@ -146,7 +146,7 @@ include 'main.php';
                                 <div class="input-group-text"><i class="fas fa-house-user"></i></div>
                             </div>
                             <input type="text" class="form-control" id="adres_straat_2" name="adres_straat_2"
-                                   placeholder="Leveringsadres" required>
+                                   placeholder="Leveringsadres" maxlength="80" required>
                         </div>
                     </div>
                     <div class="input-group col-md-3">
@@ -156,7 +156,7 @@ include 'main.php';
                                 <div class="input-group-text"><i class="fas fa-house-user"></i></div>
                             </div>
                             <input type="text" class="form-control" id="adres_nr_2" name="adres_nr_2"
-                                   placeholder="Nr. / Bus" required>
+                                   placeholder="Nr. / Bus" maxlength="20" required>
                         </div>
                     </div>
 
@@ -167,7 +167,7 @@ include 'main.php';
                                 <div class="input-group-text"><i class="fas fa-house-user"></i></div>
                             </div>
                             <input type="text" class="form-control" id="adres_postcode_2" name="adres_postcode_2"
-                                   placeholder="Postcode" required>
+                                   placeholder="Postcode" maxlength="4" required>
                         </div>
                     </div>
                     <div class="input-group col-md-6">
@@ -177,7 +177,7 @@ include 'main.php';
                                 <div class="input-group-text"><i class="fas fa-house-user"></i></div>
                             </div>
                             <input type="text" class="form-control" id="adres_plaats_2" name="adres_plaats_2"
-                                   placeholder="Plaats" required>
+                                   placeholder="Plaats" maxlength="50" required>
                         </div>
                     </div>
                     <div class="input-group col-md-12"><br></div>
@@ -190,7 +190,7 @@ include 'main.php';
                             <div class="input-group-prepend">
                                 <div class="input-group-text"><i class="fas fa-envelope"></i></div>
                             </div>
-                            <input type="email" class="form-control" id="email" name="email" placeholder="E-mailadres"
+                            <input type="email" class="form-control" id="email" name="email" placeholder="E-mailadres" maxlength="100"
                                    required>
                         </div>
                     </div>

@@ -15,6 +15,12 @@ $product = array(
     'btw' => '21'
 );
 
+$product_opties = array(
+    'optie_titel' => '',
+    'optie_naam' => '',
+    'eenheidsprijs' => ''
+);
+
 // Get categories van database
 $stmt = $pdo_function->prepare('SELECT * FROM categorie');
 $stmt->execute();
@@ -26,11 +32,11 @@ if (isset($_GET['product_id'])) {
     $stmt->execute([$_GET['product_id']]);
     $product = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    //$stmt = $pdo_function->prepare('SELECT optie_titel, GROUP_CONCAT(optie_naam) AS opties, GROUP_CONCAT(eenheidsprijs) AS optie_eenheidsprijs FROM product_opties WHERE product_id = ? GROUP BY optie_titel');
-    //$stmt->execute([$_GET['product_id']]);
-    //$product_opties = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    // Get product_opties van database
+    $stmt = $pdo_function->prepare('SELECT * FROM product_opties WHERE product_id = ?');
+    $stmt->execute([$_GET['product_id']]);
+    $product_opties = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    $page = 'Edit';
     if (isset($_POST['submit'])) {
         // Update product
         $stmt = $pdo_function->prepare('UPDATE producten SET categorie_id = ?, product_naam = ?, product_foto = ?, product_info = ?, omschrijving = ?, verpakking = ?, waarschuwing = ?, eenheidsprijs = ?, btw = ? WHERE product_id = ?');
@@ -76,9 +82,9 @@ if (isset($_GET['product_id'])) {
     <?php include('includes/header.php'); ?>
 </header>
 
-
 <main class="flex-shrink-0" role="main">
     <div class="container">
+
         <form class="needs-validation" novalidate action="" method="post" autocomplete="off">
             <div class="content-block">
                 <div class="row" id="content-wrapper">
@@ -106,16 +112,15 @@ if (isset($_GET['product_id'])) {
                             </div>
                             <div class="card-footer">
 
-
                                 <div class="input-group mr-2">
-
                                     <div class="input-group col-md-2">
                                         <label class="sr-only" for="eenheidsprijs">Eenheidsprijs</label>
                                         <div class="input-group mb-2">
                                             <div class="input-group-prepend">
                                                 <div class="input-group-text"><i class="fas fa-euro-sign"></i></div>
                                             </div>
-                                            <input type="text" class="form-control" id="eenheidsprijs" name="eenheidsprijs"
+                                            <input type="text" class="form-control" id="eenheidsprijs"
+                                                   name="eenheidsprijs"
                                                    value="<?= $product['eenheidsprijs'] ?>"
                                                    placeholder="Prijs" required>
                                         </div>
@@ -131,32 +136,24 @@ if (isset($_GET['product_id'])) {
                                                    placeholder="btw" required>
                                         </div>
                                     </div>
-<!--
-                                    <?php foreach ($product_opties as $optie): ?>
-                                        <select multiple class="form-control" aria-label="optie"
-                                                name="optie-<?= $optie['optie_titel'] ?>" required>
-                                            <option value="" selected disabled
-                                                    style="display:none"><?= $optie['optie_titel'] ?></option>
-                                            <?php
-                                            $optie_naam = explode(',', $optie['opties']);
-                                            $optie_eenheidsprijs = explode(',', $optie['optie_eenheidsprijs']);
-                                            ?>
-                                            <?php foreach ($optie_naam as $k => $naam): ?>
-                                                <option value="<?= $naam ?>"
-                                                        data-eenheidsprijs="<?= $optie_eenheidsprijs[$k] ?>"><?= $optie_eenheidsprijs[$k] ?> <?= $naam ?></option>
-                                            <?php endforeach; ?>
-                                        </select>
-                                    <?php endforeach; ?>
--->
+
+                                    <?php if ($product_opties != null) { ?>
+                                        <div class="col-md-2">
+                                            <a class="btn btn-success" href="product_opties.php?product_id=<?= $product['product_id'] ?>" role="button"><i class="fas fa-cart-plus"></i> Opties</a>
+                                        </div>
+                                    <?php } else { ?>
+                                    <div class="col-md-2">
+                                        <a class="btn btn-secondary" href="optie.php" role="button"><i class="fas fa-cart-plus"></i> Opties</a>
+                                    </div>
+                                    <?php } ?>
+
 
                                 </div>
                             </div>
-
                         </div>
                     </div>
                 </div>
             </div>
-
 
             <div class="row">
                 <div class="input-group col-md-12"><br></div>
@@ -167,7 +164,8 @@ if (isset($_GET['product_id'])) {
                             <div class="input-group-text"><i class="fas fa-store"></i></div>
                         </div>
                         <input type="text" class="form-control" id="product_naam" name="product_naam"
-                               value="<?= $product['product_naam'] ?>" placeholder="Product naam" maxlength="60" required>
+                               value="<?= $product['product_naam'] ?>" placeholder="Product naam" maxlength="60"
+                               required>
                         <div class="invalid-feedback">Dit veld is verplicht.</div>
                     </div>
                 </div>
@@ -178,7 +176,8 @@ if (isset($_GET['product_id'])) {
                             <div class="input-group-text"><i class="far fa-image"></i></div>
                         </div>
                         <input type="text" class="form-control" id="product_foto" name="product_foto"
-                               value="<?= $product['product_foto'] ?>" placeholder="Product foto" maxlength="60" required>
+                               value="<?= $product['product_foto'] ?>" placeholder="Product foto" maxlength="60"
+                               required>
                         <div class="invalid-feedback">Dit veld is verplicht.</div>
                     </div>
                 </div>
@@ -209,7 +208,6 @@ if (isset($_GET['product_id'])) {
                                placeholder="Verpakking" maxlength="60">
                     </div>
                 </div>
-
                 <div class="input-group col-md-12"><br></div>
                 <div class="input-group col-md-6">
                     <label class="sr-only" for="omschrijving">Omschrijving</label>
@@ -245,8 +243,10 @@ if (isset($_GET['product_id'])) {
 
                 <div class="input-group col-md-12"><br></div>
                 <div class="col-12">
-                    <a class="btn btn-secondary" href="producten.php" role="button"><i class="fas fa-times"></i> Annuleer</a>
-                    <button type="submit" name="submit" class="btn btn-success"><i class="fas fa-check"></i> Opslaan</button>
+                    <a class="btn btn-secondary" href="producten.php" role="button"><i class="fas fa-times"></i>
+                        Annuleer</a>
+                    <button type="submit" name="submit" class="btn btn-success"><i class="fas fa-check"></i> Opslaan
+                    </button>
                     <!--<button type="submit" name="delete" class="btn btn-danger">Verwijder</button>-->
                 </div>
                 <div class="input-group col-md-12"><br></div>

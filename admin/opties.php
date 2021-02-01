@@ -87,7 +87,8 @@ $product_opties = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     </tr>
                 <?php else: ?>
                     <?php foreach ($product_opties as $product_optie): ?>
-                        <tr class="details" onclick="location.href='optie.php?product_id=<?= $product_optie['product_id'] ?>'">
+                        <tr class="details">
+                        <tr class="details" onclick="location.href='optie.php?optie_id=<?= $product_optie['optie_id'] ?>'">
                             <td><?= $product_optie['optie_id'] ?></td>
                             <td><?= $product_optie['product_naam'] ?></td>
                             <td><?= $product_optie['optie_titel'] ?></td>
@@ -107,3 +108,4 @@ $product_opties = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 </body>
 </html>
+

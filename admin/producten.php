@@ -35,8 +35,8 @@ $producten = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <h2>Producten</h2>
 
         <div class="content table-responsive-lg">
-            <table class="table table-hover">
-                <thead class="thead-light">
+            <table class="table table-success table-hover table-borderless">
+                <thead class="table-light">
                 <tr>
                     <th>
                         <a href="producten.php?order_by=product_id&order_sort=<?= $order_sort == 'ASC' ? 'DESC' : 'ASC' ?>">

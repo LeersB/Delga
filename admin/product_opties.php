@@ -21,29 +21,6 @@ if (isset($_GET['product_id'])) {
     $stmt = $pdo_function->prepare('SELECT * FROM product_opties WHERE product_id = ?');
     $stmt->execute([$_GET['product_id']]);
     $opties = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-    if (isset($_POST['submit'])) {
-        // Update product_opties
-        $stmt = $pdo_function->prepare('UPDATE product_opties SET optie_titel = ?, optie_naam = ?, eenheidsprijs = ?, product_id = ? WHERE optie_id = ?');
-        $stmt->execute([$_POST['optie_titel'], $_POST['optie_naam'], $_POST['eenheidsprijs'], $_POST['product_id'], $_GET['optie_id']]);
-        header('Location: opties.php');
-        exit;
-    }
-    if (isset($_POST['delete'])) {
-        // Delete product_opties
-        $stmt = $pdo_function->prepare('DELETE FROM product_opties WHERE optie_id = ?');
-        $stmt->execute([$_GET['optie_id']]);
-        header('Location: opties.php');
-        exit;
-    }
-} else {
-    // Create product_opties
-    if (isset($_POST['submit'])) {
-        $stmt = $pdo_function->prepare('INSERT INTO product_opties (optie_titel, optie_naam, eenheidsprijs, product_id) VALUES (?,?,?,?)');
-        $stmt->execute([$_POST['optie_titel'], $_POST['optie_naam'], $_POST['eenheidsprijs'], $_POST['product_id']]);
-        header('Location: product_opties.php');
-        exit;
-    }
 }
 ?>
 <!DOCTYPE html>
@@ -119,7 +96,7 @@ if (isset($_GET['product_id'])) {
                                         </div>
                                     </div>
                                     <div class="col-md-2">
-                                        <a class="btn btn-secondary"
+                                        <a class="btn btn-outline-success"
                                            href="product.php?product_id=<?= $product['product_id'] ?>" role="button"><i
                                                     class="fas fa-pump-soap"></i> Product</a>
                                     </div>
@@ -130,80 +107,57 @@ if (isset($_GET['product_id'])) {
                 </div>
             </div>
 
-            <?php foreach ($opties as $optie): ?>
-                <div class="row">
-                    <div class="input-group col-md-12"><br></div>
-                    <div class="sr-only input-group col-md-2">
-                        <label class="sr-only" for="optie_id">Optie_id</label>
-                        <div class="input-group mb-2">
-                            <div class="input-group-prepend">
-                                <div class="input-group-text"><i class="fas fa-store"></i></div>
-                            </div>
-                            <input type="text" class="form-control" id="optie_id" name="optie_id"
-                                   value="<?= $optie['optie_id'] ?>" placeholder="Titel" required>
-                        </div>
-                    </div>
-                    <div class="input-group col-md-3">
-                        <label class="sr-only" for="optie_titel">Titel</label>
-                        <div class="input-group mb-2">
-                            <div class="input-group-prepend">
-                                <div class="input-group-text"><i class="fas fa-store"></i></div>
-                            </div>
-                            <input type="text" class="form-control" id="optie_titel" name="optie_titel"
-                                   value="<?= $optie['optie_titel'] ?>" placeholder="Titel" maxlength="20" required>
-                            <div class="invalid-feedback">Dit veld is verplicht.</div>
-                        </div>
-                    </div>
-                    <div class="input-group col-md-3">
-                        <label class="sr-only" for="optie_naam">Naam</label>
-                        <div class="input-group mb-2">
-                            <div class="input-group-prepend">
-                                <div class="input-group-text"><i class="far fa-image"></i></div>
-                            </div>
-                            <input type="text" class="form-control" id="optie_naam" name="optie_naam"
-                                   value="<?= $optie['optie_naam'] ?>" placeholder="Naam" maxlength="20" required>
-                            <div class="invalid-feedback">Dit veld is verplicht.</div>
-                        </div>
-                    </div>
-                    <div class="sr-only input-group col-md-2">
-                        <label class="sr-only" for="product_id">product_id</label>
-                        <div class="input-group mb-2">
-                            <div class="input-group-prepend">
-                                <div class="input-group-text"><i class="fas fa-info"></i></div>
-                            </div>
-                            <input type="text" class="form-control" id="product_id" name="product_id"
-                                   value="<?= $optie['product_id'] ?>" placeholder="Product_id" maxlength="4" required>
-                            <div class="invalid-feedback">Dit veld is verplicht.</div>
-                        </div>
-                    </div>
-                    <div class="input-group col-md-2">
-                        <label class="sr-only" for="eenheidsprijs">Eenheidsprijs</label>
-                        <div class="input-group mb-2">
-                            <div class="input-group-prepend">
-                                <div class="input-group-text"><i class="fas fa-euro-sign"></i></div>
-                            </div>
-                            <input type="text" class="form-control" id="eenheidsprijs" name="eenheidsprijs"
-                                   value="<?= $optie['eenheidsprijs'] ?>"
-                                   placeholder="Prijs" required>
-                        </div>
-                    </div>
-                    <div class="col-md-2">
-                        <a class="btn btn-success" href="optie.php?optie_id=<?= $optie['optie_id'] ?>" role="button"><i class="fas fa-pencil-alt"></i></a>
-                        <a class="btn btn-danger" href="optie.php?optie_id=<?= $optie['optie_id'] ?>" role="button"><i class="fas fa-trash-alt"></i></a>
-                    </div>
-                </div>
+            <div class="input-group col-md-12"><br></div>
 
-            <?php endforeach; ?>
+            <div class="content table-responsive-lg">
+                <table class="table table-success table-hover table-borderless">
+                    <thead class="table-light">
+                    <tr>
+                        <th><i class="fas fa-hashtag"></i></th>
+                        <th>
+                                Titel
+                        </th>
+                        <th>
+                                Naam
+                        </th>
+                        <th>
+                                Prijs
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <?php if (empty($opties)): ?>
+                        <tr>
+                            <td colspan="8" style="text-align:center;">Er zijn geen producten aanwezig</td>
+                        </tr>
+                    <?php else: ?>
+                        <?php foreach ($opties as $optie): ?>
+                            <tr class="details" onclick="location.href='optie.php?optie_id=<?= $optie['optie_id'] ?>'">
+                                <td><?= $optie['optie_id'] ?></td>
+                                <td><?= $optie['optie_titel'] ?></td>
+                                <td><?= $optie['optie_naam'] ?></td>
+                                <td><?= $optie['eenheidsprijs'] ?></td>
+                            </tr>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+                    </tbody>
+                </table>
+            </div>
+
+
             <div class="row">
             <div class="input-group col-md-12"><br></div>
             <div class="col-12">
                 <a class="btn btn-secondary" href="producten.php" role="button"><i class="fas fa-times"></i> Annuleer</a>
-                <!--<button type="submit" name="submit" class="btn btn-success"><i class="fas fa-check"></i> Opslaan
-                </button>-->
             </div>
             <div class="input-group col-md-12"><br></div>
             </div>
         </form>
+
+
+
+
+
 
     </div>
 </main>

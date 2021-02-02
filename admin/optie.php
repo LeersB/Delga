@@ -21,14 +21,14 @@ if (isset($_GET['optie_id'])) {
         // Update product_opties
         $stmt = $pdo_function->prepare('UPDATE product_opties SET optie_titel = ?, optie_naam = ?, eenheidsprijs = ?, product_id = ? WHERE optie_id = ?');
         $stmt->execute([$_POST['optie_titel'], $_POST['optie_naam'], $_POST['eenheidsprijs'], $_POST['product_id'], $_GET['optie_id']]);
-        header('Location: product_opties.php');
+        header('Location: product_opties.php?product_id=' . $_POST['product_id']);
         exit;
     }
     if (isset($_POST['delete'])) {
         // Delete product_opties
         $stmt = $pdo_function->prepare('DELETE FROM product_opties WHERE optie_id = ?');
         $stmt->execute([$_GET['optie_id']]);
-        header('Location: product_opties.php');
+        header('Location: opties.php');
         exit;
     }
 } else {
@@ -36,7 +36,7 @@ if (isset($_GET['optie_id'])) {
     if (isset($_POST['submit'])) {
         $stmt = $pdo_function->prepare('INSERT INTO product_opties (optie_titel, optie_naam, eenheidsprijs, product_id) VALUES (?,?,?,?)');
         $stmt->execute([$_POST['optie_titel'], $_POST['optie_naam'], $_POST['eenheidsprijs'], $_POST['product_id']]);
-        header('Location: product_opties.php');
+        header('Location: product_opties.php?product_id=' . $_POST['product_id']);
         exit;
     }
 }
@@ -130,7 +130,7 @@ if (isset($_GET['optie_id'])) {
 
                 <div class="input-group col-md-12"><br></div>
                 <div class="col-12">
-                    <a class="btn btn-secondary" href="producten.php" role="button"><i class="fas fa-times"></i>
+                    <a class="btn btn-secondary" href="opties.php" role="button"><i class="fas fa-times"></i>
                         Annuleer</a>
                     <button type="submit" name="submit" class="btn btn-success"><i class="fas fa-check"></i> Opslaan
                     </button>
@@ -144,10 +144,6 @@ if (isset($_GET['optie_id'])) {
 </main>
 
 <?php include('includes/footer.php'); ?>
-<script>
-    $('#myModal').on('shown.bs.modal', function () {
-        $('#myInput').trigger('focus')
-    })
-</script>
+
 </body>
 </html>

@@ -31,8 +31,8 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <h2>Users</h2>
 
         <div class="content table-responsive-lg">
-            <table class="table table-hover">
-                <thead class="thead-light">
+            <table class="table table-success table-hover table-borderless">
+                <thead class="table-light">
                 <tr>
                     <th scope="col">E-mailadres</th>
                     <th scope="col">Naam</th>

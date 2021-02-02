@@ -214,8 +214,8 @@ if (empty($_SESSION['delgashop'])) {
                 <div class="cart content-wrapper">
 
                     <div class="table-responsive-md">
-                        <table class="table table-hover">
-                            <thead class="thead-light">
+                        <table class="table table-hover table-borderless">
+                            <thead class="table-secondary">
                             <tr>
                                 <th scope="col"></th>
                                 <th scope="col" colspan="2">Product</th>

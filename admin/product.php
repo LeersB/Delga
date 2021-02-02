@@ -139,14 +139,13 @@ if (isset($_GET['product_id'])) {
 
                                     <?php if ($product_opties != null) { ?>
                                         <div class="col-md-2">
-                                            <a class="btn btn-success" href="product_opties.php?product_id=<?= $product['product_id'] ?>" role="button"><i class="fas fa-cart-plus"></i> Opties</a>
+                                            <a class="btn btn-outline-success" href="product_opties.php?product_id=<?= $product['product_id'] ?>" role="button"><i class="fas fa-cart-plus"></i> Opties</a>
                                         </div>
                                     <?php } else { ?>
                                     <div class="col-md-2">
-                                        <a class="btn btn-secondary" href="optie.php" role="button"><i class="fas fa-cart-plus"></i> Opties</a>
+                                        <a class="btn btn-outline-secondary" href="optie.php" role="button"><i class="fas fa-cart-plus"></i> Opties</a>
                                     </div>
                                     <?php } ?>
-
 
                                 </div>
                             </div>
@@ -247,7 +246,7 @@ if (isset($_GET['product_id'])) {
                         Annuleer</a>
                     <button type="submit" name="submit" class="btn btn-success"><i class="fas fa-check"></i> Opslaan
                     </button>
-                    <!--<button type="submit" name="delete" class="btn btn-danger">Verwijder</button>-->
+                    <button type="submit" name="delete" class="btn btn-danger"><i class="fas fa-trash-alt"></i> Verwijder</button>
                 </div>
                 <div class="input-group col-md-12"><br></div>
             </div>

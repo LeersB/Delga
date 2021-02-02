@@ -7,7 +7,7 @@ $order_by_list = array('optie_id', 'product_naam', 'optie_titel', 'optie_naam', 
 $order_by = isset($_GET['order_by']) && in_array($_GET['order_by'], $order_by_list) ? $_GET['order_by'] : 'optie_id';
 $order_sort = isset($_GET['order_sort']) && $_GET['order_sort'] == 'DESC' ? 'DESC' : 'ASC';
 
-$stmt = $pdo_function->prepare('SELECT * FROM  product_opties o inner join producten p on o.product_id = p.product_id ORDER BY ' . $order_by . ' ' . $order_sort);
+$stmt = $pdo_function->prepare('SELECT optie_id, optie_titel, optie_naam, o.eenheidsprijs, o.product_id, product_naam FROM  product_opties o inner join producten p on o.product_id = p.product_id ORDER BY ' . $order_by . ' ' . $order_sort);
 $stmt->execute();
 $product_opties = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
@@ -35,8 +35,8 @@ $product_opties = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <h2>Product opties</h2>
 
         <div class="content table-responsive-lg">
-            <table class="table table-hover">
-                <thead class="thead-light">
+            <table class="table table-hover table-success table-borderless">
+                <thead class="table-light">
                 <tr>
                     <th>
                         <a href="opties.php?order_by=optie_id&order_sort=<?= $order_sort == 'ASC' ? 'DESC' : 'ASC' ?>">
@@ -78,6 +78,7 @@ $product_opties = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             <?php endif; ?>
                         </a>
                     </th>
+                    <th></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -94,6 +95,7 @@ $product_opties = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             <td><?= $product_optie['optie_titel'] ?></td>
                             <td><?= $product_optie['optie_naam'] ?></td>
                             <td><?= $product_optie['eenheidsprijs'] ?></td>
+                            <td><a class="btn btn-outline-danger" href="optie_delete.php?optie_id=<?= $product_optie['optie_id'] ?>" role="button"><i class="fas fa-trash-alt"></i></a></td>
                         </tr>
                     <?php endforeach; ?>
                 <?php endif; ?>

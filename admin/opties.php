@@ -95,7 +95,7 @@ $product_opties = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             <td><?= $product_optie['optie_titel'] ?></td>
                             <td><?= $product_optie['optie_naam'] ?></td>
                             <td><?= $product_optie['eenheidsprijs'] ?></td>
-                            <td><a class="btn btn-outline-danger" href="optie_delete.php?optie_id=<?= $product_optie['optie_id'] ?>" role="button"><i class="fas fa-trash-alt"></i></a></td>
+                            <td><a class="btn btn-outline-danger" href="optie-delete.php?optie_id=<?= $product_optie['optie_id'] ?>" role="button"><i class="fas fa-trash-alt"></i></a></td>
                         </tr>
                     <?php endforeach; ?>
                 <?php endif; ?>

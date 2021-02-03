@@ -21,7 +21,7 @@ if (isset($_GET['optie_id'])) {
         // Update product_opties
         $stmt = $pdo_function->prepare('UPDATE product_opties SET optie_titel = ?, optie_naam = ?, eenheidsprijs = ?, product_id = ? WHERE optie_id = ?');
         $stmt->execute([$_POST['optie_titel'], $_POST['optie_naam'], $_POST['eenheidsprijs'], $_POST['product_id'], $_GET['optie_id']]);
-        header('Location: product_opties.php?product_id=' . $_POST['product_id']);
+        header('Location: product-opties.php?product_id=' . $_POST['product_id']);
         exit;
     }
     if (isset($_POST['delete'])) {
@@ -36,7 +36,7 @@ if (isset($_GET['optie_id'])) {
     if (isset($_POST['submit'])) {
         $stmt = $pdo_function->prepare('INSERT INTO product_opties (optie_titel, optie_naam, eenheidsprijs, product_id) VALUES (?,?,?,?)');
         $stmt->execute([$_POST['optie_titel'], $_POST['optie_naam'], $_POST['eenheidsprijs'], $_POST['product_id']]);
-        header('Location: product_opties.php?product_id=' . $_POST['product_id']);
+        header('Location: product-opties.php?product_id=' . $_POST['product_id']);
         exit;
     }
 }

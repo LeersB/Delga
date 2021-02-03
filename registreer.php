@@ -26,7 +26,7 @@ include 'main.php';
 
         <div class="register">
             <h2>Maak je Delga account aan</h2>
-            <form class="needs-validation" novalidate action="proces_registreer.php" method="post" autocomplete="off">
+            <form class="needs-validation" novalidate action="proces-registreer.php" method="post" autocomplete="off">
                 <div class="row">
                     <legend class="legend col-md-12"><span>Persoonlijke informatie</span></legend>
                     <div class="input-group col-md-6">

@@ -52,7 +52,7 @@ if (isset($_GET['email'], $_GET['code']) && !empty($_GET['code'])) {
 
         <div class="login">
             <h1>Wachtwoord aanpassen</h1>
-            <form class="needs-validation" novalidate action="wachtwoord_reset.php?email=<?= $_GET['email'] ?>&code=<?= $_GET['code'] ?>" method="post">
+            <form class="needs-validation" novalidate action="wachtwoord-reset.php?email=<?= $_GET['email'] ?>&code=<?= $_GET['code'] ?>" method="post">
                 <div class="input-group col-md-12"><br></div>
                 <div class="input-group col-md-12">
                     <label class="sr-only" for="nwachtwoord">Nieuw wachtwoord</label>

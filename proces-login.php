@@ -12,7 +12,7 @@ if ($account) {
         // Check if the account is activated
         if (account_activatie && $account['activatie_code'] != 'activated') {
             // User has not activated their account, output the message
-            echo 'U moet uw account activeren voor u kan aanmelden, klik <u><a href="activatie_resend.php">hier</a></u> voor het opnieuw verzenden van de activatie email!';
+            echo 'U moet uw account activeren voor u kan aanmelden, klik <u><a href="activatie-resend.php">hier</a></u> voor het opnieuw verzenden van de activatie email!';
         } else {
             // Verification success!
             session_regenerate_id();

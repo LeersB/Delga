@@ -48,7 +48,7 @@ if (isset($_COOKIE['rememberme']) && !empty($_COOKIE['rememberme'])) {
                         <h2 class="title" id="block-customer-login-heading" role="heading"><span>Log in met je Delga account</span>
                         </h2>
                     </div>
-                    <form class="needs-validation" novalidate action="proces_login.php" method="post" id="login-form">
+                    <form class="needs-validation" novalidate action="proces-login.php" method="post" id="login-form">
                         <div class="field note margin-bottom10">Als u een account hebt, meld u dan hier aan.</div>
                         <div class="form-group email">
                             <label for="email" class="form-label">E-mailadres<em>*</em></label>
@@ -71,7 +71,7 @@ if (isset($_COOKIE['rememberme']) && !empty($_COOKIE['rememberme'])) {
                                 </label>
                             </div>
                             <div class="col">
-                                <a href="wachtwoord_aanvraag.php">Wachtwoord vergeten</a>
+                                <a href="wachtwoord-aanvraag.php">Wachtwoord vergeten</a>
                             </div>
                         </div>
 

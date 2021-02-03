@@ -70,7 +70,6 @@ if (isset($_GET['product_id'])) {
                                 </div>
                             </div>
                             <div class="card-footer">
-
                                 <div class="input-group mr-2">
                                     <div class="input-group col-md-2">
                                         <label class="sr-only" for="eenheidsprijs">Eenheidsprijs</label>
@@ -114,21 +113,15 @@ if (isset($_GET['product_id'])) {
                     <thead class="table-light">
                     <tr>
                         <th><i class="fas fa-hashtag"></i></th>
-                        <th>
-                                Titel
-                        </th>
-                        <th>
-                                Naam
-                        </th>
-                        <th>
-                                Prijs
-                        </th>
+                        <th>Titel</th>
+                        <th>Naam</th>
+                        <th>Prijs</th>
                     </tr>
                     </thead>
                     <tbody>
                     <?php if (empty($opties)): ?>
                         <tr>
-                            <td colspan="8" style="text-align:center;">Er zijn geen producten aanwezig</td>
+                            <td colspan="8" style="text-align:center;">Er zijn geen product opties aanwezig</td>
                         </tr>
                     <?php else: ?>
                         <?php foreach ($opties as $optie): ?>
@@ -144,20 +137,15 @@ if (isset($_GET['product_id'])) {
                 </table>
             </div>
 
-
             <div class="row">
-            <div class="input-group col-md-12"><br></div>
-            <div class="col-12">
-                <a class="btn btn-secondary" href="producten.php" role="button"><i class="fas fa-times"></i> Annuleer</a>
-            </div>
-            <div class="input-group col-md-12"><br></div>
+                <div class="input-group col-md-12"><br></div>
+                <div class="col-12">
+                    <a class="btn btn-secondary" href="producten.php" role="button"><i class="fas fa-times"></i>
+                        Annuleer</a>
+                </div>
+                <div class="input-group col-md-12"><br></div>
             </div>
         </form>
-
-
-
-
-
 
     </div>
 </main>

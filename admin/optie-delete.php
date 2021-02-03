@@ -58,8 +58,8 @@ if (isset($_GET['optie_id'])) {
             <?php else: ?>
                 <p>Ben je zeker dat je product optie #<?= $optie['optie_id'] ?> <?= $optie['optie_titel'] ?>-<?= $optie['optie_naam'] ?> wilt verwijderen?</p>
                 <div class="yesno">
-                    <a class="btn btn-secondary" href="optie_delete.php?optie_id=<?= $optie['optie_id'] ?>&confirm=no"><i class="fas fa-times"></i> Annuleer</a>
-                    <a class="btn btn-danger" href="optie_delete.php?optie_id=<?= $optie['optie_id'] ?>&confirm=yes"><i class="fas fa-trash-alt"></i> Verwijder</a>
+                    <a class="btn btn-secondary" href="optie-delete.php?optie_id=<?= $optie['optie_id'] ?>&confirm=no"><i class="fas fa-times"></i> Annuleer</a>
+                    <a class="btn btn-danger" href="optie-delete.php?optie_id=<?= $optie['optie_id'] ?>&confirm=yes"><i class="fas fa-trash-alt"></i> Verwijder</a>
                 </div>
             <?php endif; ?>
         </div>

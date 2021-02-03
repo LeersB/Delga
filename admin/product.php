@@ -139,7 +139,7 @@ if (isset($_GET['product_id'])) {
 
                                     <?php if ($product_opties != null) { ?>
                                         <div class="col-md-2">
-                                            <a class="btn btn-outline-success" href="product_opties.php?product_id=<?= $product['product_id'] ?>" role="button"><i class="fas fa-cart-plus"></i> Opties</a>
+                                            <a class="btn btn-outline-success" href="product-opties.php?product_id=<?= $product['product_id'] ?>" role="button"><i class="fas fa-cart-plus"></i> Opties</a>
                                         </div>
                                     <?php } else { ?>
                                     <div class="col-md-2">

@@ -2,7 +2,6 @@
 $menu = 3;
 include 'main.php';
 ?>
-
 <!DOCTYPE html>
 <html class="h-100" lang="nl">
 <head>
@@ -19,7 +18,7 @@ include 'main.php';
 
 <header>
     <?php include('includes/header.php'); ?>
-</header>categorie_id
+</header>
 
 <main class="flex-shrink-0" role="main">
     <div class="container">

@@ -1,17 +1,20 @@
-<footer class="bg-white text-dark mt-auto py-2">
-    <div class="modal-footer">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-auto mr-auto"></div>
-                <p><i class="far fa-edit"></i> 02/02/2021</p>
-                <div class="col-auto">
-                    <address>
-                        <h5>Bart Leers <i class="far fa-copyright"></i> 2021 </h5>
-                    </address>
+<footer class="bg-white text-dark mt-auto">
+    <hr style="height: 2px;background-color:gray">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col">
+                <div class="d-flex justify-content-end">
+                    <div class="p-2 bd-highlight">
+                        <p><i class="far fa-edit"></i> 04/02/2021</p>
+                    </div>
+                    <div class="p-2 bd-highlight">
+                        <address>
+                            <h5>Bart Leers <i class="far fa-copyright"></i> 2021 </h5>
+                        </address>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 </footer>
 
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"

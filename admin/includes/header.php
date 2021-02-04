@@ -35,10 +35,23 @@
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="images.php"><i class="far fa-image"></i> Afbeeldingen</a>
                             <a class="dropdown-item" href="opties.php"><i class="fas fa-cart-plus"></i> Opties</a>
+                            <a class="dropdown-item" href="categories.php"><i class="fas fa-list-ol"></i> Categorieën</a>
                         </div>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="settings.php"><i class="fas fa-tools"></i> Settings</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" id="ordersDropdown" role="button" data-toggle="dropdown"
+                           aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-store"></i> Orders
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="ordersDropdown">
+                            <a class="dropdown-item" href="orders.php"><i class="fas fa-store"></i> Raadplegen</a>
+                            <a class="dropdown-item" href="order.php"><i class="fas fa-pump-soap"></i> Toevoegen</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="categories.php"><i class="fas fa-list-ol"></i> Categorieën</a>
+                        </div>
                     </li>
                     <?php
                     break;
@@ -69,6 +82,19 @@
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="images.php"><i class="far fa-image"></i> Afbeeldingen</a>
                             <a class="dropdown-item" href="opties.php"><i class="fas fa-cart-plus"></i> Opties</a>
+                            <a class="dropdown-item" href="categories.php"><i class="fas fa-list-ol"></i> Categorieën</a>
+                        </div>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" id="ordersDropdown" role="button" data-toggle="dropdown"
+                           aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-store"></i> Orders
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="ordersDropdown">
+                            <a class="dropdown-item" href="orders.php"><i class="fas fa-store"></i> Raadplegen</a>
+                            <a class="dropdown-item" href="order.php"><i class="fas fa-pump-soap"></i> Toevoegen</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="categories.php"><i class="fas fa-list-ol"></i> Categorieën</a>
                         </div>
                     </li>
                     <?php
@@ -100,9 +126,66 @@
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="images.php"><i class="far fa-image"></i> Afbeeldingen</a>
                             <a class="dropdown-item" href="opties.php"><i class="fas fa-cart-plus"></i> Opties</a>
+                            <a class="dropdown-item" href="categories.php"><i class="fas fa-list-ol"></i> Categorieën</a>
                         </div>
                     </li>
-            <?php
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" id="ordersDropdown" role="button" data-toggle="dropdown"
+                           aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-store"></i> Orders
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="ordersDropdown">
+                            <a class="dropdown-item" href="orders.php"><i class="fas fa-store"></i> Raadplegen</a>
+                            <a class="dropdown-item" href="order.php"><i class="fas fa-pump-soap"></i> Toevoegen</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="categories.php"><i class="fas fa-list-ol"></i> Categorieën</a>
+                        </div>
+                    </li>
+                    <?php
+                    break;
+                case 4: //
+                    ?>
+                    <li class="nav-item ">
+                        <a class="nav-link" href="index.php"><i class="fas fa-home"></i> Home</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" id="userDropdown" role="button" data-toggle="dropdown"
+                           aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-users"></i> Users
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="userDropdown">
+                            <a class="dropdown-item" href="users.php"><i class="fas fa-users"></i> Raadplegen</a>
+                            <a class="dropdown-item" href="user.php"><i class="fas fa-user"></i> Toevoegen</a>
+                        </div>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" id="productenDropdown" role="button" data-toggle="dropdown"
+                           aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-store"></i> Producten
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="productenDropdown">
+                            <a class="dropdown-item" href="producten.php"><i class="fas fa-store"></i> Raadplegen</a>
+                            <a class="dropdown-item" href="product.php"><i class="fas fa-pump-soap"></i> Toevoegen</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="images.php"><i class="far fa-image"></i> Afbeeldingen</a>
+                            <a class="dropdown-item" href="opties.php"><i class="fas fa-cart-plus"></i> Opties</a>
+                            <a class="dropdown-item" href="categories.php"><i class="fas fa-list-ol"></i> Categorieën</a>
+                        </div>
+                    </li>
+                    <li class="nav-item dropdown active">
+                        <a class="nav-link dropdown-toggle" id="ordersDropdown" role="button" data-toggle="dropdown"
+                           aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-store"></i> Orders<span
+                                    class="sr-only">(current)</span>
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="ordersDropdown">
+                            <a class="dropdown-item" href="orders.php"><i class="fas fa-store"></i> Raadplegen</a>
+                            <a class="dropdown-item" href="order.php"><i class="fas fa-pump-soap"></i> Toevoegen</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="categories.php"><i class="fas fa-list-ol"></i> Categorieën</a>
+                        </div>
+                    </li>
+                    <?php
                     break;
             }
             ?>

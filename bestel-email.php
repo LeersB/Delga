@@ -41,7 +41,7 @@
             </tbody>
         </table>
         <p style="text-align:right;margin:0;box-sizing:border-box;font-size:18px;padding:20px 0;">
-            Totaal <span style="padding-left:25px;">€ <?=number_format($subtotaal,2)?></span> <small>(Inclusief levering)</small>
+            Totaal <span style="padding-left:25px;">€ <?=number_format($subtotaal,2)?></span> <small>(Inclusief € 6 levering)</small>
         </p>
     </div>
     <h2 style="padding:20px 40px;margin:0;color:#394453;box-sizing:border-box;">Uw gegevens</h2>

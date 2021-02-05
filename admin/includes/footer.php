@@ -1,4 +1,4 @@
-<footer class="bg-white text-dark mt-auto">
+<footer class="footer text-dark mt-auto">
     <hr style="height: 2px;background-color:gray">
     <div class="container-fluid">
         <div class="row">
@@ -15,6 +15,7 @@
                 </div>
             </div>
         </div>
+    </div>
 </footer>
 
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"

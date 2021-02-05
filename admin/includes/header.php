@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg navbar-light fixed-top" style="background-color: #C5D3CE;">
+<nav class="navbar navbar-expand-lg navbar-light fixed-top">
     <a class="navbar-brand" href="../index.php"><img alt="" height="40" src="../images/delga_gif.gif" width="75"></a>
     <button aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler"
             data-target="#navbar" data-toggle="collapse" type="button"><span class="navbar-toggler-icon"></span>
@@ -38,9 +38,9 @@
                             <a class="dropdown-item" href="categories.php"><i class="fas fa-list-ol"></i> Categorieën</a>
                         </div>
                     </li>
-                    <li class="nav-item">
+                    <!--<li class="nav-item">
                         <a class="nav-link" href="settings.php"><i class="fas fa-tools"></i> Settings</a>
-                    </li>
+                    </li>-->
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" id="ordersDropdown" role="button" data-toggle="dropdown"
                            aria-haspopup="true" aria-expanded="false">

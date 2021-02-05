@@ -38,7 +38,7 @@ if (isset($_GET['optie_id'])) {
     <meta content="Bart Leers" name="author">
     <title>Delga admin product-optie</title>
     <link href="../css/bootstrap.css" rel="stylesheet" type="text/css">
-    <link href="../css/delga.css" rel="stylesheet">
+    <link href="../css/delga-admin.css" rel="stylesheet">
 </head>
 
 <body class="d-flex flex-column h-100">

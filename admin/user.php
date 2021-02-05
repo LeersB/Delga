@@ -65,7 +65,7 @@ if (isset($_GET['user_id'])) {
     <meta content="Bart Leers" name="author">
     <title>Delga admin user</title>
     <link href="../css/bootstrap.css" rel="stylesheet" type="text/css">
-    <link href="../css/delga.css" rel="stylesheet">
+    <link href="../css/delga-admin.css" rel="stylesheet">
 </head>
 
 <body class="d-flex flex-column h-100">
@@ -77,7 +77,7 @@ if (isset($_GET['user_id'])) {
 <main class="flex-shrink-0" role="main">
     <div class="container">
 
-<div class="content-block">
+<div class="content">
 
     <form class="needs-validation" novalidate action="" method="post" autocomplete="off">
         <div class="row">

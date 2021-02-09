@@ -7,6 +7,11 @@ $msg = '';
 $stmt = $pdo_function->prepare('SELECT * FROM users WHERE user_id = ?');
 $stmt->execute([$_SESSION['user_id']]);
 $account = $stmt->fetch(PDO::FETCH_ASSOC);
+// Get orders
+$stmt = $pdo_function->prepare('SELECT p.product_foto AS img, p.product_naam, o.*, od.product_prijs, od.product_aantal, od.product_optie FROM orders o JOIN order_details od ON od.order_nr = o.order_nr
+    JOIN producten p ON p.product_id = od.product_id WHERE user_id = ?');
+$stmt->execute([$_SESSION['user_id']]);
+$orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 if (isset($_POST['voornaam'], $_POST['achternaam'], $_POST['wachtwoord'], $_POST['cwachtwoord'], $_POST['email'])) {
 
@@ -37,7 +42,7 @@ if (isset($_POST['voornaam'], $_POST['achternaam'], $_POST['wachtwoord'], $_POST
             $_SESSION['email'] = $_POST['email'];
             if (account_activatie && $account['email'] != $_POST['email']) {
                 $activatie_link = activatie_link . '?email=' . $_POST['email'] . '&code=' . $uniqid;
-                send_activation_email($_POST['email'], $activatie_link, $_POST['voornaam'], $_POST['achternaam']);
+                send_activatie_email($_POST['email'], $activatie_link, $_POST['voornaam'], $_POST['achternaam']);
                 unset($_SESSION['loggedin']);
                 $msg = 'U hebt het e-mailadres aangepast, u moet deze eerst terug activeren voor u kunt aanmelden!';
             } else {
@@ -55,7 +60,7 @@ if (isset($_POST['voornaam'], $_POST['achternaam'], $_POST['wachtwoord'], $_POST
     <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
     <meta content="Delga contactgegevens" name="description">
     <meta content="Bart Leers" name="author">
-    <title>Profiel Pagina</title>
+    <title>Delga account</title>
     <link href="css/bootstrap.css" rel="stylesheet" type="text/css">
     <link href="css/delga.css" rel="stylesheet">
 </head>
@@ -72,37 +77,106 @@ if (isset($_POST['voornaam'], $_POST['achternaam'], $_POST['wachtwoord'], $_POST
             <?php if (!isset($_GET['action'])): ?>
                 <div class="jumbotron p-4 p-md-5 text-dark rounded bg-light">
                     <div class="content profile">
-                        <h2>Delga profiel</h2>
+                        <h2>Delga account</h2>
                         <div class="block">
                             <p>Uw account details staan hieronder.</p>
 
-                            <dl class="row">
-                                <dt class="col-md-3">Voornaam:</dt>
-                                <dd class="col-md-9"><?= $account['voornaam'] ?></dd>
-                                <dt class="col-md-3">Achternaam:</dt>
-                                <dd class="col-md-9"><?= $account['achternaam'] ?></dd>
-                                <dt class="col-md-3">Telefoonnummer:</dt>
-                                <dd class="col-md-9"><?= $account['telefoon_nr'] ?></dd>
-                                <dt class="col-md-3">E-mailadres:</dt>
-                                <dd class="col-md-9"><?= $_SESSION['email'] ?></dd>
-                                <?php if ($account['user_level'] == 'Bedrijf'): ?>
-                                    <dt class="col-md-3">Bedrijfsnaam:</dt>
-                                    <dd class="col-md-9"><?= $account['bedrijfsnaam'] ?></dd>
-                                    <dt class="col-md-3">BTW-nummer:</dt>
-                                    <dd class="col-md-9"><?= $account['btw_nr'] ?></dd>
-                                <?php endif; ?>
-                                <dt class="col-md-3">Facturatieadres:</dt>
-                                <dd class="col-md-9"><?= $account['adres_straat'],' ', $account['adres_nr']?></dd>
-                                <dt class="col-md-3"></dt>
-                                <dd class="col-md-9"><?= $account['adres_postcode'],' ', $account['adres_plaats']?></dd>
-                                <dt class="col-md-3">Leveringsadres:</dt>
-                                <dd class="col-md-9"><?= $account['adres_straat_2'],' ', $account['adres_nr_2']?></dd>
-                                <dt class="col-md-3"></dt>
-                                <dd class="col-md-9"><?= $account['adres_postcode_2'],' ', $account['adres_plaats_2']?></dd>
-                            </dl>
+                            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                <li class="nav-item" role="presentation">
+                                    <a class="nav-link active" id="profiel-tab" data-bs-toggle="tab" href="#profiel" role="tab" aria-controls="profiel" aria-selected="true">Profiel</a>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <a class="nav-link" id="bestellingen-tab" data-bs-toggle="tab" href="#bestellingen" role="tab" aria-controls="bestellingen" aria-selected="false">Bestellingen</a>
+                                </li>
+                            </ul>
+                            <div class="tab-content" id="myTabContent">
+                                <div class="tab-pane fade show active" id="profiel" role="tabpanel" aria-labelledby="profiel-tab">
+                                    <dl class="row">
+                                        <div class="input-group col-md-12"><br></div>
+                                        <dt class="col-md-3">Voornaam:</dt>
+                                        <dd class="col-md-9"><?= $account['voornaam'] ?></dd>
+                                        <dt class="col-md-3">Achternaam:</dt>
+                                        <dd class="col-md-9"><?= $account['achternaam'] ?></dd>
+                                        <dt class="col-md-3">Telefoonnummer:</dt>
+                                        <dd class="col-md-9"><?= $account['telefoon_nr'] ?></dd>
+                                        <dt class="col-md-3">E-mailadres:</dt>
+                                        <dd class="col-md-9"><?= $_SESSION['email'] ?></dd>
+                                        <?php if ($account['user_level'] == 'Bedrijf'): ?>
+                                            <dt class="col-md-3">Bedrijfsnaam:</dt>
+                                            <dd class="col-md-9"><?= $account['bedrijfsnaam'] ?></dd>
+                                            <dt class="col-md-3">BTW-nummer:</dt>
+                                            <dd class="col-md-9"><?= $account['btw_nr'] ?></dd>
+                                        <?php endif; ?>
+                                        <dt class="col-md-3">Facturatieadres:</dt>
+                                        <dd class="col-md-9"><?= $account['adres_straat'],' ', $account['adres_nr']?></dd>
+                                        <dt class="col-md-3"></dt>
+                                        <dd class="col-md-9"><?= $account['adres_postcode'],' ', $account['adres_plaats']?></dd>
+                                        <dt class="col-md-3">Leveringsadres:</dt>
+                                        <dd class="col-md-9"><?= $account['adres_straat_2'],' ', $account['adres_nr_2']?></dd>
+                                        <dt class="col-md-3"></dt>
+                                        <dd class="col-md-9"><?= $account['adres_postcode_2'],' ', $account['adres_plaats_2']?></dd>
+                                    </dl>
 
-                            <a class="btn btn-secondary" href="profiel.php?action=edit" role="button"><i
-                                        class="far fa-edit"></i> Aanpassen</a>
+                                    <a class="btn btn-secondary" href="profiel.php?action=edit" role="button"><i class="far fa-edit"></i> Aanpassen</a>
+                                </div>
+                                <div class="tab-pane fade" id="bestellingen" role="tabpanel" aria-labelledby="bestellingen-tab">
+                                    <div class="input-group col-md-12"><br></div>
+                                    <div class="content table-responsive-lg">
+                                        <table class="table table-striped table-success table-borderless">
+                                            <thead class="table-light">
+                                            <tr>
+                                                <th><i class="fas fa-hashtag"></i></th>
+                                                <th>Product</th>
+                                                <th>Datum</th>
+                                                <th>Prijs</th>
+                                                <th>Aantal</th>
+                                                <th>Totaal</th>
+                                                <th>Status</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <?php if (empty($orders)): ?>
+                                                <tr>
+                                                    <td colspan="7" style="text-align:center;">Er zijn geen bestellingen aanwezig</td>
+                                                </tr>
+                                            <?php else: ?>
+                                                <?php foreach ($orders as $order): ?>
+                                                    <tr class="details">
+                                                        <td colspan="2">
+                                                            <div>
+                                                                <span>Bestel datum: </span>
+                                                                <span><?=date('d-m-Y', strtotime($order['order_datum']))?></span>
+                                                            </div>
+                                                        </td>
+                                                        <td colspan="5">
+                                                            <div>
+                                                                <span>Order nummer: </span>
+                                                                <span><?=$order['order_nr']?></span>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                    <tr class="expanded-details" style="display: none">
+                                                        <td class="img">
+                                                            <?php if (!empty($order['img']) && file_exists('images/producten/' . $order['img'])): ?>
+                                                                <img src="images/producten/<?=$order['img']?>" width="32" height="32" alt="<?=$order['product_naam']?>">
+                                                            <?php endif; ?>
+                                                        </td>
+                                                        <td><?=$order['product_naam']?> <?=$order['product_optie']?></td>
+                                                        <td><?=date('d-m-Y', strtotime($order['order_datum']))?></td>
+                                                        <td>€ <?=number_format($order['product_prijs'],2)?></td>
+                                                        <td><?=$order['product_aantal']?></td>
+                                                        <td>€&nbsp;<?=number_format($order['product_prijs'] * $order['product_aantal'], 2)?></td>
+                                                        <td><?=$order['order_status']?></td>
+                                                    </tr>
+                                                <?php endforeach; ?>
+                                            <?php endif; ?>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                            </div>
+
                         </div>
                     </div>
                 </div>
@@ -273,7 +347,6 @@ if (isset($_POST['voornaam'], $_POST['achternaam'], $_POST['wachtwoord'], $_POST
                                                value="<?= $_SESSION['email'] ?>" placeholder="E-mailadres" required>
                                     </div>
                                 </div>
-                                <div class="input-group col-md-12"><br></div>
                                 <div class="input-group col-md-12">
                                     <label class="sr-only" for="wachtwoord">Wachtwoord</label>
                                     <div class="input-group mb-2">
@@ -315,5 +388,24 @@ if (isset($_POST['voornaam'], $_POST['achternaam'], $_POST['wachtwoord'], $_POST
 
 <?php include('includes/footer.php'); ?>
 <script src="js/form-validation.js"></script>
+<script>
+    var triggerTabList = [].slice.call(document.querySelectorAll('#myTab a'))
+    triggerTabList.forEach(function (triggerEl) {
+        var tabTrigger = new bootstrap.Tab(triggerEl)
+
+        triggerEl.addEventListener('click', function (event) {
+            event.preventDefault()
+            tabTrigger.show()
+        })
+    })
+</script>
+<script>
+    document.querySelectorAll(".details").forEach(function(detail) {
+        detail.onclick = function() {
+            let display = this.nextElementSibling.style.display === 'table-row' ? 'none' : 'table-row';
+            this.nextElementSibling.style.display = display;
+        };
+    });
+</script>
 </body>
 </html>

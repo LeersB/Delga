@@ -38,11 +38,20 @@ function check_loggedin($pdo, $redirect_file = 'login.php') {
     }
 }
 // Functie verzenden activatie email
-function send_activation_email($email, $activatie_link, $voornaam, $achternaam) {
+function send_activatie_email($email, $activatie_link, $voornaam, $achternaam) {
     $subject = 'Account activatie delga.be';
     $headers = 'From: ' . mail_from . "\r\n" . 'Reply-To: ' . mail_from . "\r\n" . 'Return-Path: ' . mail_from . "\r\n" . 'X-Mailer: PHP/' . phpversion() . "\r\n" . 'MIME-Version: 1.0' . "\r\n" . 'Content-Type: text/html; charset=UTF-8' . "\r\n";
     ob_start();
     include 'activatie-email.php';
+    $email_template = ob_get_clean();
+    mail($email, $subject, $email_template, $headers);
+}
+// Functie verzenden wachtwoord email
+function send_wachtwoord_email($email, $reset_link, $voornaam, $achternaam) {
+    $subject = 'Wachtwoord herstel delga.be';
+    $headers = 'From: ' . mail_from . "\r\n" . 'Reply-To: ' . mail_from . "\r\n" . 'Return-Path: ' . mail_from . "\r\n" . 'X-Mailer: PHP/' . phpversion() . "\r\n" . 'MIME-Version: 1.0' . "\r\n" . 'Content-Type: text/html; charset=UTF-8' . "\r\n";
+    ob_start();
+    include 'wachtwoord-email.php';
     $email_template = ob_get_clean();
     mail($email, $subject, $email_template, $headers);
 }
@@ -63,12 +72,12 @@ function &get_delgashop_product($product_id, $opties) {
 $aantal_winkelmand = isset($_SESSION['delgashop']) ? count($_SESSION['delgashop']) : 0;
 
 // Functie verzenden order details email
-function send_order_detail_email($email, $producten_winkelmand, $voornaam, $achternaam, $order_adres, $order_adres_2, $subtotaal, $order_nr) {
+function send_order_detail_email($email, $producten_winkelmand, $user_naam, $order_adres, $order_adres_2, $subtotaal, $order_nr) {
     $subject = 'Bestelling delga.be';
     $headers = 'From: ' . mail_from . "\r\n" . 'Reply-To: ' . mail_from . "\r\n" . 'Return-Path: ' . mail_from . "\r\n" . 'X-Mailer: PHP/' . phpversion() . "\r\n" . 'MIME-Version: 1.0' . "\r\n" . 'Content-Type: text/html; charset=UTF-8' . "\r\n";
     ob_start();
     include 'bestel-email.php';
-    $order_details_template = ob_get_clean();
-    mail($email, $subject, $order_details_template, $headers);
+    $email_template = ob_get_clean();
+    mail($email, $subject, $email_template, $headers);
 }
 ?>

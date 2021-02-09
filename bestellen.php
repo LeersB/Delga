@@ -33,22 +33,21 @@ if ($producten_winkelmand) {
     }
 }
 
-if (isset($_POST['voornaam'], $_POST['order_adres'], $_POST['order_adres_2'], $_SESSION['delgashop'])) {
+if (isset($_POST['user_naam'], $_POST['order_adres'], $_POST['order_adres_2'], $_SESSION['delgashop'])) {
     if (isset($_SESSION['loggedin'])) {
         $user_id = $_SESSION['user_id'];
     }
     if (isset($_POST['bestellen']) && $producten_winkelmand) {
         // Uniek ID genereren
         $order_nr = strtoupper(uniqid('2021-') . substr(md5(mt_rand()), 0, 1));
-        $stmt = $pdo_function->prepare('INSERT INTO orders (order_nr, totaal_prijs, order_status, order_datum, order_email, order_voornaam, order_achternaam, order_adres, order_adres_2, gebruiker_id, opmerking) VALUES (?,?,?,?,?,?,?,?,?,?,?)');
+        $stmt = $pdo_function->prepare('INSERT INTO orders (order_nr, totaal_prijs, order_status, order_datum, order_email, user_naam, order_adres, order_adres_2, user_id, opmerking) VALUES (?,?,?,?,?,?,?,?,?,?)');
         $stmt->execute([
             $order_nr,
             $subtotaal + $levering,
-            '1',
+            'nieuw',
             date('Y-m-d H:i:s'),
             isset($account['email']) && !empty($account['email']) ? $account['email'] : $_POST['email'],
-            $_POST['voornaam'],
-            $_POST['achternaam'],
+            $_POST['user_naam'],
             $_POST['order_adres'],
             $_POST['order_adres_2'],
             $user_id,
@@ -61,8 +60,7 @@ if (isset($_POST['voornaam'], $_POST['order_adres'], $_POST['order_adres_2'], $_
         send_order_detail_email(
             isset($account['email']) && !empty($account['email']) ? $account['email'] : $_POST['email'],
             $producten_winkelmand,
-            $_POST['voornaam'],
-            $_POST['achternaam'],
+            $_POST['user_naam'],
             $_POST['order_adres'],
             $_POST['order_adres_2'],
             $subtotaal + $levering,
@@ -105,49 +103,35 @@ if (empty($_SESSION['delgashop'])) {
                 <h2>Details bestelling</h2>
 
                 <div class="row">
-                    <div class="input-group col-md-6">
-                        <label class="sr-only" for="voornaam">Voornaam</label>
+                    <p class="legend col-md-12"><span>Beste <?= $account['voornaam']," ",$account['achternaam']?>, gelieve de volgende gegevens na te kijken voor u uw bestelling plaatst.</span></p>
+                    <div class="input-group col-md-4 sr-only">
+                        <label class="sr-only" for="user_naam">Naam</label>
                         <div class="input-group mb-2">
                             <div class="input-group-prepend">
                                 <div class="input-group-text"><i class="fas fa-user"></i></div>
                             </div>
-                            <input type="text" class="form-control" value="<?= $account['voornaam'] ?>"
-                                   id="voornaam" name="voornaam" placeholder="Voornaam"
-                                   required>
+                            <input type="text" class="form-control" value="<?= $account['voornaam']," ",$account['achternaam']?>"
+                                   id="user_naam" name="user_naam" placeholder="Naam" required>
                         </div>
                     </div>
-                    <div class="input-group col-md-6">
-                        <label class="sr-only" for="achternaam">Achternaam</label>
-                        <div class="input-group mb-2">
-                            <div class="input-group-prepend">
-                                <div class="input-group-text"><i class="fas fa-user"></i></div>
-                            </div>
-                            <input type="text" class="form-control" value="<?= $account['achternaam'] ?>"
-                                   id="achternaam" name="achternaam"
-                                   placeholder="Achternaam" required>
-                        </div>
-                    </div>
-                    <div class="input-group col-md-6">
+                    <div class="input-group col-md-4 sr-only">
                         <label class="sr-only" for="email">E-mailadres</label>
                         <div class="input-group mb-2">
                             <div class="input-group-prepend">
                                 <div class="input-group-text"><i class="fas fa-envelope"></i></div>
                             </div>
                             <input type="email" class="form-control" value="<?= $account['email'] ?>" id="email"
-                                   name="email"
-                                   placeholder="E-mailadres"
-                                   required>
+                                   name="email" placeholder="E-mailadres" required>
                         </div>
                     </div>
-                    <div class="input-group col-md-6">
+                    <div class="input-group col-md-4 sr-only">
                         <label class="sr-only" for="telefoon_nr">Telefoonnummer</label>
                         <div class="input-group mb-2">
                             <div class="input-group-prepend">
                                 <div class="input-group-text"><i class="fas fa-phone-alt"></i></div>
                             </div>
                             <input type="text" class="form-control" value="<?= $account['telefoon_nr'] ?>"
-                                   id="telefoon_nr" name="telefoon_nr"
-                                   placeholder="Telefoonnummer">
+                                   id="telefoon_nr" name="telefoon_nr" placeholder="Telefoonnummer">
                         </div>
                     </div>
 
@@ -286,6 +270,7 @@ if (empty($_SESSION['delgashop'])) {
 
                 </div>
                 <div><br></div>
+                <a class="btn btn-secondary" href="winkelmand.php" role="button"><i class="fas fa-times"></i> Annuleer</a>
                 <button class="btn btn-success" type="submit" name="bestellen"><i class="fas fa-check"></i> Plaats
                     bestelling
                 </button>

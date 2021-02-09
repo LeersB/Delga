@@ -21,25 +21,6 @@
                     <li class="nav-item">
                         <a class="nav-link" href="producten.php"><i class="fas fa-store"></i> Producten</a>
                     </li>
-                    <!--<li class="nav-item dropdown">
-                        <a aria-expanded="false" aria-haspopup="true" class="nav-link dropdown-toggle"
-                           data-toggle="dropdown"
-                           href="#"
-                           id="navbarDropDown1" role="button">
-                            Producten
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropDown1">
-                            <a class="dropdown-item" href="producten.php?categorie=1">Vloerreinigers</a>
-                            <a class="dropdown-item" href="producten.php?categorie=2">Allesreinigers</a>
-                            <a class="dropdown-item" href="vaatreinigers.html">Vaatreinigers</a>
-                            <a class="dropdown-item" href="sanitairreinigers.html">Sanitairreinigers</a>
-                            <a class="dropdown-item" href="ontvetters.html">Ontvetters</a>
-                            <a class="dropdown-item" href="wasmiddelen.html">Wasmiddelen</a>
-                            <a class="dropdown-item" href="papierwaren.html">Papierwaren</a>
-                            <a class="dropdown-item" href="toiletartikelen.html">Toiletartikelen</a>
-                            <a class="dropdown-item" href="speciaalgamma.html">Speciaal gamma</a>
-                        </div>
-                    </li>-->
                     <?php
                     break;
                 case 2: //

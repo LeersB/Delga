@@ -12,15 +12,8 @@ if (isset($_POST['email'])) {
         $stmt = $pdo_function->prepare('UPDATE users SET reset_code = ? WHERE email = ?');
         $uniqid = uniqid();
         $stmt->execute([$uniqid, $_POST['email']]);
-        // Email to send below, TODO
-        $subject = 'Wachtwoord herstel Delga.be';
-        $headers = 'From: ' . mail_from . "\r\n" . 'Reply-To: ' . mail_from . "\r\n" . 'Return-Path: ' . mail_from . "\r\n" . 'X-Mailer: PHP/' . phpversion() . "\r\n" . 'MIME-Version: 1.0' . "\r\n" . 'Content-Type: text/html; charset=UTF-8' . "\r\n";
-        $reset_link = 'http://test.delga.be/wachtwoord-reset.php?email=' . $_POST['email'] . '&code=' . $uniqid;
-        $message = '<p>Beste,</p>
-                    <p>Please click the following link to reset your password: <a href="' . $reset_link . '">' . $reset_link . '</a></p>
-                    <p>Met vriendelijke groeten</p>';
-        //
-        mail($_POST['email'], $subject, $message, $headers);
+        $reset_link = reset_link . '?email=' . $_POST['email'] . '&code=' . $uniqid;
+        send_wachtwoord_email($_POST['email'], $reset_link, $account['voornaam'], $account['achternaam']);
         $msg2 = 'De link voor het opnieuw instellen van het wachtwoord is naar uw e-mailadres verstuurd!';
     } else {
         $msg = 'Er is geen account gevonden met dit e-mailadres!';
@@ -64,7 +57,9 @@ if (isset($_POST['email'])) {
                 <div class="col-md-12 text-success msg"><?= $msg2 ?></div>
                 <div class="input-group col-md-12"><br></div>
                 <div class="col-md-12">
-                    <button type="submit" value="submit" class="btn btn-primary"><i class="far fa-envelope"></i> Verstuur</button>
+                    <button type="submit" value="submit" class="btn btn-success"><i class="far fa-envelope"></i>
+                        Verstuur
+                    </button>
                 </div>
             </form>
         </div>

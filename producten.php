@@ -14,7 +14,7 @@ if ($categorie != 'all') {
 }
 $sort = isset($_GET['sort']) ? $_GET['sort'] : 'sort1';
 // Totaal getoonde producten per pagina
-$num_products_on_each_page = 12;
+$num_products_on_each_page = 14;
 // Huidige pagina
 $current_page = isset($_GET['p']) && is_numeric($_GET['p']) ? (int)$_GET['p'] : 1;
 
@@ -24,8 +24,6 @@ if ($sort == 'sort1') {
     $stmt = $pdo_function->prepare('SELECT p.* FROM producten p ' . $category_sql . ' ORDER BY p.product_naam ASC LIMIT :page,:num_products');
 } elseif ($sort == 'sort3') {
     $stmt = $pdo_function->prepare('SELECT p.* FROM producten p ' . $category_sql . ' ORDER BY p.product_naam DESC LIMIT :page,:num_products');
-//} elseif ($sort == 'sort4') {
-//    $stmt = $pdo_function->prepare('SELECT p.* FROM producten p inner join categorie c on p.categorie_id = c.categorie_id ' . $category_sql . ' ORDER BY p.categorie_id, p.product_naam ASC LIMIT :page,:num_products');
 } else {
     $stmt = $pdo_function->prepare('SELECT p.* FROM producten p ' . $category_sql . ' LIMIT :page,:num_products');
 }
@@ -52,7 +50,7 @@ $total_pages = round($total_products / $num_products_on_each_page + 0.9, 1);
     <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
     <meta content="Delga contactgegevens" name="description">
     <meta content="Bart Leers" name="author">
-    <title>Delga home</title>
+    <title>Delga producten</title>
     <link href="css/bootstrap.css" rel="stylesheet" type="text/css">
     <link href="css/delga.css" rel="stylesheet">
 </head>
@@ -74,38 +72,34 @@ $total_pages = round($total_products / $num_products_on_each_page + 0.9, 1);
 
             <form action="" method="get" class="product-form">
                 <div class="row no-gutters">
-                <div class="input-group col-md-6 mb-2">
-                    <div class="input-group-prepend">
-                        <label class="input-group-text" for="categorie">Categorie</label>
-                    </div>
-                    <select class="custom-select" id="categorie" name="categorie">
-                        <option value="all"<?= ($categorie == 'all' ? ' selected' : '') ?>>Alle producten
-                        </option>
-                        <?php foreach ($categories as $c): ?>
-                            <option value="<?= $c['categorie_id'] ?>"<?= ($categorie == $c['categorie_id'] ? ' selected' : '') ?>><?= $c['categorie_naam'] ?></option>
-                        <?php endforeach; ?>
-                    </select>
-                </div>
                     <div class="input-group col-md-6 mb-2">
-                    <div class="input-group-prepend">
-                        <label class="input-group-text" for="sort">Sorteren</label>
+                        <div class="input-group-prepend">
+                            <label class="input-group-text" for="categorie">Categorie</label>
+                        </div>
+                        <select class="custom-select" id="categorie" name="categorie">
+                            <option value="all"<?= ($categorie == 'all' ? ' selected' : '') ?>>Alle producten
+                            </option>
+                            <?php foreach ($categories as $c): ?>
+                                <option value="<?= $c['categorie_id'] ?>"<?= ($categorie == $c['categorie_id'] ? ' selected' : '') ?>><?= $c['categorie_naam'] ?></option>
+                            <?php endforeach; ?>
+                        </select>
                     </div>
-                    <select class="custom-select" name="sort" id="sort">
-                        <option value="sort1"<?= ($sort == 'sort1' ? ' selected' : '') ?> selected>Categorie</option>
-                        <option value="sort2"<?= ($sort == 'sort2' ? ' selected' : '') ?>>Oplopend</option>
-                        <option value="sort3"<?= ($sort == 'sort3' ? ' selected' : '') ?>>Aflopend</option>
-                    </select>
-                </div>
+                    <div class="input-group col-md-6 mb-2">
+                        <div class="input-group-prepend">
+                            <label class="input-group-text" for="sort">Sorteren</label>
+                        </div>
+                        <select class="custom-select" name="sort" id="sort">
+                            <option value="sort1"<?= ($sort == 'sort1' ? ' selected' : '') ?> selected>Categorie
+                            </option>
+                            <option value="sort2"<?= ($sort == 'sort2' ? ' selected' : '') ?>>Oplopend</option>
+                            <option value="sort3"<?= ($sort == 'sort3' ? ' selected' : '') ?>>Aflopend</option>
+                        </select>
+                    </div>
                 </div>
             </form>
         </div>
 
         <div class="row"><br></div>
-
-        <!--<svg class="bd-placeholder-img" width="200" height="250" role="img"><title>Placeholder</title>
-            <rect width="100%" height="100%" fill="#55595c"/>
-            <text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text>
-        </svg>-->
 
         <div class="row mb-2">
             <?php foreach ($products as $product): ?>
@@ -115,21 +109,18 @@ $total_pages = round($total_products / $num_products_on_each_page + 0.9, 1);
 
                             <div class="row no-gutters g-2">
                                 <div class="col-md-4">
-
                                     <?php if (empty($product['product_foto'])): ?>
                                         <svg class="card-img-top" role="img">
                                             <title>Placeholder</title>
                                             <rect width="100%" height="100%" fill="#55595c"/>
                                         </svg>
                                     <?php endif; ?>
-
                                     <?php if (!empty($product['product_foto']) && file_exists('images/producten/' . $product['product_foto'])): ?>
                                         <img src="images/producten/<?= $product['product_foto'] ?>"
                                              class="card-img-top"
                                              alt="<?= $product['product_naam'] ?>">
                                     <?php endif; ?>
                                 </div>
-
                                 <div class="col-md-8">
                                     <h5 class="card-header text-uppercase"> <?= $product['product_naam'] ?></h5>
                                     <div class="card-body">
@@ -142,12 +133,18 @@ $total_pages = round($total_products / $num_products_on_each_page + 0.9, 1);
                             </div>
 
                             <div class="card-footer">
-                                <p class="card-text text-secondary">€&nbsp;<?= number_format($product['eenheidsprijs'], 2) ?>
-                                    <a href="product.php?&product_id=<?= $product['product_id'] ?>"
-                                       class="btn btn-outline-secondary"><i class="fas fa-info"></i> Info</a>
-                                </p>
-
+                                <div class="d-flex justify-content-between">
+                                    <div class="p-2">
+                                        <p class="card-text text-secondary">
+                                            €&nbsp;<?= number_format($product['eenheidsprijs'], 2) ?></p>
+                                    </div>
+                                    <div class="p-2">
+                                        <a href="product.php?&product_id=<?= $product['product_id'] ?>"
+                                           class="btn btn-outline-secondary"><i class="fas fa-info"></i> Info</a>
+                                    </div>
+                                </div>
                             </div>
+
                         </div>
                     </div>
                 </div>

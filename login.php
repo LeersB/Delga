@@ -78,10 +78,8 @@ if (isset($_COOKIE['rememberme']) && !empty($_COOKIE['rememberme'])) {
                         <div class="form-group login">
                             <div class="row">
                                 <div class="col">
-                                    <input id="submit" class="btn btn-primary" type="submit" name="submit"
-                                           value="Aanmelden">
+                                    <button class="btn btn-success" type="submit" name="submit"><i class="fas fa-sign-in-alt"></i> Aanmelden</button>
                                 </div>
-
                             </div>
                         </div>
                     </form>

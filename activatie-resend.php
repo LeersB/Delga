@@ -10,7 +10,7 @@ if (isset($_POST['email'])) {
     $account = $stmt->fetch(PDO::FETCH_ASSOC);
     if ($account) {
         $activatie_link = activatie_link . '?email=' . $_POST['email'] . '&code=' . $account['activatie_code'];
-        send_activation_email($_POST['email'], $activatie_link, $account['voornaam'], $account['achternaam']);
+        send_activatie_email($_POST['email'], $activatie_link, $account['voornaam'], $account['achternaam']);
         $msg2 = 'De link voor het activeren van uw account is naar uw e-mailadres verstuurd!';
     } else {
         $msg = 'Er is geen account gevonden met dit e-mailadres!';

@@ -125,7 +125,6 @@ if ($producten_winkelmand) {
 <main class="flex-shrink-0" role="main">
     <div class="container">
 
-
         <div class="cart content-wrapper">
 
             <h2>Winkelmand</h2>

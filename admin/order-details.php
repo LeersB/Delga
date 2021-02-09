@@ -7,7 +7,6 @@ $order_by_list = array('order_id','product_naam','order_datum','order_status');
 $order_by = isset($_GET['order_by']) && in_array($_GET['order_by'], $order_by_list) ? $_GET['order_by'] : 'order_id';
 $order_sort = isset($_GET['order_sort']) && $_GET['order_sort'] == 'DESC' ? 'DESC' : 'ASC';
 
-$order_status = array('nieuw','afgewerkt','geannuleerd');
 // Get orders
 $stmt = $pdo_function->prepare('SELECT p.product_foto AS img, p.product_naam, o.*, od.product_prijs, od.product_aantal, od.product_optie FROM orders o JOIN order_details od ON od.order_nr = o.order_nr
     JOIN producten p ON p.product_id = od.product_id ORDER BY ' . $order_by . ' ' . $order_sort);
@@ -35,7 +34,7 @@ $orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <main class="flex-shrink-0" role="main">
     <div class="container">
 
-        <h2> Nieuwe Orders</h2>
+        <h2>Orders</h2>
 
         <div class="content table-responsive-lg">
             <table class="table table-hover table-success table-borderless">
@@ -67,7 +66,7 @@ $orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     </th>
                     <th class="responsive-hidden">Prijs</th>
                     <th>Aantal</th>
-                    <th class="responsive-hidden">Totaal</th>
+                    <th>Totaal</th>
                     <th class="responsive-hidden">Email</th>
                     <th class="responsive-hidden">
                         <a href="orders.php?order_by=order_status&order_sort=<?= $order_sort == 'ASC' ? 'DESC' : 'ASC' ?>">
@@ -77,13 +76,12 @@ $orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             <?php endif; ?>
                         </a>
                     </th>
-                <th></th>
                 </tr>
                 </thead>
                 <tbody>
                 <?php if (empty($orders)): ?>
                     <tr>
-                        <td colspan="10" style="text-align:center;">Er zijn geen orders aanwezig</td>
+                        <td colspan="9" style="text-align:center;">Er zijn geen orders aanwezig</td>
                     </tr>
                 <?php else: ?>
                     <?php foreach ($orders as $order): ?>
@@ -98,10 +96,39 @@ $orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             <td class="responsive-hidden"><?=date('d-m-Y', strtotime($order['order_datum']))?></td>
                             <td class="responsive-hidden">€ <?=number_format($order['product_prijs'],2)?></td>
                             <td><?=$order['product_aantal']?></td>
-                            <td class="responsive-hidden">€&nbsp;<?=number_format($order['product_prijs'] * $order['product_aantal'], 2)?></td>
+                            <td>€&nbsp;<?=number_format($order['product_prijs'] * $order['product_aantal'], 2)?></td>
                             <td class="responsive-hidden"><?=$order['order_email']?></td>
                             <td class="responsive-hidden"><?=$order['order_status']?></td>
-                            <td><a class="btn btn-outline-success" href="order.php?optie_id=<?= $order['order_id'] ?>" role="button"><i class="fas fa-edit"></i></a></td>
+                        </tr>
+                        <tr class="expanded-details">
+                            <td colspan="9">
+                                <div>
+                                    <div>
+                                        <span>Order nummer</span>
+                                        <span><?=$order['order_nr']?></span>
+                                    </div>
+                                    <div>
+                                        <span>Aangemaakt</span>
+                                        <span><?=date('d-m-Y H:i:s', strtotime($order['order_datum']))?></span>
+                                    </div>
+                                    <div>
+                                        <span>Naam</span>
+                                        <span><?=$order['user_naam']?></span>
+                                    </div>
+                                    <div>
+                                        <span>Email</span>
+                                        <span><?=$order['order_email']?></span>
+                                    </div>
+                                    <div>
+                                        <span>Facturatieadres</span>
+                                        <span><?=$order['order_adres']?></span>
+                                    </div>
+                                    <div>
+                                        <span>Leveringsadres</span>
+                                        <span><?=$order['order_adres_2']?></span>
+                                    </div>
+                                </div>
+                            </td>
                         </tr>
                     <?php endforeach; ?>
                 <?php endif; ?>
@@ -113,6 +140,14 @@ $orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
 </main>
 
 <?php include('includes/footer.php'); ?>
+<script>
+    document.querySelectorAll(".details").forEach(function(detail) {
+        detail.onclick = function() {
+            let display = this.nextElementSibling.style.display === 'table-row' ? 'none' : 'table-row';
+            this.nextElementSibling.style.display = display;
+        };
+    });
+</script>
 </body>
 </html>
 

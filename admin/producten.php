@@ -38,7 +38,7 @@ $producten = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <table class="table table-success table-hover table-borderless">
                 <thead class="table-light">
                 <tr>
-                    <th>
+                    <th colspan="2">
                         <a href="producten.php?order_by=product_id&order_sort=<?= $order_sort == 'ASC' ? 'DESC' : 'ASC' ?>">
                             <i class="fas fa-hashtag"></i>
                             <?php if ($order_by == 'product_id'): ?>
@@ -47,17 +47,17 @@ $producten = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         </a>
                     </th>
                     <th>
-                        <a href="producten.php?order_by=categorie_naam&order_sort=<?= $order_sort == 'ASC' ? 'DESC' : 'ASC' ?>">
-                            Categorie
-                            <?php if ($order_by == 'categorie_naam'): ?>
+                        <a href="producten.php?order_by=product_naam&order_sort=<?= $order_sort == 'ASC' ? 'DESC' : 'ASC' ?>">
+                            Product naam
+                            <?php if ($order_by == 'product_naam'): ?>
                                 <i class="fas fa-sort-alpha-<?= str_replace(array('ASC', 'DESC'), array('down', 'down-alt'), $order_sort) ?>"></i>
                             <?php endif; ?>
                         </a>
                     </th>
                     <th>
-                        <a href="producten.php?order_by=product_naam&order_sort=<?= $order_sort == 'ASC' ? 'DESC' : 'ASC' ?>">
-                            Naam
-                            <?php if ($order_by == 'product_naam'): ?>
+                        <a href="producten.php?order_by=categorie_naam&order_sort=<?= $order_sort == 'ASC' ? 'DESC' : 'ASC' ?>">
+                            Categorie
+                            <?php if ($order_by == 'categorie_naam'): ?>
                                 <i class="fas fa-sort-alpha-<?= str_replace(array('ASC', 'DESC'), array('down', 'down-alt'), $order_sort) ?>"></i>
                             <?php endif; ?>
                         </a>
@@ -90,10 +90,15 @@ $producten = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         <tr class="details"
                             onclick="location.href='product.php?product_id=<?= $product['product_id'] ?>'">
                             <td><?= $product['product_id'] ?></td>
-                            <td><?= $product['categorie_naam'] ?></td>
+                            <td class="img">
+                                <?php if (!empty($product['product_foto']) && file_exists('../images/producten/' . $product['product_foto'])): ?>
+                                    <img src="../images/producten/<?=$product['product_foto']?>" width="32" height="32" alt="<?=$product['product_naam']?>">
+                                <?php endif; ?>
+                            </td>
                             <td><?= $product['product_naam'] ?></td>
+                            <td><?= $product['categorie_naam'] ?></td>
                             <td><?= $product['verpakking'] ?></td>
-                            <td><?= $product['eenheidsprijs'] ?></td>
+                            <td>€&nbsp;<?= $product['eenheidsprijs'] ?></td>
                         </tr>
                     <?php endforeach; ?>
                 <?php endif; ?>

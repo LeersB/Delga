@@ -193,7 +193,6 @@ include 'main.php';
                                    required>
                         </div>
                     </div>
-                    <div class="input-group col-md-12"><br></div>
                     <div class="input-group col-md-12">
                         <label class="sr-only" for="wachtwoord">Wachtwoord</label>
                         <div class="input-group mb-2">
@@ -222,7 +221,8 @@ include 'main.php';
                     <div class="col-md-12 msg"></div>
                     <div class="input-group col-md-12"><br></div>
                     <div class="col-12">
-                        <button type="submit" class="btn btn-primary">Registreer</button>
+                        <a class="btn btn-secondary" href="login.php" role="button"><i class="fas fa-times"></i> Annuleer</a>
+                        <button type="submit" class="btn btn-success"><i class="fas fa-check"></i> Registreer</button>
                     </div>
                     <div class="input-group col-md-12"><br></div>
                 </div>

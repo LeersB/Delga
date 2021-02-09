@@ -49,38 +49,34 @@ main .dashboard .stat p {
     font-weight: 700;
 }
 
-main .table table .details {
+main .table-responsive-lg table .details {
     cursor: pointer;
 }
 
-main .table table .details:hover {
-    background-color: #e2e8ed;
-}
-
-main .table table .expanded-details {
+main .table-responsive-lg table .expanded-details {
     display: none;
     background-color: #fefefe;
 }
 
-main .table table .expanded-details td {
+main .table-responsive-lg table .expanded-details td {
     padding: 15px;
 }
 
-main .table table .expanded-details td > div {
+main .table-responsive-lg table .expanded-details td > div {
     display: flex;
     flex-flow: wrap;
 }
 
-main .table table .expanded-details td > div div {
+main .table-responsive-lg table .expanded-details td > div div {
     width: 33.3%;
 }
 
-main .table table .expanded-details td > div div span {
+main .table-responsive-lg table .expanded-details td > div div span {
     display: flex;
     padding: 5px 0;
 }
 
-main .table table .expanded-details td > div div span:first-child {
+main .table-responsive-lg table .expanded-details td > div div span:first-child {
     font-weight: 600;
     padding-top: 10px;
 }

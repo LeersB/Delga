@@ -52,10 +52,8 @@ if (isset($_GET['id'])) {
                                 <a class="nav-link active" href="bestellingen.php">Bestellingen</a>
                             </li>
                         </ul>
-
                         <div class="tab-content">
                             <div class="tab-pane fade show active">
-
                                 <?php if (!isset($_GET['id'])): ?>
                                     <div class="input-group col-md-12"><br></div>
                                     <div class="content table-responsive-lg">
@@ -71,9 +69,7 @@ if (isset($_GET['id'])) {
                                             <tbody>
                                             <?php if (empty($orders)): ?>
                                                 <tr>
-                                                    <td colspan="4" style="text-align:center;">Er zijn geen bestellingen
-                                                        aanwezig
-                                                    </td>
+                                                    <td colspan="4" style="text-align:center;">Er zijn geen bestellingen aanwezig</td>
                                                 </tr>
                                             <?php else: ?>
                                                 <?php foreach ($orders as $order): ?>
@@ -88,15 +84,13 @@ if (isset($_GET['id'])) {
                                             </tbody>
                                         </table>
                                     </div>
-
                                 <?php elseif ($_GET['id'] > '0'): ?>
                                     <div class="input-group col-md-12"><br></div>
                                     <div class="content table-responsive-lg">
                                         <table class="table table-success table-hover table-borderless">
                                             <thead class="table-light">
                                             <tr>
-                                                <th></th>
-                                                <th colspan="2">Product</th>
+                                                <th colspan="3">Producten ordernummer: <?= $_GET['id'] ?></th>
                                                 <th>Prijs</th>
                                                 <th>Aantal</th>
                                                 <th>Totaal</th>
@@ -104,12 +98,13 @@ if (isset($_GET['id'])) {
                                             </thead>
                                             <tbody>
                                             <?php foreach ($order_detail as $order): ?>
-                                                <tr class="details" onclick="location.href='product.php?id=<?= $order['product_id'] ?>'">
+                                                <tr class="details"
+                                                    onclick="location.href='product.php?id=<?= $order['product_id'] ?>'">
                                                     <td class="img">
                                                         <?php if (!empty($order['img']) && file_exists('images/producten/' . $order['img'])): ?>
-                                                            <img src="images/producten/<?=$order['img']?>" width="32" height="32" alt="<?=$order['product_naam']?>">
+                                                            <img src="images/producten/<?= $order['img'] ?>" width="32"
+                                                                 height="32" alt="<?= $order['product_naam'] ?>">
                                                         <?php endif; ?>
-
                                                     <td><?= $order['product_naam'] ?></td>
                                                     <td><?= $order['product_optie'] ?></td>
                                                     <td>€ <?= $order['product_prijs'] ?></td>
@@ -117,19 +112,15 @@ if (isset($_GET['id'])) {
                                                     <td>€ <?= number_format($order['product_prijs'] * $order['product_aantal'], 2) ?></td>
                                                 </tr>
                                             <?php endforeach; ?>
-
                                             </tbody>
                                         </table>
                                     </div>
                                 <?php endif; ?>
                             </div>
-
                         </div>
-
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
 </main>

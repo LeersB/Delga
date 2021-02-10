@@ -139,7 +139,7 @@ $total_pages = round($total_products / $num_products_on_each_page + 0.9, 1);
                                             €&nbsp;<?= number_format($product['eenheidsprijs'], 2) ?></p>
                                     </div>
                                     <div class="p-2">
-                                        <a href="product.php?&product_id=<?= $product['product_id'] ?>"
+                                        <a href="product.php?id=<?= $product['product_id'] ?>"
                                            class="btn btn-outline-secondary"><i class="fas fa-info"></i> Info</a>
                                     </div>
                                 </div>

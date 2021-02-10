@@ -57,8 +57,6 @@ if (isset($_GET['product_id'])) {
     if (isset($_POST['submit'])) {
         $stmt = $pdo_function->prepare('INSERT IGNORE INTO producten (categorie_id, product_naam, product_foto, product_info, omschrijving, verpakking, waarschuwing, eenheidsprijs, btw) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)');
         $stmt->execute([$_POST['categorie_id'], $_POST['product_naam'], $_POST['product_foto'], $_POST['product_info'], $_POST['omschrijving'], $_POST['verpakking'], $_POST['waarschuwing'], $_POST['eenheidsprijs'], $_POST['btw']]);
-        //$stmt = $pdo_function->prepare('INSERT IGNORE INTO product_opties (optie_titel, optie_naam, eenheidsprijs, product_id) VALUES (?, ?, ?, ?)');
-        //$stmt->execute([$_POST['product_id'], $_POST['optie_naam'], $_POST['eenheidsprijs'], $_POST['product_id']]);
         header('Location: producten.php');
         exit;
     }

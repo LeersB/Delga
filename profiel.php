@@ -4,14 +4,24 @@ include 'main.php';
 $pdo_function = pdo_connect_mysql();
 check_loggedin($pdo_function);
 $msg = '';
+
+//Get user
 $stmt = $pdo_function->prepare('SELECT * FROM users WHERE user_id = ?');
 $stmt->execute([$_SESSION['user_id']]);
 $account = $stmt->fetch(PDO::FETCH_ASSOC);
-// Get orders
-$stmt = $pdo_function->prepare('SELECT p.product_foto AS img, p.product_naam, o.*, od.product_prijs, od.product_aantal, od.product_optie FROM orders o JOIN order_details od ON od.order_nr = o.order_nr
-    JOIN producten p ON p.product_id = od.product_id WHERE user_id = ?');
+//Get orders
+$stmt = $pdo_function->prepare('SELECT * FROM orders WHERE user_id = ?');
 $stmt->execute([$_SESSION['user_id']]);
 $orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+if (isset($_GET['order_nr'])) {
+//Get order_details
+    $stmt = $pdo_function->prepare('SELECT p.product_foto AS img, p.product_naam, od.product_prijs, od.product_aantal, od.product_optie FROM order_details od 
+    JOIN producten p ON p.product_id = od.product_id WHERE order_nr = ?');
+    $stmt->execute([$_GET['order_nr']]);
+    $order_detail = $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
 
 if (isset($_POST['voornaam'], $_POST['achternaam'], $_POST['wachtwoord'], $_POST['cwachtwoord'], $_POST['email'])) {
 
@@ -74,23 +84,24 @@ if (isset($_POST['voornaam'], $_POST['achternaam'], $_POST['wachtwoord'], $_POST
 <main class="flex-shrink-0" role="main">
     <div class="container">
         <div class="content">
-            <?php if (!isset($_GET['action'])): ?>
-                <div class="jumbotron p-4 p-md-5 text-dark rounded bg-light">
-                    <div class="content profile">
-                        <h2>Delga account</h2>
-                        <div class="block">
-                            <p>Uw account details staan hieronder.</p>
+            <div class="jumbotron p-4 p-md-5 text-dark rounded bg-light">
+                <div class="content profile">
+                    <h2>Delga account</h2>
+                    <div class="block">
+                        <p>Uw account details staan hieronder.</p>
+                        <ul class="nav nav-tabs">
+                            <li class="nav-item">
+                                <a class="nav-link active" href="profiel.php">Profiel</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="bestellingen.php">Bestellingen</a>
+                            </li>
+                        </ul>
 
-                            <ul class="nav nav-tabs" id="myTab" role="tablist">
-                                <li class="nav-item" role="presentation">
-                                    <a class="nav-link active" id="profiel-tab" data-bs-toggle="tab" href="#profiel" role="tab" aria-controls="profiel" aria-selected="true">Profiel</a>
-                                </li>
-                                <li class="nav-item" role="presentation">
-                                    <a class="nav-link" id="bestellingen-tab" data-bs-toggle="tab" href="#bestellingen" role="tab" aria-controls="bestellingen" aria-selected="false">Bestellingen</a>
-                                </li>
-                            </ul>
-                            <div class="tab-content" id="myTabContent">
-                                <div class="tab-pane fade show active" id="profiel" role="tabpanel" aria-labelledby="profiel-tab">
+                        <div class="tab-content" id="myTabContent">
+                            <div class="tab-pane fade show active" id="profiel" role="tabpanel"
+                                 aria-labelledby="profiel-tab">
+                                <?php if (!isset($_GET['action'])): ?>
                                     <dl class="row">
                                         <div class="input-group col-md-12"><br></div>
                                         <dt class="col-md-3">Voornaam:</dt>
@@ -108,304 +119,288 @@ if (isset($_POST['voornaam'], $_POST['achternaam'], $_POST['wachtwoord'], $_POST
                                             <dd class="col-md-9"><?= $account['btw_nr'] ?></dd>
                                         <?php endif; ?>
                                         <dt class="col-md-3">Facturatieadres:</dt>
-                                        <dd class="col-md-9"><?= $account['adres_straat'],' ', $account['adres_nr']?></dd>
+                                        <dd class="col-md-9"><?= $account['adres_straat'], ' ', $account['adres_nr'] ?></dd>
                                         <dt class="col-md-3"></dt>
-                                        <dd class="col-md-9"><?= $account['adres_postcode'],' ', $account['adres_plaats']?></dd>
+                                        <dd class="col-md-9"><?= $account['adres_postcode'], ' ', $account['adres_plaats'] ?></dd>
                                         <dt class="col-md-3">Leveringsadres:</dt>
-                                        <dd class="col-md-9"><?= $account['adres_straat_2'],' ', $account['adres_nr_2']?></dd>
+                                        <dd class="col-md-9"><?= $account['adres_straat_2'], ' ', $account['adres_nr_2'] ?></dd>
                                         <dt class="col-md-3"></dt>
-                                        <dd class="col-md-9"><?= $account['adres_postcode_2'],' ', $account['adres_plaats_2']?></dd>
+                                        <dd class="col-md-9"><?= $account['adres_postcode_2'], ' ', $account['adres_plaats_2'] ?></dd>
                                     </dl>
 
-                                    <a class="btn btn-secondary" href="profiel.php?action=edit" role="button"><i class="far fa-edit"></i> Aanpassen</a>
-                                </div>
-                                <div class="tab-pane fade" id="bestellingen" role="tabpanel" aria-labelledby="bestellingen-tab">
-                                    <div class="input-group col-md-12"><br></div>
-                                    <div class="content table-responsive-lg">
-                                        <table class="table table-striped table-success table-borderless">
-                                            <thead class="table-light">
-                                            <tr>
-                                                <th><i class="fas fa-hashtag"></i></th>
-                                                <th>Product</th>
-                                                <th>Datum</th>
-                                                <th>Prijs</th>
-                                                <th>Aantal</th>
-                                                <th>Totaal</th>
-                                                <th>Status</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                            <?php if (empty($orders)): ?>
-                                                <tr>
-                                                    <td colspan="7" style="text-align:center;">Er zijn geen bestellingen aanwezig</td>
-                                                </tr>
-                                            <?php else: ?>
-                                                <?php foreach ($orders as $order): ?>
-                                                    <tr class="details">
-                                                        <td colspan="2">
-                                                            <div>
-                                                                <span>Bestel datum: </span>
-                                                                <span><?=date('d-m-Y', strtotime($order['order_datum']))?></span>
-                                                            </div>
-                                                        </td>
-                                                        <td colspan="5">
-                                                            <div>
-                                                                <span>Order nummer: </span>
-                                                                <span><?=$order['order_nr']?></span>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                    <tr class="expanded-details" style="display: none">
-                                                        <td class="img">
-                                                            <?php if (!empty($order['img']) && file_exists('images/producten/' . $order['img'])): ?>
-                                                                <img src="images/producten/<?=$order['img']?>" width="32" height="32" alt="<?=$order['product_naam']?>">
-                                                            <?php endif; ?>
-                                                        </td>
-                                                        <td><?=$order['product_naam']?> <?=$order['product_optie']?></td>
-                                                        <td><?=date('d-m-Y', strtotime($order['order_datum']))?></td>
-                                                        <td>€ <?=number_format($order['product_prijs'],2)?></td>
-                                                        <td><?=$order['product_aantal']?></td>
-                                                        <td>€&nbsp;<?=number_format($order['product_prijs'] * $order['product_aantal'], 2)?></td>
-                                                        <td><?=$order['order_status']?></td>
-                                                    </tr>
-                                                <?php endforeach; ?>
-                                            <?php endif; ?>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
+                                    <a class="btn btn-secondary" href="profiel.php?action=edit" role="button"><i
+                                                class="far fa-edit"></i> Aanpassen</a>
 
+                                <?php elseif ($_GET['action'] == 'edit'): ?>
+                                    <div class="content profile">
+                                        <div class="block">
+                                            <form class="needs-validation" novalidate action="profiel.php?action=edit"
+                                                  method="post">
+                                                <div class="row">
+                                                    <legend class="legend col-md-12">
+                                                        <span>Persoonlijke informatie</span></legend>
+                                                    <div class="input-group col-md-6">
+                                                        <label class="sr-only" for="voornaam">Voornaam</label>
+                                                        <div class="input-group mb-2">
+                                                            <div class="input-group-prepend">
+                                                                <div class="input-group-text"><i
+                                                                            class="fas fa-user"></i></div>
+                                                            </div>
+                                                            <input type="text" class="form-control" id="voornaam"
+                                                                   name="voornaam"
+                                                                   value="<?= $account['voornaam'] ?>"
+                                                                   placeholder="Voornaam" maxlength="50" required>
+                                                        </div>
+                                                    </div>
+                                                    <div class="input-group col-md-6">
+                                                        <label class="sr-only" for="achternaam">Achternaam</label>
+                                                        <div class="input-group mb-2">
+                                                            <div class="input-group-prepend">
+                                                                <div class="input-group-text"><i
+                                                                            class="fas fa-user"></i></div>
+                                                            </div>
+                                                            <input type="text" class="form-control" id="achternaam"
+                                                                   name="achternaam"
+                                                                   value="<?= $account['achternaam'] ?>"
+                                                                   placeholder="Achternaam" maxlength="50" required>
+                                                        </div>
+                                                    </div>
+                                                    <div class="input-group col-md-6">
+                                                        <label class="sr-only" for="telefoon_nr">Telefoonnummer</label>
+                                                        <div class="input-group mb-2">
+                                                            <div class="input-group-prepend">
+                                                                <div class="input-group-text"><i
+                                                                            class="fas fa-phone-alt"></i></div>
+                                                            </div>
+                                                            <input type="text" class="form-control" id="telefoon_nr"
+                                                                   name="telefoon_nr"
+                                                                   value="<?= $account['telefoon_nr'] ?>"
+                                                                   placeholder="Telefoonnummer">
+                                                        </div>
+                                                    </div>
+                                                    <div class="input-group col-md-12"><br></div>
+                                                    <?php if ($account['user_level'] == 'Bedrijf'): ?>
+                                                        <div class="input-group col-md-6">
+                                                            <label class="sr-only"
+                                                                   for="bedrijfsnaam">Bedrijfsnaam</label>
+                                                            <div class="input-group mb-2">
+                                                                <div class="input-group-prepend">
+                                                                    <div class="input-group-text"><i
+                                                                                class="fas fa-industry"></i></div>
+                                                                </div>
+                                                                <input type="text" class="form-control"
+                                                                       id="bedrijfsnaam"
+                                                                       name="bedrijfsnaam"
+                                                                       value="<?= $account['bedrijfsnaam'] ?>"
+                                                                       placeholder="Bedrijfsnaam"
+                                                                       required>
+                                                            </div>
+                                                        </div>
+                                                        <div class="input-group col-md-6">
+                                                            <label class="sr-only" for="btw_nr">BTW-nummer</label>
+                                                            <div class="input-group mb-2">
+                                                                <div class="input-group-prepend">
+                                                                    <div class="input-group-text"><i
+                                                                                class="fas fa-industry"></i></div>
+                                                                </div>
+                                                                <input type="text" class="form-control" id="btw_nr"
+                                                                       name="btw_nr"
+                                                                       value="<?= $account['btw_nr'] ?>"
+                                                                       placeholder="BTW-nummer" required>
+                                                            </div>
+                                                        </div>
+                                                        <div class="input-group col-md-12"><br></div>
+                                                    <?php endif; ?>
+                                                    <legend class="legend col-md-12"><span>Adres Gegevens</span>
+                                                    </legend>
+                                                    <h5 class="legend col-md-12"><span>Facturatieadres</span></h5>
+                                                    <div class="input-group col-md-9">
+                                                        <label class="sr-only" for="adres_straat">Adres</label>
+                                                        <div class="input-group mb-2">
+                                                            <div class="input-group-prepend">
+                                                                <div class="input-group-text"><i
+                                                                            class="fas fa-house-user"></i></div>
+                                                            </div>
+                                                            <input type="text" class="form-control" id="adres_straat"
+                                                                   name="adres_straat"
+                                                                   value="<?= $account['adres_straat'] ?>"
+                                                                   placeholder="Adres" required>
+                                                        </div>
+                                                    </div>
+                                                    <div class="input-group col-md-3">
+                                                        <label class="sr-only" for="adres_nr">Huisnummer / Bus</label>
+                                                        <div class="input-group mb-2">
+                                                            <div class="input-group-prepend">
+                                                                <div class="input-group-text"><i
+                                                                            class="fas fa-house-user"></i></div>
+                                                            </div>
+                                                            <input type="text" class="form-control" id="adres_nr"
+                                                                   name="adres_nr"
+                                                                   value="<?= $account['adres_nr'] ?>"
+                                                                   placeholder="Huisnummer / Bus"
+                                                                   required>
+                                                            <div class="invalid-feedback">Dit veld is verplicht.</div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="input-group col-md-6">
+                                                        <label class="sr-only" for="adres_postcode">Postcode</label>
+                                                        <div class="input-group mb-2">
+                                                            <div class="input-group-prepend">
+                                                                <div class="input-group-text"><i
+                                                                            class="fas fa-house-user"></i></div>
+                                                            </div>
+                                                            <input type="text" class="form-control" id="adres_postcode"
+                                                                   name="adres_postcode"
+                                                                   value="<?= $account['adres_postcode'] ?>"
+                                                                   placeholder="Postcode"
+                                                                   required>
+                                                        </div>
+                                                    </div>
+                                                    <div class="input-group col-md-6">
+                                                        <label class="sr-only" for="adres_plaats">Plaats</label>
+                                                        <div class="input-group mb-2">
+                                                            <div class="input-group-prepend">
+                                                                <div class="input-group-text"><i
+                                                                            class="fas fa-house-user"></i></div>
+                                                            </div>
+                                                            <input type="text" class="form-control" id="adres_plaats"
+                                                                   name="adres_plaats"
+                                                                   value="<?= $account['adres_plaats'] ?>"
+                                                                   placeholder="Plaats" required>
+                                                        </div>
+                                                    </div>
+                                                    <div class="input-group col-md-12"><br></div>
+                                                    <h5 class="legend col-md-12"><span>Leveringsadres</span></h5>
+                                                    <div class="input-group col-md-9">
+                                                        <label class="sr-only" for="adres_straat_2">Adres</label>
+                                                        <div class="input-group mb-2">
+                                                            <div class="input-group-prepend">
+                                                                <div class="input-group-text"><i
+                                                                            class="fas fa-house-user"></i></div>
+                                                            </div>
+                                                            <input type="text" class="form-control" id="adres_straat_2"
+                                                                   name="adres_straat_2"
+                                                                   value="<?= $account['adres_straat_2'] ?>"
+                                                                   placeholder="Adres" required>
+                                                        </div>
+                                                    </div>
+                                                    <div class="input-group col-md-3">
+                                                        <label class="sr-only" for="adres_nr_2">Huisnummer / Bus</label>
+                                                        <div class="input-group mb-2">
+                                                            <div class="input-group-prepend">
+                                                                <div class="input-group-text"><i
+                                                                            class="fas fa-house-user"></i></div>
+                                                            </div>
+                                                            <input type="text" class="form-control" id="adres_nr_2"
+                                                                   name="adres_nr_2"
+                                                                   value="<?= $account['adres_nr_2'] ?>"
+                                                                   placeholder="Huisnummer / Bus"
+                                                                   required>
+                                                            <div class="invalid-feedback">Dit veld is verplicht.</div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="input-group col-md-6">
+                                                        <label class="sr-only" for="adres_postcode_2">Postcode</label>
+                                                        <div class="input-group mb-2">
+                                                            <div class="input-group-prepend">
+                                                                <div class="input-group-text"><i
+                                                                            class="fas fa-house-user"></i></div>
+                                                            </div>
+                                                            <input type="text" class="form-control"
+                                                                   id="adres_postcode_2"
+                                                                   name="adres_postcode_2"
+                                                                   value="<?= $account['adres_postcode_2'] ?>"
+                                                                   placeholder="Postcode"
+                                                                   required>
+                                                        </div>
+                                                    </div>
+                                                    <div class="input-group col-md-6">
+                                                        <label class="sr-only" for="adres_plaats_2">Plaats</label>
+                                                        <div class="input-group mb-2">
+                                                            <div class="input-group-prepend">
+                                                                <div class="input-group-text"><i
+                                                                            class="fas fa-house-user"></i></div>
+                                                            </div>
+                                                            <input type="text" class="form-control" id="adres_plaats_2"
+                                                                   name="adres_plaats_2"
+                                                                   value="<?= $account['adres_plaats_2'] ?>"
+                                                                   placeholder="Plaats" required>
+                                                        </div>
+                                                    </div>
+                                                    <div class="input-group col-md-12"><br></div>
+
+                                                    <legend class="legend col-md-12"><span>Inloggegevens</span></legend>
+                                                    <div class="input-group col-md-12">
+                                                        <label class="sr-only" for="email">E-mailadres</label>
+                                                        <div class="input-group mb-2">
+                                                            <div class="input-group-prepend">
+                                                                <div class="input-group-text"><i
+                                                                            class="fas fa-envelope"></i></div>
+                                                            </div>
+                                                            <input type="email" class="form-control" id="email"
+                                                                   name="email"
+                                                                   value="<?= $_SESSION['email'] ?>"
+                                                                   placeholder="E-mailadres" required>
+                                                        </div>
+                                                    </div>
+                                                    <div class="input-group col-md-12">
+                                                        <label class="sr-only" for="wachtwoord">Wachtwoord</label>
+                                                        <div class="input-group mb-2">
+                                                            <div class="input-group-prepend">
+                                                                <div class="input-group-text"><i
+                                                                            class="fas fa-lock"></i></div>
+                                                            </div>
+                                                            <input type="password" class="form-control" id="wachtwoord"
+                                                                   name="wachtwoord"
+                                                                   placeholder="Wachtwoord"
+                                                                   aria-describedby="wachtwoordHelpBlock">
+                                                            <small id="wachtwoordHelpBlock"
+                                                                   class="form-text text-muted col-md-12">
+                                                                Uw wachtwoord moet tussen 8 en 16 karakters lang zijn!
+                                                            </small>
+                                                        </div>
+                                                    </div>
+                                                    <div class="input-group col-md-12">
+                                                        <label class="sr-only" for="cwachtwoord">Bevestig
+                                                            wachtwoord</label>
+                                                        <div class="input-group mb-2">
+                                                            <div class="input-group-prepend">
+                                                                <div class="input-group-text"><i
+                                                                            class="fas fa-lock"></i></div>
+                                                            </div>
+                                                            <input type="password" class="form-control" id="cwachtwoord"
+                                                                   name="cwachtwoord"
+                                                                   placeholder="Bevestig wachtwoord">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-12 text-danger msg"><?= $msg ?></div>
+                                                    <div class="input-group col-md-12"><br></div>
+                                                    <div class="col-12">
+                                                        <a class="btn btn-secondary" href="profiel.php" role="button"><i
+                                                                    class="fas fa-times"></i> Annuleer</a>
+                                                        <button type="submit" class="btn btn-success"><i
+                                                                    class="fas fa-check"></i> Opslaan
+                                                        </button>
+                                                    </div>
+                                                    <div class="input-group col-md-12"><br></div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                <?php endif; ?>
                             </div>
 
                         </div>
+
                     </div>
                 </div>
-            <?php elseif ($_GET['action'] == 'edit'): ?>
-                <div class="content profile">
-                    <h2>Uw delga profiel aanpassen</h2>
-                    <div class="block">
-                        <form class="needs-validation" novalidate action="profiel.php?action=edit" method="post">
-                            <div class="row">
+            </div>
 
-                                <legend class="legend col-md-12"><span>Persoonlijke informatie</span></legend>
-                                <div class="input-group col-md-6">
-                                    <label class="sr-only" for="voornaam">Voornaam</label>
-                                    <div class="input-group mb-2">
-                                        <div class="input-group-prepend">
-                                            <div class="input-group-text"><i class="fas fa-user"></i></div>
-                                        </div>
-                                        <input type="text" class="form-control" id="voornaam" name="voornaam"
-                                               value="<?= $account['voornaam'] ?>" placeholder="Voornaam" required>
-                                    </div>
-                                </div>
-                                <div class="input-group col-md-6">
-                                    <label class="sr-only" for="achternaam">Achternaam</label>
-                                    <div class="input-group mb-2">
-                                        <div class="input-group-prepend">
-                                            <div class="input-group-text"><i class="fas fa-user"></i></div>
-                                        </div>
-                                        <input type="text" class="form-control" id="achternaam" name="achternaam"
-                                               value="<?= $account['achternaam'] ?>" placeholder="Achternaam" required>
-                                    </div>
-                                </div>
-                                <div class="input-group col-md-6">
-                                    <label class="sr-only" for="telefoon_nr">Telefoonnummer</label>
-                                    <div class="input-group mb-2">
-                                        <div class="input-group-prepend">
-                                            <div class="input-group-text"><i class="fas fa-phone-alt"></i></div>
-                                        </div>
-                                        <input type="text" class="form-control" id="telefoon_nr" name="telefoon_nr"
-                                               value="<?= $account['telefoon_nr'] ?>" placeholder="Telefoonnummer">
-                                    </div>
-                                </div>
-                                <div class="input-group col-md-12"><br></div>
-                                <?php if ($account['user_level'] == 'Bedrijf'): ?>
-                                <div class="input-group col-md-6">
-                                    <label class="sr-only" for="bedrijfsnaam">Bedrijfsnaam</label>
-                                    <div class="input-group mb-2">
-                                        <div class="input-group-prepend">
-                                            <div class="input-group-text"><i class="fas fa-industry"></i></div>
-                                        </div>
-                                        <input type="text" class="form-control" id="bedrijfsnaam" name="bedrijfsnaam"
-                                               value="<?= $account['bedrijfsnaam'] ?>" placeholder="Bedrijfsnaam" required>
-                                    </div>
-                                </div>
-                                <div class="input-group col-md-6">
-                                    <label class="sr-only" for="btw_nr">BTW-nummer</label>
-                                    <div class="input-group mb-2">
-                                        <div class="input-group-prepend">
-                                            <div class="input-group-text"><i class="fas fa-industry"></i></div>
-                                        </div>
-                                        <input type="text" class="form-control" id="btw_nr" name="btw_nr"
-                                               value="<?= $account['btw_nr'] ?>" placeholder="BTW-nummer" required>
-                                    </div>
-                                </div>
-                                <div class="input-group col-md-12"><br></div>
-                                <?php endif; ?>
-                                <legend class="legend col-md-12"><span>Adres Gegevens</span></legend>
-                                <h5 class="legend col-md-12"><span>Facturatieadres</span></h5>
-                                <div class="input-group col-md-9">
-                                    <label class="sr-only" for="adres_straat">Adres</label>
-                                    <div class="input-group mb-2">
-                                        <div class="input-group-prepend">
-                                            <div class="input-group-text"><i class="fas fa-house-user"></i></div>
-                                        </div>
-                                        <input type="text" class="form-control" id="adres_straat" name="adres_straat"
-                                               value="<?= $account['adres_straat'] ?>" placeholder="Adres" required>
-                                    </div>
-                                </div>
-                                <div class="input-group col-md-3">
-                                    <label class="sr-only" for="adres_nr">Huisnummer / Bus</label>
-                                    <div class="input-group mb-2">
-                                        <div class="input-group-prepend">
-                                            <div class="input-group-text"><i class="fas fa-house-user"></i></div>
-                                        </div>
-                                        <input type="text" class="form-control" id="adres_nr" name="adres_nr"
-                                               value="<?= $account['adres_nr'] ?>" placeholder="Huisnummer / Bus"
-                                               required>
-                                        <div class="invalid-feedback">Dit veld is verplicht.</div>
-                                    </div>
-                                </div>
-                                <div class="input-group col-md-6">
-                                    <label class="sr-only" for="adres_postcode">Postcode</label>
-                                    <div class="input-group mb-2">
-                                        <div class="input-group-prepend">
-                                            <div class="input-group-text"><i class="fas fa-house-user"></i></div>
-                                        </div>
-                                        <input type="text" class="form-control" id="adres_postcode"
-                                               name="adres_postcode"
-                                               value="<?= $account['adres_postcode'] ?>" placeholder="Postcode"
-                                               required>
-                                    </div>
-                                </div>
-                                <div class="input-group col-md-6">
-                                    <label class="sr-only" for="adres_plaats">Plaats</label>
-                                    <div class="input-group mb-2">
-                                        <div class="input-group-prepend">
-                                            <div class="input-group-text"><i class="fas fa-house-user"></i></div>
-                                        </div>
-                                        <input type="text" class="form-control" id="adres_plaats" name="adres_plaats"
-                                               value="<?= $account['adres_plaats'] ?>" placeholder="Plaats" required>
-                                    </div>
-                                </div>
-                                <div class="input-group col-md-12"><br></div>
-                                <h5 class="legend col-md-12"><span>Leveringsadres</span></h5>
-                                <div class="input-group col-md-9">
-                                    <label class="sr-only" for="adres_straat_2">Adres</label>
-                                    <div class="input-group mb-2">
-                                        <div class="input-group-prepend">
-                                            <div class="input-group-text"><i class="fas fa-house-user"></i></div>
-                                        </div>
-                                        <input type="text" class="form-control" id="adres_straat_2" name="adres_straat_2"
-                                               value="<?= $account['adres_straat_2'] ?>" placeholder="Adres" required>
-                                    </div>
-                                </div>
-                                <div class="input-group col-md-3">
-                                    <label class="sr-only" for="adres_nr_2">Huisnummer / Bus</label>
-                                    <div class="input-group mb-2">
-                                        <div class="input-group-prepend">
-                                            <div class="input-group-text"><i class="fas fa-house-user"></i></div>
-                                        </div>
-                                        <input type="text" class="form-control" id="adres_nr_2" name="adres_nr_2"
-                                               value="<?= $account['adres_nr_2'] ?>" placeholder="Huisnummer / Bus"
-                                               required>
-                                        <div class="invalid-feedback">Dit veld is verplicht.</div>
-                                    </div>
-                                </div>
-                                <div class="input-group col-md-6">
-                                    <label class="sr-only" for="adres_postcode_2">Postcode</label>
-                                    <div class="input-group mb-2">
-                                        <div class="input-group-prepend">
-                                            <div class="input-group-text"><i class="fas fa-house-user"></i></div>
-                                        </div>
-                                        <input type="text" class="form-control" id="adres_postcode_2"
-                                               name="adres_postcode_2"
-                                               value="<?= $account['adres_postcode_2'] ?>" placeholder="Postcode"
-                                               required>
-                                    </div>
-                                </div>
-                                <div class="input-group col-md-6">
-                                    <label class="sr-only" for="adres_plaats_2">Plaats</label>
-                                    <div class="input-group mb-2">
-                                        <div class="input-group-prepend">
-                                            <div class="input-group-text"><i class="fas fa-house-user"></i></div>
-                                        </div>
-                                        <input type="text" class="form-control" id="adres_plaats_2" name="adres_plaats_2"
-                                               value="<?= $account['adres_plaats_2'] ?>" placeholder="Plaats" required>
-                                    </div>
-                                </div>
-                                <div class="input-group col-md-12"><br></div>
-
-                                <legend class="legend col-md-12"><span>Inloggegevens</span></legend>
-                                <div class="input-group col-md-12">
-                                    <label class="sr-only" for="email">E-mailadres</label>
-                                    <div class="input-group mb-2">
-                                        <div class="input-group-prepend">
-                                            <div class="input-group-text"><i class="fas fa-envelope"></i></div>
-                                        </div>
-                                        <input type="email" class="form-control" id="email" name="email"
-                                               value="<?= $_SESSION['email'] ?>" placeholder="E-mailadres" required>
-                                    </div>
-                                </div>
-                                <div class="input-group col-md-12">
-                                    <label class="sr-only" for="wachtwoord">Wachtwoord</label>
-                                    <div class="input-group mb-2">
-                                        <div class="input-group-prepend">
-                                            <div class="input-group-text"><i class="fas fa-lock"></i></div>
-                                        </div>
-                                        <input type="password" class="form-control" id="wachtwoord" name="wachtwoord"
-                                               placeholder="Wachtwoord" aria-describedby="wachtwoordHelpBlock">
-                                        <small id="wachtwoordHelpBlock" class="form-text text-muted col-md-12">
-                                            Uw wachtwoord moet tussen 8 en 16 karakters lang zijn!
-                                        </small>
-                                    </div>
-                                </div>
-                                <div class="input-group col-md-12">
-                                    <label class="sr-only" for="cwachtwoord">Bevestig wachtwoord</label>
-                                    <div class="input-group mb-2">
-                                        <div class="input-group-prepend">
-                                            <div class="input-group-text"><i class="fas fa-lock"></i></div>
-                                        </div>
-                                        <input type="password" class="form-control" id="cwachtwoord" name="cwachtwoord"
-                                               placeholder="Bevestig wachtwoord">
-                                    </div>
-                                </div>
-                                <div class="col-md-12 text-danger msg"><?= $msg ?></div>
-                                <div class="input-group col-md-12"><br></div>
-                                <div class="col-12">
-                                    <a class="btn btn-secondary" href="profiel.php" role="button"><i class="fas fa-times"></i> Annuleer</a>
-                                <button type="submit" class="btn btn-success"><i class="fas fa-check"></i> Opslaan</button>
-                                </div>
-                                <div class="input-group col-md-12"><br></div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            <?php endif; ?>
         </div>
     </div>
 </main>
 
 <?php include('includes/footer.php'); ?>
 <script src="js/form-validation.js"></script>
-<script>
-    var triggerTabList = [].slice.call(document.querySelectorAll('#myTab a'))
-    triggerTabList.forEach(function (triggerEl) {
-        var tabTrigger = new bootstrap.Tab(triggerEl)
-
-        triggerEl.addEventListener('click', function (event) {
-            event.preventDefault()
-            tabTrigger.show()
-        })
-    })
-</script>
-<script>
-    document.querySelectorAll(".details").forEach(function(detail) {
-        detail.onclick = function() {
-            let display = this.nextElementSibling.style.display === 'table-row' ? 'none' : 'table-row';
-            this.nextElementSibling.style.display = display;
-        };
-    });
-</script>
 </body>
 </html>

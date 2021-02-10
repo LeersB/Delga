@@ -4,15 +4,15 @@ $error = '';
 include 'main.php';
 
 $pdo_function = pdo_connect_mysql();
-if (isset($_GET['product_id'])) {
+if (isset($_GET['id'])) {
     $stmt = $pdo_function->prepare('SELECT * FROM producten WHERE product_id = ?');
-    $stmt->execute([$_GET['product_id']]);
+    $stmt->execute([$_GET['id']]);
     $product = $stmt->fetch(PDO::FETCH_ASSOC);
     if (!$product) {
         $error = 'Product bestaat niet!';
     }
     $stmt = $pdo_function->prepare('SELECT optie_titel, GROUP_CONCAT(optie_naam) AS opties, GROUP_CONCAT(eenheidsprijs) AS optie_eenheidsprijs FROM product_opties WHERE product_id = ? GROUP BY optie_titel');
-    $stmt->execute([$_GET['product_id']]);
+    $stmt->execute([$_GET['id']]);
     $product_opties = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } else {
     $error = 'Product bestaat niet!';
@@ -38,7 +38,6 @@ if (isset($_GET['product_id'])) {
 
 <main class="flex-shrink-0" role="main">
     <div class="container">
-
 
         <?php if ($error): ?>
 

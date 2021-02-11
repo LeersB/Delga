@@ -1,5 +1,5 @@
 <?php
-$menu = 3;
+$menu = 5;
 $error = '';
 include 'main.php';
 
@@ -28,6 +28,32 @@ if (isset($_GET['id'])) {
     <title>Delga product info</title>
     <link href="css/bootstrap.css" rel="stylesheet" type="text/css">
     <link href="css/delga.css" rel="stylesheet">
+    <style>
+        .image-popup {
+            display: none;
+            flex-flow: column;
+            justify-content: center;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 99999;
+        }
+        .image-popup .con {
+            display: flex;
+            flex-flow: column;
+            background-color: #ffffff;
+            padding: 25px;
+            border-radius: 5px;
+        }
+        .image-popup .con h3 {
+            margin: 0;
+            font-size: 18px;
+        }
+    </style>
 </head>
 
 <body class="d-flex flex-column h-100">
@@ -49,10 +75,11 @@ if (isset($_GET['id'])) {
                 <div class="col-md">
                     <div class="card md-12">
                         <div class="row no-gutters g-0">
-                            <div class="col-md-4">
+                            <div class="images col-md-4">
                                 <?php if (!empty($product['product_foto']) && file_exists('images/producten/' . $product['product_foto'])): ?>
-                                    <img src="images/producten/<?= $product['product_foto'] ?>" class="card-img-top"
-                                         alt="<?= $product['product_naam'] ?>">
+                                    <a href="#">
+                                        <img src="images/producten/<?= $product['product_foto'] ?>" class="card-img-top" alt="<?= $product['product_naam'] ?>" data-title="<?=$product['product_naam']?>" data-id="<?=$product['product_id']?>">
+                                    </a>
                                 <?php endif; ?>
                             </div>
                             <div class="col-md-8">
@@ -109,7 +136,7 @@ if (isset($_GET['id'])) {
         <?php endif; ?>
         <div class="row"><br></div>
     </div>
-
+    <div class="image-popup"></div>
     </div>
 </main>
 
@@ -130,6 +157,35 @@ if (isset($_GET['id'])) {
             };
         });
     }
+</script>
+<script>
+    // Container we'll use to show an image
+    let image_popup = document.querySelector('.image-popup');
+    // Loop each image so we can add the on click event
+    document.querySelectorAll('.images a').forEach(img_link => {
+        img_link.onclick = e => {
+            e.preventDefault();
+            let img_meta = img_link.querySelector('img');
+            let img = new Image();
+            img.onload = () => {
+                // Create the pop out image
+                image_popup.innerHTML = `
+				<div class="con">
+					<h3 class="text-uppercase">${img_meta.dataset.title}</h3>
+					<img src="${img.src}" width="${img.width}" height="${img.height}">
+				</div>
+			`;
+                image_popup.style.display = 'flex';
+            };
+            img.src = img_meta.src;
+        };
+    });
+    // Hide the image popup container if user clicks outside the image
+    image_popup.onclick = e => {
+        if (e.target.className === 'image-popup') {
+            image_popup.style.display = "none";
+        }
+    };
 </script>
 </body>
 </html>

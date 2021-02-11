@@ -1,5 +1,5 @@
 <?php
-$menu = 3;
+$menu = 4;
 include 'main.php';
 if (isset($_SESSION['loggedin'])) {
     header('Location: home.php');

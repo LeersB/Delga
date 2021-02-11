@@ -1,5 +1,5 @@
 <?php
-$menu = 5;
+$menu = 3;
 include 'main.php';
 $pdo_function = pdo_connect_mysql();
 if (isset($_POST['product_id'], $_POST['aantal']) && is_numeric($_POST['product_id']) && is_numeric($_POST['aantal'])) {

@@ -1,5 +1,5 @@
 <?php
-$menu = 5;
+$menu = 3;
 include 'main.php';
 
 $pdo_function = pdo_connect_mysql();
@@ -10,7 +10,7 @@ $categories = $stmt->fetchAll(PDO::FETCH_ASSOC);
 $categorie = isset($_GET['categorie']) ? $_GET['categorie'] : 'all';
 $category_sql = '';
 if ($categorie != 'all') {
-    $category_sql = 'WHERE p.categorie_id = :categorie';
+    $category_sql = "AND p.categorie_id = :categorie";
 }
 $sort = isset($_GET['sort']) ? $_GET['sort'] : 'sort1';
 // Totaal getoonde producten per pagina
@@ -19,13 +19,13 @@ $num_products_on_each_page = 14;
 $current_page = isset($_GET['p']) && is_numeric($_GET['p']) ? (int)$_GET['p'] : 1;
 
 if ($sort == 'sort1') {
-    $stmt = $pdo_function->prepare('SELECT p.* FROM producten p ' . $category_sql . ' ORDER BY p.categorie_id, p.product_naam ASC LIMIT :page,:num_products');
+    $stmt = $pdo_function->prepare("SELECT p.* FROM producten p WHERE product_level = 'actief'" . $category_sql . " ORDER BY p.categorie_id, p.product_naam ASC LIMIT :page,:num_products");
 } elseif ($sort == 'sort2') {
-    $stmt = $pdo_function->prepare('SELECT p.* FROM producten p ' . $category_sql . ' ORDER BY p.product_naam ASC LIMIT :page,:num_products');
+    $stmt = $pdo_function->prepare("SELECT p.* FROM producten p WHERE product_level = 'actief'" . $category_sql . " ORDER BY p.product_naam ASC LIMIT :page,:num_products");
 } elseif ($sort == 'sort3') {
-    $stmt = $pdo_function->prepare('SELECT p.* FROM producten p ' . $category_sql . ' ORDER BY p.product_naam DESC LIMIT :page,:num_products');
+    $stmt = $pdo_function->prepare("SELECT p.* FROM producten p WHERE product_level = 'actief'" . $category_sql . " ORDER BY p.product_naam DESC LIMIT :page,:num_products");
 } else {
-    $stmt = $pdo_function->prepare('SELECT p.* FROM producten p ' . $category_sql . ' LIMIT :page,:num_products');
+    $stmt = $pdo_function->prepare("SELECT p.* FROM producten p WHERE product_level = 'actief'" . $category_sql . " LIMIT :page,:num_products");
 }
 if ($categorie != 'all') {
     $stmt->bindValue(':categorie', $categorie, PDO::PARAM_INT);
@@ -35,7 +35,7 @@ $stmt->bindValue(':num_products', $num_products_on_each_page, PDO::PARAM_INT);
 $stmt->execute();
 $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 // Totaal aantal producten
-$stmt = $pdo_function->prepare('SELECT COUNT(*) FROM producten p ' . $category_sql);
+$stmt = $pdo_function->prepare("SELECT COUNT(*) FROM producten p WHERE product_level = 'actief'" . $category_sql);
 if ($categorie != 'all') {
     $stmt->bindValue(':categorie', $categorie, PDO::PARAM_INT);
 }

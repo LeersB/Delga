@@ -1,12 +1,12 @@
 <?php
-$menu = 5;
+$menu = 3;
 $error = '';
 include 'main.php';
 $pdo_function = pdo_connect_mysql();
 if (isset($_GET['query']) && $_GET['query'] != '') {
     // Escape the user query, prevent XSS attacks
     $search_query = htmlspecialchars($_GET['query'], ENT_QUOTES, 'UTF-8');
-    $stmt = $pdo_function->prepare('SELECT * FROM producten WHERE product_naam LIKE ?');
+    $stmt = $pdo_function->prepare("SELECT * FROM producten WHERE product_level = 'actief' and product_naam LIKE ?");
     $stmt->execute(['%' . $search_query . '%']);
     $producten = $stmt->fetchAll(PDO::FETCH_ASSOC);
     $total_products = count($producten);
@@ -36,15 +36,12 @@ if (isset($_GET['query']) && $_GET['query'] != '') {
     <div class="container">
 
         <?php if ($error): ?>
-
             <p class="content-wrapper error"><?= $error ?></p>
-
         <?php else: ?>
 
             <div class="products content-wrapper">
 
                 <h2>Zoek resultaat voor "<?= $search_query ?>"</h2>
-
                 <p><?= $total_products ?> product(en) gevonden</p>
 
                 <div class="row mb-2">
@@ -82,7 +79,7 @@ if (isset($_GET['query']) && $_GET['query'] != '') {
                                     </div>
                                     <div class="card-footer">
                                         <p class="card-text text-secondary">€&nbsp;<?= number_format($product['eenheidsprijs'], 2) ?>
-                                            <a href="product.php?&product_id=<?= $product['product_id'] ?>"
+                                            <a href="product.php?id=<?= $product['product_id'] ?>"
                                                class="btn btn-outline-secondary"><i class="fas fa-info"></i> Info</a>
                                         </p>
 

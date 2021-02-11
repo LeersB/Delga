@@ -66,6 +66,33 @@ include 'main.php';
                 -->
             </div>
         </div>
+        <div class="jumbotron p-4 p-md-5 text-dark rounded bg-light">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <h3>
+                        <dl class="row">
+                            <dt class="col-lg-6">Zaakvoerder:</dt>
+                            <dd class="col-lg-6">Delhaye&nbsp;Gabriël</dd>
+                            <dt class="col-lg-6">Adres:</dt>
+                            <dd class="col-lg-6">Voorzienigheidsstraat&nbsp;18<br>
+                                8500&nbsp;Kortrijk
+                            </dd>
+                            <dt class="col-lg-6">Telefoon:</dt>
+                            <dd class="col-lg-6">+32&nbsp;(0)56/22&nbsp;59&nbsp;62</dd>
+                            <dt class="col-lg-6">GSM:</dt>
+                            <dd class="col-lg-6">+32&nbsp;(0)495/36&nbsp;11&nbsp;49</dd>
+                            <dt class="col-lg-6">E-mailadres:</dt>
+                            <dd class="col-lg-6"><u><a href="mailto:info@delga.be?subject=info" class="text-primary">info@delga.be</a></u>
+                            </dd>
+                            <dt class="col-lg-6">HR:</dt>
+                            <dd class="col-lg-6">Kortrijk&nbsp;117.854</dd>
+                            <dt class="col-lg-6">BTW:</dt>
+                            <dd class="col-lg-6">BE&nbsp;0524479592</dd>
+                        </dl>
+                    </h3>
+                </div>
+            </div>
+        </div>
 
     </div>
 </main>

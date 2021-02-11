@@ -1,9 +1,8 @@
 <?php
-$menu = 5;
+$menu = 4;
 include 'main.php';
 $pdo_function = pdo_connect_mysql();
 check_loggedin($pdo_function);
-
 $error = '';
 
 // Verwijder producten in winkelmand

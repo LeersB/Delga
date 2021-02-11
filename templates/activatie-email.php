@@ -7,7 +7,7 @@
 </head>
 <body style="background-color:#ffffff;font-family:-apple-system, BlinkMacSystemFont, 'segoe ui', roboto, oxygen, ubuntu, cantarell, 'fira sans', 'droid sans', 'helvetica neue', Arial, sans-serif;box-sizing:border-box;font-size:16px;">
 <div style="padding:20px;background-color:#ffffff;box-sizing:border-box;font-size:16px;">
-    <h1 style="padding:20px;box-sizing:border-box;font-size:24px;color:#394453;background-color:#EBFFD7;margin:0;"><img src="http://test.delga.be/images/delga_gif.gif" height="80"/></h1>
+    <h1 style="padding:20px;box-sizing:border-box;font-size:24px;color:#394453;background-color:#EBFFD7;margin:0;"><img src="http://www.delga.be/images/delga_gif.gif" height="80"/></h1>
     <h1 style="padding:20px;box-sizing:border-box;font-size:24px;color:#394453;margin:0;">Account activatie email</h1>
 
     <p style="padding:20px;box-sizing:border-box;font-size:16px;">Beste <?=$voornaam?> <?=$achternaam?>,</p>

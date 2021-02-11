@@ -42,7 +42,7 @@ function send_activatie_email($email, $activatie_link, $voornaam, $achternaam) {
     $subject = 'Account activatie delga.be';
     $headers = 'From: ' . mail_from . "\r\n" . 'Reply-To: ' . mail_from . "\r\n" . 'Return-Path: ' . mail_from . "\r\n" . 'X-Mailer: PHP/' . phpversion() . "\r\n" . 'MIME-Version: 1.0' . "\r\n" . 'Content-Type: text/html; charset=UTF-8' . "\r\n";
     ob_start();
-    include 'activatie-email.php';
+    include 'templates/activatie-email.php';
     $email_template = ob_get_clean();
     mail($email, $subject, $email_template, $headers);
 }
@@ -51,7 +51,7 @@ function send_wachtwoord_email($email, $reset_link, $voornaam, $achternaam) {
     $subject = 'Wachtwoord herstel delga.be';
     $headers = 'From: ' . mail_from . "\r\n" . 'Reply-To: ' . mail_from . "\r\n" . 'Return-Path: ' . mail_from . "\r\n" . 'X-Mailer: PHP/' . phpversion() . "\r\n" . 'MIME-Version: 1.0' . "\r\n" . 'Content-Type: text/html; charset=UTF-8' . "\r\n";
     ob_start();
-    include 'wachtwoord-email.php';
+    include 'templates/wachtwoord-email.php';
     $email_template = ob_get_clean();
     mail($email, $subject, $email_template, $headers);
 }
@@ -76,7 +76,7 @@ function send_order_detail_email($email, $producten_winkelmand, $user_naam, $ord
     $subject = 'Bestelling delga.be';
     $headers = 'From: ' . mail_from . "\r\n" . 'Reply-To: ' . mail_from . "\r\n" . 'Return-Path: ' . mail_from . "\r\n" . 'X-Mailer: PHP/' . phpversion() . "\r\n" . 'MIME-Version: 1.0' . "\r\n" . 'Content-Type: text/html; charset=UTF-8' . "\r\n";
     ob_start();
-    include 'bestel-email.php';
+    include 'templates/bestel-email.php';
     $email_template = ob_get_clean();
     mail($email, $subject, $email_template, $headers);
 }

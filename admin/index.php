@@ -16,7 +16,10 @@ $stmt = $pdo_function->prepare('SELECT COUNT(*) AS totaal FROM users');
 $stmt->execute();
 $users = $stmt->fetch(PDO::FETCH_ASSOC);
 // Get totaal aantal producten
-$stmt = $pdo_function->prepare('SELECT COUNT(*) AS totaal FROM producten');
+$stmt = $pdo_function->prepare("SELECT COUNT(*) AS totaal FROM producten WHERE product_level = 'actief'");
+$stmt->execute();
+$producten_actief = $stmt->fetch(PDO::FETCH_ASSOC);
+$stmt = $pdo_function->prepare("SELECT COUNT(*) AS totaal FROM producten");
 $stmt->execute();
 $producten = $stmt->fetch(PDO::FETCH_ASSOC);
 ?>
@@ -60,8 +63,8 @@ $producten = $stmt->fetch(PDO::FETCH_ASSOC);
             </div>
             <div class="content-block stat">
                 <div>
-                    <h3>Producten</h3>
-                    <p><?=number_format($producten['totaal'])?></p>
+                    <h3>Actieve producten</h3>
+                    <p><?=number_format($producten_actief['totaal'])?> / <?=number_format($producten['totaal'])?></p>
                 </div>
                 <i class="fas fa-pump-soap"></i>
             </div>

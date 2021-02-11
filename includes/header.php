@@ -44,16 +44,6 @@
                     <li class="nav-item">
                         <a class="nav-link" href="info.php"><i class="fas fa-info"></i> Info</a>
                     </li>
-                    <?php
-                    break;
-                case 5: //
-                    ?>
-                    <li class="nav-item">
-                        <a class="nav-link" href="index.php"><i class="fas fa-home"></i> Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="info.php"><i class="fas fa-info"></i> Info</a>
-                    </li>
                     <li class="nav-item active">
                         <a class="nav-link" href="producten.php"><i class="fas fa-store"></i> Producten<span
                                     class="sr-only">(current)</span></a>
@@ -61,6 +51,19 @@
                     <?php
                     break;
                 case 4: //
+                    ?>
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.php"><i class="fas fa-home"></i> Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="info.php"><i class="fas fa-info"></i> Info</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="producten.php"><i class="fas fa-store"></i> Producten</a>
+                    </li>
+                    <?php
+                    break;
+                case 5: //
                     ?>
                     <li class="nav-item">
                         <a class="nav-link" href="index.php"><i class="fas fa-home"></i> Home</a>

@@ -12,7 +12,8 @@ $product = array(
     'verpakking' => '',
     'waarschuwing' => '',
     'eenheidsprijs' => '',
-    'btw' => '21'
+    'btw' => '21',
+    'product_level' => 'niet-actief'
 );
 
 $product_opties = array(
@@ -20,7 +21,7 @@ $product_opties = array(
     'optie_naam' => '',
     'eenheidsprijs' => ''
 );
-
+$product_levels = array('actief', 'niet-actief');
 // Get categories van database
 $stmt = $pdo_function->prepare('SELECT * FROM categorie');
 $stmt->execute();
@@ -39,8 +40,8 @@ if (isset($_GET['product_id'])) {
 
     if (isset($_POST['submit'])) {
         // Update product
-        $stmt = $pdo_function->prepare('UPDATE producten SET categorie_id = ?, product_naam = ?, product_foto = ?, product_info = ?, omschrijving = ?, verpakking = ?, waarschuwing = ?, eenheidsprijs = ?, btw = ? WHERE product_id = ?');
-        $stmt->execute([$_POST['categorie_id'], $_POST['product_naam'], $_POST['product_foto'], $_POST['product_info'], $_POST['omschrijving'], $_POST['verpakking'], $_POST['waarschuwing'], $_POST['eenheidsprijs'], $_POST['btw'], $_GET['product_id']]);
+        $stmt = $pdo_function->prepare('UPDATE producten SET categorie_id = ?, product_naam = ?, product_foto = ?, product_info = ?, omschrijving = ?, verpakking = ?, waarschuwing = ?, eenheidsprijs = ?, btw = ? , product_level = ? WHERE product_id = ?');
+        $stmt->execute([$_POST['categorie_id'], $_POST['product_naam'], $_POST['product_foto'], $_POST['product_info'], $_POST['omschrijving'], $_POST['verpakking'], $_POST['waarschuwing'], $_POST['eenheidsprijs'], $_POST['btw'], $_POST['product_level'], $_GET['product_id']]);
         header('Location: producten.php');
         exit;
     }
@@ -55,8 +56,8 @@ if (isset($_GET['product_id'])) {
     // Create product
     $page = 'Create';
     if (isset($_POST['submit'])) {
-        $stmt = $pdo_function->prepare('INSERT IGNORE INTO producten (categorie_id, product_naam, product_foto, product_info, omschrijving, verpakking, waarschuwing, eenheidsprijs, btw) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)');
-        $stmt->execute([$_POST['categorie_id'], $_POST['product_naam'], $_POST['product_foto'], $_POST['product_info'], $_POST['omschrijving'], $_POST['verpakking'], $_POST['waarschuwing'], $_POST['eenheidsprijs'], $_POST['btw']]);
+        $stmt = $pdo_function->prepare('INSERT IGNORE INTO producten (categorie_id, product_naam, product_foto, product_info, omschrijving, verpakking, waarschuwing, eenheidsprijs, btw, product_level) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
+        $stmt->execute([$_POST['categorie_id'], $_POST['product_naam'], $_POST['product_foto'], $_POST['product_info'], $_POST['omschrijving'], $_POST['verpakking'], $_POST['waarschuwing'], $_POST['eenheidsprijs'], $_POST['btw'], $_POST['product_level']]);
         header('Location: producten.php');
         exit;
     }
@@ -134,16 +135,29 @@ if (isset($_GET['product_id'])) {
                                                    placeholder="btw" required>
                                         </div>
                                     </div>
-
-                                    <?php if ($product_opties != null) { ?>
-                                        <div class="col-md-2">
-                                            <a class="btn btn-outline-success" href="product-opties.php?product_id=<?= $product['product_id'] ?>" role="button"><i class="fas fa-cart-plus"></i> Opties</a>
-                                        </div>
-                                    <?php } else { ?>
                                     <div class="col-md-2">
-                                        <a class="btn btn-outline-secondary" href="optie.php" role="button"><i class="fas fa-cart-plus"></i> Opties</a>
+                                        <?php if ($product_opties != null) { ?>
+                                            <a class="btn btn-outline-success"
+                                               href="product-opties.php?product_id=<?= $product['product_id'] ?>"
+                                               role="button"><i class="fas fa-cart-plus"></i> Opties</a>
+                                        <?php } else { ?>
+                                            <a class="btn btn-outline-secondary" href="optie.php" role="button"><i
+                                                        class="fas fa-cart-plus"></i> Opties</a>
+                                        <?php } ?>
                                     </div>
-                                    <?php } ?>
+                                    <div class="col-md-3">
+                                        <div class="input-group mb-2">
+                                            <label class="sr-only" for="product_level">Level</label>
+                                            <div class="input-group-prepend">
+                                                <div class="input-group-text"><i class="fas fa-list-ol"></i></div>
+                                            </div>
+                                            <select class="custom-select" id="product_level" name="product_level">
+                                                <?php foreach ($product_levels as $level): ?>
+                                                    <option value="<?= $level ?>"<?= $level == $product['product_level'] ? ' selected' : '' ?>><?= $level ?></option>
+                                                <?php endforeach; ?>
+                                            </select>
+                                        </div>
+                                    </div>
 
                                 </div>
                             </div>
@@ -244,7 +258,9 @@ if (isset($_GET['product_id'])) {
                         Annuleer</a>
                     <button type="submit" name="submit" class="btn btn-success"><i class="fas fa-check"></i> Opslaan
                     </button>
-                    <button type="submit" name="delete" class="btn btn-danger"><i class="fas fa-trash-alt"></i> Verwijder</button>
+                    <button type="submit" name="delete" class="btn btn-danger"><i class="fas fa-trash-alt"></i>
+                        Verwijder
+                    </button>
                 </div>
                 <div class="input-group col-md-12"><br></div>
             </div>

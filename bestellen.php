@@ -1,5 +1,5 @@
 <?php
-$menu = 5;
+$menu = 3;
 include 'main.php';
 $pdo_function = pdo_connect_mysql();
 check_loggedin($pdo_function);

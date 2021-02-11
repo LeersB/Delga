@@ -1,11 +1,11 @@
 <?php
-$menu = 3;
+$menu = 4;
 include 'main.php';
 $msg = '';
 $msg2 = '';
 $pdo_function = pdo_connect_mysql();
 if (isset($_POST['email'])) {
-    $stmt = $pdo_function->prepare('SELECT * FROM users WHERE email = ? AND activatie_code != "" AND activatie_code != "activated"');
+    $stmt = $pdo_function->prepare("SELECT * FROM users WHERE email = ? AND activatie_code != '' AND activatie_code != 'activated'");
     $stmt->execute([ $_POST['email']]);
     $account = $stmt->fetch(PDO::FETCH_ASSOC);
     if ($account) {
@@ -17,7 +17,6 @@ if (isset($_POST['email'])) {
     }
 }
 ?>
-
 <!DOCTYPE html>
 <html class="h-100" lang="nl">
 <head>

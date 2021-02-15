@@ -40,7 +40,7 @@ if (isset($_POST['voornaam'], $_POST['achternaam'], $_POST['wachtwoord'], $_POST
     }
     if (empty($msg)) {
         $stmt = $pdo_function->prepare('SELECT COUNT(*) FROM users WHERE (email = ?) AND email != ?');
-        $stmt->execute([$_POST['email'], $_SESSION['email']]);
+        $stmt->execute([$_POST['email'], $account['email']]);
         if ($result = $stmt->fetchColumn()) {
             $msg = 'Een account met dit e-mailadres bestaat reeds!';
         } else {
@@ -49,7 +49,6 @@ if (isset($_POST['voornaam'], $_POST['achternaam'], $_POST['wachtwoord'], $_POST
             $stmt = $pdo_function->prepare('UPDATE users SET email = ?, wachtwoord = ?, voornaam = ?, achternaam = ?, adres_straat = ?, adres_nr = ?, adres_postcode = ?, adres_plaats = ?, adres_straat_2 = ?, adres_nr_2 = ?, adres_postcode_2 = ?, adres_plaats_2 = ?, telefoon_nr = ?, bedrijfsnaam = ?, btw_nr = ?, activatie_code = ? WHERE user_id = ?');
             $wachtwoord = !empty($_POST['wachtwoord']) ? password_hash($_POST['wachtwoord'], PASSWORD_DEFAULT) : $account['wachtwoord'];
             $stmt->execute([$_POST['email'], $wachtwoord, $_POST['voornaam'], $_POST['achternaam'], $_POST['adres_straat'], $_POST['adres_nr'], $_POST['adres_postcode'], $_POST['adres_plaats'], $_POST['adres_straat_2'], $_POST['adres_nr_2'], $_POST['adres_postcode_2'], $_POST['adres_plaats_2'], $_POST['telefoon_nr'], $_POST['bedrijfsnaam'], $_POST['btw_nr'], $uniqid, $_SESSION['user_id']]);
-            $_SESSION['email'] = $_POST['email'];
             if (account_activatie && $account['email'] != $_POST['email']) {
                 $activatie_link = activatie_link . '?email=' . $_POST['email'] . '&code=' . $uniqid;
                 send_activatie_email($_POST['email'], $activatie_link, $_POST['voornaam'], $_POST['achternaam']);
@@ -111,7 +110,7 @@ if (isset($_POST['voornaam'], $_POST['achternaam'], $_POST['wachtwoord'], $_POST
                                         <dt class="col-md-3">Telefoonnummer:</dt>
                                         <dd class="col-md-9"><?= $account['telefoon_nr'] ?></dd>
                                         <dt class="col-md-3">E-mailadres:</dt>
-                                        <dd class="col-md-9"><?= $_SESSION['email'] ?></dd>
+                                        <dd class="col-md-9"><?= $account['email'] ?></dd>
                                         <?php if ($account['user_level'] == 'Bedrijf'): ?>
                                             <dt class="col-md-3">Bedrijfsnaam:</dt>
                                             <dd class="col-md-9"><?= $account['bedrijfsnaam'] ?></dd>
@@ -339,7 +338,7 @@ if (isset($_POST['voornaam'], $_POST['achternaam'], $_POST['wachtwoord'], $_POST
                                                             </div>
                                                             <input type="email" class="form-control" id="email"
                                                                    name="email"
-                                                                   value="<?= $_SESSION['email'] ?>"
+                                                                   value="<?= $account['email'] ?>"
                                                                    placeholder="E-mailadres" required>
                                                         </div>
                                                     </div>

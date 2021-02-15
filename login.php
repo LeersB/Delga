@@ -13,7 +13,8 @@ if (isset($_COOKIE['rememberme']) && !empty($_COOKIE['rememberme'])) {
     if ($account) {
         session_regenerate_id();
         $_SESSION['loggedin'] = TRUE;
-        $_SESSION['email'] = $account['email'];
+        $_SESSION['voornaam'] = $account['voornaam'];
+        $_SESSION['achternaam'] = $account['achternaam'];
         $_SESSION['user_id'] = $account['user_id'];
         $_SESSION['user_level'] = $account['user_level'];
         header('Location: home.php');

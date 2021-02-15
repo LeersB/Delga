@@ -1,9 +1,16 @@
 <?php
 session_start();
-session_destroy();
-if (isset($_COOKIE['rememberme'])) {
+if (isset($_SESSION['loggedin'])) {
     unset($_COOKIE['rememberme']);
     setcookie('rememberme', '', time() - 3600);
+    unset($_SESSION['loggedin']);
+    unset($_SESSION['voornaam']);
+    unset($_SESSION['achternaam']);
+    unset($_SESSION['user_id']);
+    unset($_SESSION['user_level']);
+    session_destroy();
+
+    header('Location: index.php');
+    exit();
 }
-header('Location: index.php');
 ?>

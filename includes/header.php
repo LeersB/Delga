@@ -88,8 +88,9 @@
         <?php
         if (isset($_SESSION['loggedin'])) {
             include('includes/header_logout.php');
-        } else
+        } else {
             include('includes/header_login.php');
+        }
         ?>
 
     </div>

@@ -17,7 +17,6 @@ if ($account) {
             // Verification success!
             session_regenerate_id();
             $_SESSION['loggedin'] = TRUE;
-            $_SESSION['email'] = $account['email'];
             $_SESSION['user_id'] = $account['user_id'];
             $_SESSION['voornaam'] = $account['voornaam'];
             $_SESSION['achternaam'] = $account['achternaam'];

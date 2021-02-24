@@ -124,7 +124,7 @@ $producten = $stmt->fetch(PDO::FETCH_ASSOC);
                                         </div>
                                         <div>
                                             <span>Naam</span>
-                                            <span><?=$order['user_naam']?></span>
+                                            <span><?=$order['order_naam']?></span>
                                         </div>
                                         <div>
                                             <span>Email</span>

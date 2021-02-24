@@ -3,15 +3,19 @@ $menuadmin = 4;
 include 'main.php';
 $pdo_function = pdo_connect_mysql();
 
-$order_by_list = array('order_id','product_naam','order_datum','order_status');
-$order_by = isset($_GET['order_by']) && in_array($_GET['order_by'], $order_by_list) ? $_GET['order_by'] : 'order_id';
-$order_sort = isset($_GET['order_sort']) && $_GET['order_sort'] == 'DESC' ? 'DESC' : 'ASC';
 
-// Get orders
-$stmt = $pdo_function->prepare('SELECT p.product_foto AS img, p.product_naam, o.*, od.product_prijs, od.product_aantal, od.product_optie FROM orders o JOIN order_details od ON od.order_nr = o.order_nr
-    JOIN producten p ON p.product_id = od.product_id ORDER BY ' . $order_by . ' ' . $order_sort);
-$stmt->execute();
-$orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
+if (isset($_GET['order_nr'])) {
+    // Get order_details
+    $stmt = $pdo_function->prepare("SELECT p.product_foto AS img, p.product_naam, o.*, od.product_prijs, od.product_aantal, od.product_optie FROM orders o JOIN order_details od ON od.order_nr = o.order_nr
+    JOIN producten p ON p.product_id = od.product_id WHERE o.order_nr = ? ");
+    $stmt->execute([$_GET['order_nr']]);
+    $orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    // Get order
+    $stmt = $pdo_function->prepare("SELECT * FROM orders WHERE order_nr = ? ");
+    $stmt->execute([$_GET['order_nr']]);
+    $order = $stmt->fetch(PDO::FETCH_ASSOC);
+
+}
 ?>
 <!DOCTYPE html>
 <html class="h-100" lang="nl">
@@ -34,7 +38,75 @@ $orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <main class="flex-shrink-0" role="main">
     <div class="container">
 
+        <div class="content table-responsive-lg">
+            <table class="table table-light table-borderless">
+                <tbody>
+                <?php if (empty($orders)): ?>
+                    <tr>
+                        <td colspan="8" style="text-align:center;">Er zijn geen recente orders vandaag</td>
+                    </tr>
+                <?php else: ?>
+                    <tr>
+                        <td colspan="8">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <h5>Order nummer</h5>
+                                    <p><?=$order['order_nr']?></p>
+                                </div>
+                                <div class="col-md-4">
+                                    <h5>Aangemaakt</h5>
+                                    <p><?=date('d-m-Y H:i:s', strtotime($order['order_datum']))?></p>
+                                </div>
+                                <div class="col-md-4">
+                                    <h5>Naam</h5>
+                                    <p><?=$order['order_naam']?></p>
+                                </div>
+                                <div class="col-md-4">
+                                    <h5>Email</h5>
+                                    <p><?=$order['order_email']?></p>
+                                </div>
+                                <div class="col-md-4">
+                                    <h5>Facturatieadres</h5>
+                                    <p><?=$order['order_adres']?></p>
+                                </div>
+                                <div class="col-md-4">
+                                    <h5>Leveringsadres</h5>
+                                    <p><?=$order['order_adres_2']?></p>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+                <table class="table table-hover table-success table-borderless">
+                <thead class="table-light">
+                <tr>
+                    <th colspan="2">Product</th>
+                    <th class="responsive-hidden">Prijs</th>
+                    <th>Aantal</th>
+                    <th>Totaal</th>
+                    <th class="responsive-hidden">Status</th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php foreach ($orders as $order): ?>
+                        <tr class="details">
+                            <td class="img">
+                                <?php if (!empty($order['img']) && file_exists('../images/producten/' . $order['img'])): ?>
+                                    <img src="../images/producten/<?=$order['img']?>" width="32" height="32" alt="<?=$order['product_naam']?>">
+                                <?php endif; ?>
+                            </td>
+                            <td><?=$order['product_naam']?> <?=$order['product_optie']?></td>
+                            <td class="responsive-hidden">€ <?=number_format($order['product_prijs'],2)?></td>
+                            <td><?=$order['product_aantal']?></td>
+                            <td>€&nbsp;<?=number_format($order['product_prijs'] * $order['product_aantal'], 2)?></td>
+                            <td class="responsive-hidden"><?=$order['order_status']?></td>
+                        </tr>
+                    <?php endforeach; ?>
 
+                <?php endif; ?>
+                </tbody>
+            </table>
+        </div>
 
 
     </div>

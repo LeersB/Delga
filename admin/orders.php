@@ -3,14 +3,13 @@ $menuadmin = 4;
 include 'main.php';
 $pdo_function = pdo_connect_mysql();
 
-$order_by_list = array('order_id','product_naam','order_datum','order_status');
+$order_by_list = array('order_id','order_datum','order_status');
 $order_by = isset($_GET['order_by']) && in_array($_GET['order_by'], $order_by_list) ? $_GET['order_by'] : 'order_id';
 $order_sort = isset($_GET['order_sort']) && $_GET['order_sort'] == 'DESC' ? 'DESC' : 'ASC';
 
 $order_status = array('nieuw','afgewerkt','geannuleerd');
 // Get orders
-$stmt = $pdo_function->prepare('SELECT p.product_foto AS img, p.product_naam, o.*, od.product_prijs, od.product_aantal, od.product_optie FROM orders o JOIN order_details od ON od.order_nr = o.order_nr
-    JOIN producten p ON p.product_id = od.product_id ORDER BY ' . $order_by . ' ' . $order_sort);
+$stmt = $pdo_function->prepare('SELECT * FROM orders ORDER BY ' . $order_by . ' ' . $order_sort);
 $stmt->execute();
 $orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
@@ -41,19 +40,11 @@ $orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <table class="table table-hover table-success table-borderless">
                 <thead class="table-light">
                 <tr>
-                    <th colspan="2">
+                    <th>
                         <a href="orders.php?order_by=order_id&order_sort=<?= $order_sort == 'ASC' ? 'DESC' : 'ASC' ?>">
                             <i class="fas fa-hashtag"></i>
                             <?php if ($order_by == 'order_id'): ?>
                                 <i class="fas fa-sort-numeric-<?= str_replace(array('ASC', 'DESC'), array('down', 'down-alt'), $order_sort) ?>"></i>
-                            <?php endif; ?>
-                        </a>
-                    </th>
-                    <th>
-                        <a href="orders.php?order_by=product_naam&order_sort=<?= $order_sort == 'ASC' ? 'DESC' : 'ASC' ?>">
-                            Product
-                            <?php if ($order_by == 'product_naam'): ?>
-                                <i class="fas fa-sort-alpha-<?= str_replace(array('ASC', 'DESC'), array('down', 'down-alt'), $order_sort) ?>"></i>
                             <?php endif; ?>
                         </a>
                     </th>
@@ -65,9 +56,8 @@ $orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             <?php endif; ?>
                         </a>
                     </th>
-                    <th class="responsive-hidden">Prijs</th>
-                    <th>Aantal</th>
                     <th class="responsive-hidden">Totaal</th>
+                    <th class="responsive-hidden">Naam</th>
                     <th class="responsive-hidden">Email</th>
                     <th class="responsive-hidden">
                         <a href="orders.php?order_by=order_status&order_sort=<?= $order_sort == 'ASC' ? 'DESC' : 'ASC' ?>">
@@ -89,19 +79,12 @@ $orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <?php foreach ($orders as $order): ?>
                         <tr class="details">
                             <td><?= $order['order_id'] ?></td>
-                            <td class="img">
-                                <?php if (!empty($order['img']) && file_exists('../images/producten/' . $order['img'])): ?>
-                                    <img src="../images/producten/<?=$order['img']?>" width="32" height="32" alt="<?=$order['product_naam']?>">
-                                <?php endif; ?>
-                            </td>
-                            <td><?=$order['product_naam']?> <?=$order['product_optie']?></td>
                             <td class="responsive-hidden"><?=date('d-m-Y', strtotime($order['order_datum']))?></td>
-                            <td class="responsive-hidden">€ <?=number_format($order['product_prijs'],2)?></td>
-                            <td><?=$order['product_aantal']?></td>
-                            <td class="responsive-hidden">€&nbsp;<?=number_format($order['product_prijs'] * $order['product_aantal'], 2)?></td>
+                            <td class="responsive-hidden">€&nbsp;<?=number_format($order['totaal_prijs'], 2)?></td>
+                            <td class="responsive-hidden"><?=$order['order_naam']?></td>
                             <td class="responsive-hidden"><?=$order['order_email']?></td>
                             <td class="responsive-hidden"><?=$order['order_status']?></td>
-                            <td><a class="btn btn-outline-success" href="order.php?optie_id=<?= $order['order_id'] ?>" role="button"><i class="fas fa-edit"></i></a></td>
+                            <td><a class="btn btn-outline-success" href="order.php?order_nr=<?= $order['order_nr'] ?>" role="button"><i class="fas fa-edit"></i></a></td>
                         </tr>
                     <?php endforeach; ?>
                 <?php endif; ?>

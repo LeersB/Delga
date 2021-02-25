@@ -1,5 +1,5 @@
 <?php
-$menu = 5;
+$menu = 3;
 $error = '';
 include 'main.php';
 

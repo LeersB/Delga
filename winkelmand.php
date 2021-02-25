@@ -153,14 +153,14 @@ if ($producten_winkelmand) {
                                                 class="fas fa-trash-alt"></i></a></td>
                                 <td class="img">
                                     <?php if (!empty($product['meta']['product_foto']) && file_exists('images/producten/' . $product['meta']['product_foto'])): ?>
-                                        <a href="product.php?product_id=<?= $product['product_id'] ?>">
+                                        <a href="product.php?id=<?= $product['product_id'] ?>">
                                             <img src="images/producten/<?= $product['meta']['product_foto'] ?>"
                                                  width="50" height="50" alt="<?= $product['meta']['product_naam'] ?>">
                                         </a>
                                     <?php endif; ?>
                                 </td>
                                 <td>
-                                    <a href="product.php?product_id=<?= $product['product_id'] ?>"><?= $product['meta']['product_naam'] ?></a>
+                                    <a href="product.php?id=<?= $product['product_id'] ?>"><?= $product['meta']['product_naam'] ?></a>
                                 </td>
                                 <td class="prijs">
                                     <?= $product['opties'] ?>

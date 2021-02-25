@@ -39,10 +39,17 @@ if (isset($_GET['product_id'])) {
     $product_opties = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     if (isset($_POST['submit'])) {
-        // Update product
+        // Upadte product
         $stmt = $pdo_function->prepare('UPDATE producten SET categorie_id = ?, product_naam = ?, product_foto = ?, product_info = ?, omschrijving = ?, verpakking = ?, waarschuwing = ?, eenheidsprijs = ?, btw = ? , product_level = ? WHERE product_id = ?');
         $stmt->execute([$_POST['categorie_id'], $_POST['product_naam'], $_POST['product_foto'], $_POST['product_info'], $_POST['omschrijving'], $_POST['verpakking'], $_POST['waarschuwing'], $_POST['eenheidsprijs'], $_POST['btw'], $_POST['product_level'], $_GET['product_id']]);
         header('Location: producten.php');
+        exit;
+    }
+    if (isset($_POST['update'])) {
+        // Update product in scherm
+        $stmt = $pdo_function->prepare('UPDATE producten SET categorie_id = ?, product_naam = ?, product_foto = ?, product_info = ?, omschrijving = ?, verpakking = ?, waarschuwing = ?, eenheidsprijs = ?, btw = ? , product_level = ? WHERE product_id = ?');
+        $stmt->execute([$_POST['categorie_id'], $_POST['product_naam'], $_POST['product_foto'], $_POST['product_info'], $_POST['omschrijving'], $_POST['verpakking'], $_POST['waarschuwing'], $_POST['eenheidsprijs'], $_POST['btw'], $_POST['product_level'], $_GET['product_id']]);
+        header('Location: product.php?product_id=' . $_GET['product_id']);
         exit;
     }
     if (isset($_POST['delete'])) {
@@ -85,6 +92,7 @@ if (isset($_GET['product_id'])) {
     <div class="container">
 
         <form class="needs-validation" novalidate action="" method="post" autocomplete="off">
+
             <div class="content-block">
                 <div class="row" id="content-wrapper">
                     <div class="col-md">
@@ -110,7 +118,6 @@ if (isset($_GET['product_id'])) {
                                 </div>
                             </div>
                             <div class="card-footer">
-
                                 <div class="input-group mr-2">
                                     <div class="input-group col-md-2">
                                         <label class="sr-only" for="eenheidsprijs">Eenheidsprijs</label>
@@ -158,7 +165,6 @@ if (isset($_GET['product_id'])) {
                                             </select>
                                         </div>
                                     </div>
-
                                 </div>
                             </div>
                         </div>
@@ -192,7 +198,6 @@ if (isset($_GET['product_id'])) {
                         <div class="invalid-feedback">Dit veld is verplicht.</div>
                     </div>
                 </div>
-                <div class="input-group col-md-12"><br></div>
 
                 <div class="input-group col-md-6">
                     <div class="input-group mb-2">
@@ -219,7 +224,6 @@ if (isset($_GET['product_id'])) {
                                placeholder="Verpakking" maxlength="60">
                     </div>
                 </div>
-                <div class="input-group col-md-12"><br></div>
                 <div class="input-group col-md-6">
                     <label class="sr-only" for="omschrijving">Omschrijving</label>
                     <div class="input-group mb-2">
@@ -240,7 +244,6 @@ if (isset($_GET['product_id'])) {
                                   rows="3" maxlength="400"><?= $product['waarschuwing'] ?></textarea>
                     </div>
                 </div>
-                <div class="input-group col-md-12"><br></div>
                 <div class="input-group col-md-12">
                     <label class="sr-only" for="product_info">product_info</label>
                     <div class="input-group mb-2">
@@ -252,11 +255,12 @@ if (isset($_GET['product_id'])) {
                     </div>
                 </div>
 
-                <div class="input-group col-md-12"><br></div>
                 <div class="col-12">
                     <a class="btn btn-secondary" href="producten.php" role="button"><i class="fas fa-times"></i>
                         Annuleer</a>
-                    <button type="submit" name="submit" class="btn btn-success"><i class="fas fa-check"></i> Opslaan
+                    <button type="submit" name="update" class="btn btn-success"><i class="fas fa-check"></i> Update
+                    </button>
+                    <button type="submit" name="submit" class="btn btn-success"><i class="fas fa-check-double"></i> Opslaan
                     </button>
                     <button type="submit" name="delete" class="btn btn-danger"><i class="fas fa-trash-alt"></i>
                         Verwijder
@@ -264,8 +268,8 @@ if (isset($_GET['product_id'])) {
                 </div>
                 <div class="input-group col-md-12"><br></div>
             </div>
+
         </form>
-    </div>
 
     </div>
 </main>

@@ -3,16 +3,16 @@ $menuadmin = 1;
 include 'main.php';
 $pdo_function = pdo_connect_mysql();
 // Get totaal aantal orders op vandaag en rangschik op desc datum
-$stmt = $pdo_function->prepare('SELECT p.product_foto AS img, p.product_naam, o.*, od.product_prijs, od.product_aantal, od.product_optie FROM orders o JOIN order_details od ON od.order_nr = o.order_nr
-    JOIN producten p ON p.product_id = od.product_id WHERE cast(o.order_datum as DATE) = cast(now() as DATE) ORDER BY o.order_datum DESC');
+$stmt = $pdo_function->prepare("SELECT p.product_foto AS img, p.product_naam, o.*, od.product_prijs, od.product_aantal, od.product_optie FROM orders o JOIN order_details od ON od.order_nr = o.order_nr
+    JOIN producten p ON p.product_id = od.product_id WHERE o.order_status = 'nieuw' AND cast(o.order_datum as DATE) = cast(now() as DATE) ORDER BY o.order_datum DESC");
 $stmt->execute();
 $orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
 // Get orders status
-$stmt = $pdo_function->prepare('SELECT SUM(od.product_prijs * od.product_aantal) AS verdiensten FROM orders o JOIN order_details od ON od.order_nr = o.order_nr WHERE cast(o.order_datum as DATE) = cast(now() as DATE) ORDER BY o.order_datum DESC');
+$stmt = $pdo_function->prepare("SELECT SUM(od.product_prijs * od.product_aantal) AS verdiensten FROM orders o JOIN order_details od ON od.order_nr = o.order_nr WHERE cast(o.order_datum as DATE) = cast(now() as DATE) ORDER BY o.order_datum DESC");
 $stmt->execute();
 $order_status = $stmt->fetch(PDO::FETCH_ASSOC);
 // Get totaal aantal users
-$stmt = $pdo_function->prepare('SELECT COUNT(*) AS totaal FROM users');
+$stmt = $pdo_function->prepare("SELECT COUNT(*) AS totaal FROM users");
 $stmt->execute();
 $users = $stmt->fetch(PDO::FETCH_ASSOC);
 // Get totaal aantal producten

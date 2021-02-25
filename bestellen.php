@@ -33,21 +33,21 @@ if ($producten_winkelmand) {
     }
 }
 
-if (isset($_POST['user_naam'], $_POST['order_adres'], $_POST['order_adres_2'], $_SESSION['delgashop'])) {
+if (isset($_POST['order_naam'], $_POST['order_adres'], $_POST['order_adres_2'], $_SESSION['delgashop'])) {
     if (isset($_SESSION['loggedin'])) {
         $user_id = $_SESSION['user_id'];
     }
     if (isset($_POST['bestellen']) && $producten_winkelmand) {
         // Uniek ID genereren
         $order_nr = strtoupper(uniqid('2021-') . substr(md5(mt_rand()), 0, 1));
-        $stmt = $pdo_function->prepare('INSERT INTO orders (order_nr, totaal_prijs, order_status, order_datum, order_email, user_naam, order_adres, order_adres_2, user_id, opmerking) VALUES (?,?,?,?,?,?,?,?,?,?)');
+        $stmt = $pdo_function->prepare('INSERT INTO orders (order_nr, totaal_prijs, order_status, order_datum, order_email, order_naam, order_adres, order_adres_2, user_id, opmerking) VALUES (?,?,?,?,?,?,?,?,?,?)');
         $stmt->execute([
             $order_nr,
             $subtotaal + $levering,
             'nieuw',
             date('Y-m-d H:i:s'),
             isset($account['email']) && !empty($account['email']) ? $account['email'] : $_POST['email'],
-            $_POST['user_naam'],
+            $_POST['order_naam'],
             $_POST['order_adres'],
             $_POST['order_adres_2'],
             $user_id,
@@ -60,7 +60,7 @@ if (isset($_POST['user_naam'], $_POST['order_adres'], $_POST['order_adres_2'], $
         send_order_detail_email(
             isset($account['email']) && !empty($account['email']) ? $account['email'] : $_POST['email'],
             $producten_winkelmand,
-            $_POST['user_naam'],
+            $_POST['order_naam'],
             $_POST['order_adres'],
             $_POST['order_adres_2'],
             $subtotaal + $levering,
@@ -105,13 +105,13 @@ if (empty($_SESSION['delgashop'])) {
                 <div class="row">
                     <p class="legend col-md-12"><span>Beste <?= $account['voornaam']," ",$account['achternaam']?>, gelieve de volgende gegevens na te kijken voor u uw bestelling plaatst.</span></p>
                     <div class="input-group col-md-4 sr-only">
-                        <label class="sr-only" for="user_naam">Naam</label>
+                        <label class="sr-only" for="order_naam">Naam</label>
                         <div class="input-group mb-2">
                             <div class="input-group-prepend">
                                 <div class="input-group-text"><i class="fas fa-user"></i></div>
                             </div>
                             <input type="text" class="form-control" value="<?= $account['voornaam']," ",$account['achternaam']?>"
-                                   id="user_naam" name="user_naam" placeholder="Naam" required>
+                                   id="order_naam" name="order_naam" placeholder="Naam" required>
                         </div>
                     </div>
                     <div class="input-group col-md-4 sr-only">
@@ -216,7 +216,7 @@ if (empty($_SESSION['delgashop'])) {
                                 <tr>
                                     <td class="img">
                                         <?php if (!empty($product['meta']['product_foto']) && file_exists('images/producten/' . $product['meta']['product_foto'])): ?>
-                                            <a href="product.php?product_id=<?= $product['product_id'] ?>">
+                                            <a href="product.php?id=<?= $product['product_id'] ?>">
                                                 <img src="images/producten/<?= $product['meta']['product_foto'] ?>"
                                                      width="50" height="50"
                                                      alt="<?= $product['meta']['product_naam'] ?>">
@@ -224,7 +224,7 @@ if (empty($_SESSION['delgashop'])) {
                                         <?php endif; ?>
                                     </td>
                                     <td>
-                                        <a href="product.php?product_id=<?= $product['product_id'] ?>"><?= $product['meta']['product_naam'] ?></a>
+                                        <a href="product.php?id=<?= $product['product_id'] ?>"><?= $product['meta']['product_naam'] ?></a>
                                     </td>
                                     <td class="prijs">
                                         <?= $product['opties'] ?>

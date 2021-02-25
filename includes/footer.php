@@ -9,7 +9,7 @@
             <div class="col-10">
                 <div class="d-flex justify-content-end">
                     <div class="p-2 bd-highlight">
-                        <p><i class="far fa-edit"></i> 11/02/2021</p>
+                        <p><i class="far fa-edit"></i> 25/02/2021</p>
                     </div>
                     <div class="p-2 bd-highlight">
                         <address>

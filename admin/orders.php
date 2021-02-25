@@ -5,7 +5,7 @@ $pdo_function = pdo_connect_mysql();
 
 $order_by_list = array('order_id','order_datum','order_status');
 $order_by = isset($_GET['order_by']) && in_array($_GET['order_by'], $order_by_list) ? $_GET['order_by'] : 'order_id';
-$order_sort = isset($_GET['order_sort']) && $_GET['order_sort'] == 'DESC' ? 'DESC' : 'ASC';
+$order_sort = isset($_GET['order_sort']) && $_GET['order_sort'] == 'ASC' ? 'ASC' : 'DESC';
 
 $order_status = array('nieuw','afgewerkt','geannuleerd');
 // Get orders
@@ -79,7 +79,7 @@ $orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <?php foreach ($orders as $order): ?>
                         <tr class="details">
                             <td><?= $order['order_id'] ?></td>
-                            <td class="responsive-hidden"><?=date('d-m-Y', strtotime($order['order_datum']))?></td>
+                            <td class="responsive-hidden"><?=date('d-m-Y H:i:s', strtotime($order['order_datum']))?></td>
                             <td class="responsive-hidden">€&nbsp;<?=number_format($order['totaal_prijs'], 2)?></td>
                             <td class="responsive-hidden"><?=$order['order_naam']?></td>
                             <td class="responsive-hidden"><?=$order['order_email']?></td>

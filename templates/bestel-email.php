@@ -8,7 +8,7 @@
 <body style="background-color:#ffffff;font-family:-apple-system, BlinkMacSystemFont, 'segoe ui', roboto, oxygen, ubuntu, cantarell, 'fira sans', 'droid sans', 'helvetica neue', Arial, sans-serif;box-sizing:border-box;font-size:16px;">
 <div style="padding:20px;background-color:#ffffff;box-sizing:border-box;font-size:16px;">
     <h1 style="padding:20px;box-sizing:border-box;font-size:24px;color:#394453;background-color:#EBFFD7;margin:0;"><img src="http://www.delga.be/images/delga_gif.gif" height="80"/></h1>
-    <h1 style="padding:40px;box-sizing:border-box;font-size:24px;color:#394453;margin:0;">Bedankt voor uw bestelling <?=$user_naam?></h1>
+    <h1 style="padding:40px;box-sizing:border-box;font-size:24px;color:#394453;margin:0;">Bedankt voor uw bestelling <?=$order_naam?></h1>
     <p style="padding:10px 40px;margin:0;box-sizing:border-box;font-size:16px;">Uw bestelling is ontvangen en wordt verwerkt.</p>
     <p style="padding:10px 40px;margin:0;box-sizing:border-box;font-size:16px;">We zullen u nog contacteren via email of telefonisch voor het verder afhandelen van uw bestelling.</p>
     <h3 style="padding:20px 40px;margin:0;color:#394453;box-sizing:border-box;">Order #<?=$order_nr?></h3>
@@ -47,7 +47,7 @@
     </div>
     <h2 style="padding:20px 40px;margin:0;color:#394453;box-sizing:border-box;">Uw gegevens</h2>
     <p style="padding:20px 40px 60px 40px;margin:0;box-sizing:border-box;font-size:16px;">
-        <?=$user_naam?><br>
+        <?=$order_naam?><br>
         Facturatieadres:&nbsp;<?=$order_adres?><br>
         Leveringsadres:&nbsp;<?=$order_adres_2?>
     </p>

@@ -73,7 +73,7 @@ function &get_delgashop_product($product_id, $opties) {
 $aantal_winkelmand = isset($_SESSION['delgashop']) ? count($_SESSION['delgashop']) : 0;
 
 // Functie verzenden order details email
-function send_order_detail_email($email, $producten_winkelmand, $user_naam, $order_adres, $order_adres_2, $subtotaal, $order_nr) {
+function send_order_detail_email($email, $producten_winkelmand, $order_naam, $order_adres, $order_adres_2, $subtotaal, $order_nr) {
     $subject = 'Bestelling delga.be';
     $headers = 'From: ' . mail_from . "\r\n" . 'Reply-To: ' . mail_from . "\r\n" . 'Return-Path: ' . mail_from . "\r\n" . 'X-Mailer: PHP/' . phpversion() . "\r\n" . 'MIME-Version: 1.0' . "\r\n" . 'Content-Type: text/html; charset=UTF-8' . "\r\n";
     ob_start();

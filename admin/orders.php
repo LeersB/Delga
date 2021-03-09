@@ -77,14 +77,15 @@ $orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     </tr>
                 <?php else: ?>
                     <?php foreach ($orders as $order): ?>
-                        <tr class="details">
+                        <tr class="details"
+                            onclick="location.href='order.php?order_nr=<?= $order['order_nr'] ?>'">
                             <td><?= $order['order_id'] ?></td>
                             <td class="responsive-hidden"><?=date('d-m-Y H:i:s', strtotime($order['order_datum']))?></td>
                             <td class="responsive-hidden">€&nbsp;<?=number_format($order['totaal_prijs'], 2)?></td>
                             <td class="responsive-hidden"><?=$order['order_naam']?></td>
                             <td class="responsive-hidden"><?=$order['order_email']?></td>
                             <td class="responsive-hidden"><?=$order['order_status']?></td>
-                            <td><a class="btn btn-outline-success" href="order.php?order_nr=<?= $order['order_nr'] ?>" role="button"><i class="fas fa-edit"></i></a></td>
+                            <td style="color: #28a745"><i class="fas fa-edit"></i></td>
                         </tr>
                     <?php endforeach; ?>
                 <?php endif; ?>

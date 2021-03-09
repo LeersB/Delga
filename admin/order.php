@@ -39,7 +39,7 @@ if (isset($_GET['order_nr'])) {
     }
     if (isset($_POST['update'])) {
         // Update order in scherm
-        $stmt = $pdo_function->prepare('UPDATE IGNORE orders SET opmerking = ?, leveringsdatum = ?, order_status = ? WHERE order_nr = ?');
+        $stmt = $pdo_function->prepare('UPDATE orders SET opmerking = ?, leveringsdatum = ?, order_status = ? WHERE order_nr = ?');
         $stmt->execute([$_POST['opmerking'], $_POST['leveringsdatum'], $_POST['order_status'], $_GET['order_nr']]);
         header('Location: order.php?order_nr=' . $_GET['order_nr']);
         exit;
@@ -78,8 +78,7 @@ if (isset($_GET['order_nr'])) {
                             <div class="input-group-text"><i class="fas fa-calendar-day"></i></div>
                         </div>
                         <input type="date" class="form-control" id="leveringsdatum" name="leveringsdatum"
-                               value="<?= $order['leveringsdatum'] ?>" placeholder="Leveringsdatum">
-                        <div class="invalid-feedback">Dit veld is verplicht.</div>
+                               value="<?= $order['leveringsdatum'] ?>" placeholder="Leveringsdatum" min="2021-01-01" required>
                     </div>
                 </div>
                 <div class="input-group col-md-6">
@@ -106,7 +105,7 @@ if (isset($_GET['order_nr'])) {
                     </div>
                 </div>
                 <div class="col-12">
-                    <a class="btn btn-secondary" href="producten.php" role="button"><i class="fas fa-times"></i>
+                    <a class="btn btn-secondary" href="orders.php" role="button"><i class="fas fa-times"></i>
                         Annuleer</a>
                     <button type="submit" name="update" class="btn btn-success"><i class="fas fa-check"></i> Update
                     </button>
@@ -191,6 +190,7 @@ if (isset($_GET['order_nr'])) {
 </main>
 
 <?php include('includes/footer.php'); ?>
+<script src="../js/form-validation.js"></script>
 </body>
 </html>
 

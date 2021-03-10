@@ -11,11 +11,14 @@ $stmt->execute([$_SESSION['user_id']]);
 $orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 if (isset($_GET['id'])) {
-//Get order_details
+    //Get order_details
     $stmt = $pdo_function->prepare('SELECT p.product_foto AS img, p.product_naam, od.* FROM order_details od 
-    JOIN producten p ON p.product_id = od.product_id WHERE order_nr = ?');
+        JOIN producten p ON p.product_id = od.product_id WHERE order_nr = ?');
     $stmt->execute([$_GET['id']]);
     $order_detail = $stmt->fetchAll(PDO::FETCH_ASSOC);
+ if (!$order_detail) {
+     $msg = 'Er is geen order gevonden met dit order nummer!';
+ }
 }
 ?>
 <!DOCTYPE html>
@@ -69,11 +72,14 @@ if (isset($_GET['id'])) {
                                             <tbody>
                                             <?php if (empty($orders)): ?>
                                                 <tr>
-                                                    <td colspan="4" style="text-align:center;">Er zijn geen bestellingen aanwezig</td>
+                                                    <td colspan="4" style="text-align:center;">Er zijn geen bestellingen
+                                                        aanwezig
+                                                    </td>
                                                 </tr>
                                             <?php else: ?>
                                                 <?php foreach ($orders as $order): ?>
-                                                    <tr class="details" onclick="location.href='bestellingen.php?id=<?= $order['order_nr'] ?>'">
+                                                    <tr class="details"
+                                                        onclick="location.href='bestellingen.php?id=<?= $order['order_nr'] ?>'">
                                                         <td><?= $order['order_nr'] ?></td>
                                                         <td><?= date('d-m-Y', strtotime($order['order_datum'])) ?></td>
                                                         <td><?= $order['totaal_prijs'] ?></td>
@@ -84,7 +90,7 @@ if (isset($_GET['id'])) {
                                             </tbody>
                                         </table>
                                     </div>
-                                <?php elseif ($_GET['id'] > '0'): ?>
+                                <?php elseif ($order_detail): ?>
                                     <div class="input-group col-md-12"><br></div>
                                     <div class="content table-responsive-lg">
                                         <table class="table table-success table-hover table-borderless">
@@ -109,12 +115,16 @@ if (isset($_GET['id'])) {
                                                     <td><?= $order['product_optie'] ?></td>
                                                     <td>€ <?= $order['product_prijs'] ?></td>
                                                     <td><?= $order['product_aantal'] ?></td>
-                                                    <td>€ <?= number_format($order['product_prijs'] * $order['product_aantal'], 2) ?></td>
+                                                    <td>
+                                                        € <?= number_format($order['product_prijs'] * $order['product_aantal'], 2) ?></td>
                                                 </tr>
                                             <?php endforeach; ?>
                                             </tbody>
                                         </table>
                                     </div>
+                                <?php else : ?>
+                                    <div class="input-group col-md-12"><br></div>
+                                    <div class="col-md-12 text-danger msg"><?= $msg ?></div>
                                 <?php endif; ?>
                             </div>
                         </div>

@@ -160,7 +160,7 @@ body {
         flex-flow: column;
     }
     main {
-        padding: 70px 7px 20px 7px;
+        padding: 50px 7px 20px 7px;
     }
     main .expanded-details div {
         width: 100% !important;

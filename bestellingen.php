@@ -17,7 +17,7 @@ if (isset($_GET['id'])) {
     $stmt->execute([$_GET['id']]);
     $order_detail = $stmt->fetchAll(PDO::FETCH_ASSOC);
  if (!$order_detail) {
-     $msg = 'Er is geen order gevonden met dit order nummer!';
+     $msg = 'Er is geen bestelling gevonden met dit nummer!';
  }
 }
 ?>

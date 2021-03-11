@@ -8,7 +8,7 @@ $stmt = $pdo_function->prepare("SELECT p.product_foto AS img, p.product_naam, o.
 $stmt->execute();
 $orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
 // Get orders status
-$stmt = $pdo_function->prepare("SELECT SUM(od.product_prijs * od.product_aantal) AS verdiensten FROM orders o JOIN order_details od ON od.order_nr = o.order_nr WHERE cast(o.order_datum as DATE) = cast(now() as DATE) AND o.order_status ='nieuw' ORDER BY o.order_datum DESC");
+$stmt = $pdo_function->prepare("SELECT COUNT(*) AS totaal FROM orders WHERE order_status = 'uitvoering'");
 $stmt->execute();
 $order_status = $stmt->fetch(PDO::FETCH_ASSOC);
 // Get totaal aantal users
@@ -49,17 +49,17 @@ $producten = $stmt->fetch(PDO::FETCH_ASSOC);
         <div class="dashboard">
             <div class="content-block stat" onclick="location.href='orders.php'">
                 <div>
-                    <h3>Orders</h3>
+                    <h3>Nieuw</h3>
                     <p><?=number_format(count($orders))?></p>
                 </div>
                 <i class="fas fa-mail-bulk"></i>
             </div>
-            <div class="content-block stat">
+            <div class="content-block stat" onclick="location.href='orders.php?weergaven=uitvoering'">
                 <div>
-                    <h3>Mogelijke verdiensten</h3>
-                    <p>€ <?=number_format($order_status['verdiensten'], 2)?></p>
+                    <h3>In uitvoering</h3>
+                    <p><?=number_format($order_status['totaal'])?></p>
                 </div>
-                <i class="fas fa-coins"></i>
+                <i class="fas fa-mail-bulk"></i>
             </div>
             <div class="content-block stat" onclick="location.href='producten.php'">
                 <div>

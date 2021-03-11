@@ -3,15 +3,24 @@ $menuadmin = 4;
 include 'main.php';
 $pdo_function = pdo_connect_mysql();
 
-$order_by_list = array('order_id','order_datum','order_status');
+$order_by_list = array('order_id','order_datum');
 $order_by = isset($_GET['order_by']) && in_array($_GET['order_by'], $order_by_list) ? $_GET['order_by'] : 'order_id';
-$order_sort = isset($_GET['order_sort']) && $_GET['order_sort'] == 'ASC' ? 'ASC' : 'DESC';
+$order_sort = isset($_GET['order_sort']) && $_GET['order_sort'] == 'DESC' ? 'DESC' : 'ASC';
 
-$order_status = array('nieuw','afgewerkt','geannuleerd');
+$weergaven = isset($_GET['weergaven']) ? $_GET['weergaven'] : 'nieuw';
 // Get orders
-$stmt = $pdo_function->prepare('SELECT * FROM orders ORDER BY ' . $order_by . ' ' . $order_sort);
+if ($weergaven == 'nieuw') {
+    $stmt = $pdo_function->prepare("SELECT * FROM orders WHERE order_status = 'nieuw' ORDER BY " . $order_by . ' ' . $order_sort);
+} elseif ($weergaven == 'uitvoering') {
+    $stmt = $pdo_function->prepare("SELECT * FROM orders WHERE order_status = 'uitvoering' ORDER BY " . $order_by . ' ' . $order_sort);
+} elseif ($weergaven == 'afgewerkt') {
+    $stmt = $pdo_function->prepare("SELECT * FROM orders WHERE order_status = 'afgewerkt' ORDER BY " . $order_by . ' ' . $order_sort);
+} elseif ($weergaven == 'geannuleerd') {
+    $stmt = $pdo_function->prepare("SELECT * FROM orders WHERE order_status = 'geannuleerd' ORDER BY " . $order_by . ' ' . $order_sort);
+}
 $stmt->execute();
 $orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
 ?>
 <!DOCTYPE html>
 <html class="h-100" lang="nl">
@@ -34,40 +43,47 @@ $orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <main class="flex-shrink-0" role="main">
     <div class="container">
 
-        <h2> Nieuwe Orders</h2>
+        <form action="" method="get" class="product-form">
+            <div class="row no-gutters">
+        <div class="input-group col-md-6 mb-2">
+            <div class="input-group-prepend">
+                <label class="input-group-text" for="weergaven">Weergaven orders</label>
+            </div>
+            <select class="custom-select" name="weergaven" id="weergaven">
+                <option value="nieuw"<?= ($weergaven == 'nieuw' ? ' selected' : '') ?> selected>Nieuw
+                </option>
+                <option value="uitvoering"<?= ($weergaven == 'uitvoering' ? ' selected' : '') ?>>Uitvoering</option>
+                <option value="afgewerkt"<?= ($weergaven == 'afgewerkt' ? ' selected' : '') ?>>Afgewerkt</option>
+                <option value="geannuleerd"<?= ($weergaven == 'geannuleerd' ? ' selected' : '') ?>>Geannuleerd</option>
+            </select>
+        </div>
+        </div>
+        </form>
 
         <div class="content table-responsive-lg">
             <table class="table table-hover table-success table-borderless">
                 <thead class="table-light">
                 <tr>
                     <th>
-                        <a href="orders.php?order_by=order_id&order_sort=<?= $order_sort == 'ASC' ? 'DESC' : 'ASC' ?>">
+                        <a href="orders.php?weergaven=<?= $weergaven ?>&order_by=order_id&order_sort=<?= $order_sort == 'ASC' ? 'DESC' : 'ASC' ?>">
                             <i class="fas fa-hashtag"></i>
                             <?php if ($order_by == 'order_id'): ?>
                                 <i class="fas fa-sort-numeric-<?= str_replace(array('ASC', 'DESC'), array('down', 'down-alt'), $order_sort) ?>"></i>
                             <?php endif; ?>
                         </a>
                     </th>
-                    <th class="responsive-hidden">
-                        <a href="orders.php?order_by=order_datum&order_sort=<?= $order_sort == 'ASC' ? 'DESC' : 'ASC' ?>">
+                    <th>
+                        <a href="orders.php?weergaven=<?= $weergaven ?>&order_by=order_datum&order_sort=<?= $order_sort == 'ASC' ? 'DESC' : 'ASC' ?>">
                             Datum
                             <?php if ($order_by == 'order_datum'): ?>
                                 <i class="fas fa-sort-numeric-<?= str_replace(array('ASC', 'DESC'), array('down', 'down-alt'), $order_sort) ?>"></i>
                             <?php endif; ?>
                         </a>
                     </th>
+                    <th class="responsive-hidden">Order nummer</th>
                     <th class="responsive-hidden">Totaal</th>
                     <th class="responsive-hidden">Naam</th>
-                    <th class="responsive-hidden">Email</th>
-                    <th class="responsive-hidden">
-                        <a href="orders.php?order_by=order_status&order_sort=<?= $order_sort == 'ASC' ? 'DESC' : 'ASC' ?>">
-                            Status
-                            <?php if ($order_by == 'order_status'): ?>
-                                <i class="fas fa-sort-alpha-<?= str_replace(array('ASC', 'DESC'), array('down', 'down-alt'), $order_sort) ?>"></i>
-                            <?php endif; ?>
-                        </a>
-                    </th>
-                <th></th>
+                    <th></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -80,12 +96,15 @@ $orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         <tr class="details"
                             onclick="location.href='order.php?order_nr=<?= $order['order_nr'] ?>'">
                             <td><?= $order['order_id'] ?></td>
-                            <td class="responsive-hidden"><?=date('d-m-Y H:i:s', strtotime($order['order_datum']))?></td>
+                            <td><?=date('d-m-Y H:i:s', strtotime($order['order_datum']))?></td>
+                            <td class="responsive-hidden"><?= $order['order_nr'] ?></td>
                             <td class="responsive-hidden">€&nbsp;<?=number_format($order['totaal_prijs'], 2)?></td>
-                            <td class="responsive-hidden"><?=$order['order_naam']?></td>
-                            <td class="responsive-hidden"><?=$order['order_email']?></td>
-                            <td class="responsive-hidden"><?=$order['order_status']?></td>
+                            <td class="responsive-hidden"><?= $order['order_naam'] ?></td>
+                            <?php if ($order['order_status'] == 'nieuw' || $order['order_status'] == 'uitvoering') : ?>
                             <td style="color: #28a745"><i class="fas fa-edit"></i></td>
+                                <?php else: ?>
+                                <td></td>
+                            <?php endif ?>
                         </tr>
                     <?php endforeach; ?>
                 <?php endif; ?>
@@ -97,6 +116,11 @@ $orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
 </main>
 
 <?php include('includes/footer.php'); ?>
+<script>
+    if (document.querySelector(".product-form .input-group .custom-select")) {
+        document.querySelector("#weergaven").onchange = () => document.querySelector(".product-form").submit();
+    }
+</script>
 </body>
 </html>
 

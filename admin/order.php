@@ -40,7 +40,7 @@ if (isset($_GET['order_nr'])) {
     if (isset($_POST['levering_aantal'])) {
         // Update order status geannuleerd
         $stmt = $pdo_function->prepare('UPDATE order_details SET levering_aantal = ? WHERE order_details_id = ?');
-        $stmt->execute([$_POST['levering_aantal'], $_GET['details_id']]);
+        $stmt->execute([$_POST['aantal'], $_POST['details_id']]);
         header('Location: order.php?order_nr=' . $_GET['order_nr']);
         exit;
     }
@@ -49,6 +49,7 @@ if (isset($_GET['order_nr'])) {
     header('Location: orders.php');
     exit;
 }
+
 ?>
 <!DOCTYPE html>
 <html class="h-100" lang="nl">
@@ -80,9 +81,14 @@ if (isset($_GET['order_nr'])) {
                 <?php if ($order['order_status'] == 'nieuw') { ?>
 
                     <div class="col-md-12 mt-2">
-                        <a class="btn btn-secondary" href="orders.php" role="button"><i class="fas fa-times"></i> Annuleer</a>
-                        <button type="submit" name="order_uitvoering" class="btn btn-success"><i class="fas fa-check"></i> Order in uitvoering</button>
-                        <button type="submit" name="order_annuleren" class="btn btn-danger"><i class="fas fa-times"></i> Order annuleren</button>
+                        <a class="btn btn-secondary" href="orders.php" role="button"><i class="fas fa-times"></i>
+                            Annuleer</a>
+                        <button type="submit" name="order_uitvoering" class="btn btn-success"><i
+                                    class="fas fa-check"></i> Order in uitvoering
+                        </button>
+                        <button type="submit" name="order_annuleren" class="btn btn-danger"><i class="fas fa-times"></i>
+                            Order annuleren
+                        </button>
                     </div>
 
                 <?php } elseif ($order['order_status'] == 'uitvoering') { ?>
@@ -93,7 +99,8 @@ if (isset($_GET['order_nr'])) {
                                 <div class="input-group-text"><i class="fas fa-calendar-day"></i></div>
                             </div>
                             <input type="date" class="form-control" id="leveringsdatum" name="leveringsdatum"
-                                   value="<?= $order['leveringsdatum'] ?>" placeholder="Leveringsdatum" min="2021-01-01" required>
+                                   value="<?= $order['leveringsdatum'] ?>" placeholder="Leveringsdatum" min="2021-01-01"
+                                   required>
                         </div>
                     </div>
                     <div class="input-group col-md-12">
@@ -108,15 +115,19 @@ if (isset($_GET['order_nr'])) {
                     </div>
 
                     <div class="col-md-12">
-                        <a class="btn btn-secondary" href="orders.php" role="button"><i class="fas fa-times"></i> Annuleer</a>
-                        <button type="submit" name="order_uitvoering" class="btn btn-success"><i class="fas fa-check"></i> Update
+                        <a class="btn btn-secondary" href="orders.php" role="button"><i class="fas fa-times"></i>
+                            Annuleer</a>
+                        <button type="submit" name="order_uitvoering" class="btn btn-success"><i
+                                    class="fas fa-check"></i> Update
                         </button>
-                        <button type="submit" name="order_afgewerkt" class="btn btn-success"><i class="fas fa-check-double"></i> Order afgewerkt
+                        <button type="submit" name="order_afgewerkt" class="btn btn-success"><i
+                                    class="fas fa-check-double"></i> Order afgewerkt
                         </button>
                     </div>
                 <?php } else { ?>
                     <div class="col-md-12">
-                        <a class="btn btn-secondary" href="orders.php" role="button"><i class="fas fa-times"></i> Annuleer</a>
+                        <a class="btn btn-secondary" href="orders.php" role="button"><i class="fas fa-times"></i>
+                            Annuleer</a>
                     </div>
                 <?php } ?>
 
@@ -128,49 +139,50 @@ if (isset($_GET['order_nr'])) {
         <div class="content table-responsive-lg">
             <table class="table table-light table-borderless">
                 <tbody>
-                    <tr>
-                        <td>
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <h5>Order nummer</h5>
-                                    <p><?=$order['order_nr']?></p>
-                                </div>
-                                <div class="col-md-4">
-                                    <h5>Aangemaakt</h5>
-                                    <p><?=date('d/m/Y H:i:s', strtotime($order['order_datum']))?></p>
-                                </div>
-                                <div class="col-md-4">
-                                    <h5>Naam</h5>
-                                    <p><?=$order['order_naam']?></p>
-                                </div>
-                                <div class="col-md-4">
-                                    <h5>Email</h5>
-                                    <p><?=$order['order_email']?></p>
-                                </div>
-                                <div class="col-md-4">
-                                    <h5>Facturatieadres</h5>
-                                    <p><?=$order['order_adres']?></p>
-                                </div>
-                                <div class="col-md-4">
-                                    <h5>Leveringsadres</h5>
-                                    <p><?=$order['order_adres_2']?></p>
-                                </div>
-                                <div class="col-md-8">
-                                    <h5>Opmerking</h5>
-                                    <p><?=$order['opmerking']?></p>
-                                </div>
-                                <?php if ($order['leveringsdatum'] != NULL) { ?>
-                                    <div class="col-md-4">
-                                        <h5>Leveringsdatum</h5>
-                                        <p><?= date('d/m/Y', strtotime($order['leveringsdatum']))?></p>
-                                    </div>
-                                <?php } ?>
+                <tr>
+                    <td>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <h5>Order nummer</h5>
+                                <p><?= $order['order_nr'] ?></p>
                             </div>
-                        </td>
-                    </tr>
+                            <div class="col-md-4">
+                                <h5>Aangemaakt</h5>
+                                <p><?= date('d/m/Y H:i:s', strtotime($order['order_datum'])) ?></p>
+                            </div>
+                            <div class="col-md-4">
+                                <h5>Naam</h5>
+                                <p><?= $order['order_naam'] ?></p>
+                            </div>
+                            <div class="col-md-4">
+                                <h5>Email</h5>
+                                <p><?= $order['order_email'] ?></p>
+                            </div>
+                            <div class="col-md-4">
+                                <h5>Facturatieadres</h5>
+                                <p><?= $order['order_adres'] ?></p>
+                            </div>
+                            <div class="col-md-4">
+                                <h5>Leveringsadres</h5>
+                                <p><?= $order['order_adres_2'] ?></p>
+                            </div>
+                            <div class="col-md-8">
+                                <h5>Opmerking</h5>
+                                <p><?= $order['opmerking'] ?></p>
+                            </div>
+                            <?php if ($order['leveringsdatum'] != NULL) { ?>
+                                <div class="col-md-4">
+                                    <h5>Leveringsdatum</h5>
+                                    <p><?= date('d/m/Y', strtotime($order['leveringsdatum'])) ?></p>
+                                </div>
+                            <?php } ?>
+                        </div>
+                    </td>
+                </tr>
                 </tbody>
+            </table>
 
-                <table class="table table-hover table-success table-borderless">
+            <table class="table table-hover table-success table-borderless">
                 <thead class="table-light">
                 <tr>
                     <th colspan="2">Product</th>
@@ -178,28 +190,67 @@ if (isset($_GET['order_nr'])) {
                     <th>Aantal</th>
                     <th class="responsive-hidden">Totaal</th>
                     <th>Levering</th>
-                    <th></th>
                 </tr>
                 </thead>
                 <tbody>
-                <?php foreach ($orders as $order): ?>
-                        <tr class="details" onclick="location.href='order.php?order_nr=<?= $order['order_nr'] ?>&details_id=<?= $order['order_details_id'] ?>'">
-                            <td class="img">
-                                <?php if (!empty($order['img']) && file_exists('../images/producten/' . $order['img'])): ?>
-                                    <img src="../images/producten/<?=$order['img']?>" width="32" height="32" alt="<?=$order['product_naam']?>">
-                                <?php endif; ?>
+                <?php foreach ($orders as $product): ?>
+
+                    <tr class="details">
+                        <td class="img">
+                            <?php if (!empty($product['img']) && file_exists('../images/producten/' . $product['img'])): ?>
+                                <img src="../images/producten/<?= $product['img'] ?>" width="32" height="32"
+                                     alt="<?= $product['product_naam'] ?>">
+                            <?php endif; ?>
+                        </td>
+                        <td><?= $product['product_naam'] ?> <?= $product['product_optie'] ?></td>
+                        <td class="responsive-hidden">€ <?= number_format($product['product_prijs'], 2) ?></td>
+                        <td><?= $product['product_aantal'] ?></td>
+                        <td class="responsive-hidden">
+                            €&nbsp;<?= number_format($product['product_prijs'] * $product['product_aantal'], 2) ?></td>
+                        <?php if ($product['order_status'] == 'uitvoering') { ?>
+
+
+                            <td>
+                                <form class="needs-validation" novalidate action="" method="post" autocomplete="off">
+
+                                    <div class="input-group sr-only">
+                                        <label class="sr-only" for="details_id">ID</label>
+                                        <div class="input-group mb-2">
+                                            <input type="text" class="form-control" id="details_id"
+                                                   name="details_id"
+                                                   value="<?= $product['order_details_id'] ?>">
+                                        </div>
+                                    </div>
+
+                                <div class="input-group">
+                                    <label class="sr-only" for="aantal">Aantal</label>
+                                    <div class="input-group mb-2">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text"><i class="fas fa-pump-soap"></i></div>
+                                        </div>
+                                        <input type="number" class="form-control" id="aantal"
+                                               name="aantal"
+                                               placeholder="Aantal" value="<?= $product['product_aantal'] ?>"
+                                               required>
+                                        <?php if (!empty($product['levering_aantal'])) : ?>
+                                        <button type="submit" name="levering_aantal" class="btn btn-outline-success"><i class="fas fa-edit"></i></button>
+                                        <?php else : ?>
+                                            <button type="submit" name="levering_aantal" class="btn btn-outline-danger"><i class="fas fa-edit"></i></button>
+                                        <?php endif; ?>
+
+                                    </div>
+
+                                </div>
+                                </form>
                             </td>
-                            <td><?=$order['product_naam']?> <?=$order['product_optie']?></td>
-                            <td class="responsive-hidden">€ <?=number_format($order['product_prijs'],2)?></td>
-                            <td><?=$order['product_aantal']?></td>
-                            <td class="responsive-hidden">€&nbsp;<?=number_format($order['product_prijs'] * $order['product_aantal'], 2)?></td>
-                            <td><?=$order['levering_aantal']?></td>
-                            <?php if ($order['order_status'] == 'nieuw' || $order['order_status'] == 'uitvoering') { ?>
-                            <td style="color: #28a745"><i class="fas fa-edit"></i></td>
-                            <?php } else { ?>
-                                <td></td>
-                            <?php } ?>
-                        </tr>
+
+
+                        <?php } else { ?>
+                            <td><?= $product['levering_aantal'] ?></td>
+                        <?php } ?>
+                    </tr>
+
+
                 <?php endforeach; ?>
                 </tbody>
             </table>

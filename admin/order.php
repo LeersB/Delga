@@ -209,10 +209,8 @@ if (isset($_GET['order_nr'])) {
                             €&nbsp;<?= number_format($product['product_prijs'] * $product['product_aantal'], 2) ?></td>
                         <?php if ($product['order_status'] == 'uitvoering') { ?>
 
-
                             <td>
                                 <form class="needs-validation" novalidate action="" method="post" autocomplete="off">
-
                                     <div class="input-group sr-only">
                                         <label class="sr-only" for="details_id">ID</label>
                                         <div class="input-group mb-2">
@@ -221,29 +219,34 @@ if (isset($_GET['order_nr'])) {
                                                    value="<?= $product['order_details_id'] ?>">
                                         </div>
                                     </div>
+                                    <div class="input-group">
+                                        <label class="sr-only" for="aantal">Aantal</label>
+                                        <div class="input-group mb-2">
+                                            <div class="input-group-prepend">
+                                                <div class="input-group-text"><?= $product['levering_aantal'] ?>&nbsp;<i
+                                                            class="fas fa-pump-soap"></i></div>
+                                            </div>
+                                            <input type="number" class="form-control" id="aantal"
+                                                   name="aantal"
+                                                   placeholder="Aantal" required>
 
-                                <div class="input-group">
-                                    <label class="sr-only" for="aantal">Aantal</label>
-                                    <div class="input-group mb-2">
-                                        <div class="input-group-prepend">
-                                            <div class="input-group-text"><i class="fas fa-pump-soap"></i></div>
+                                            <?php if ($product['levering_aantal'] == $product['product_aantal']) : ?>
+                                                <button type="submit" name="levering_aantal"
+                                                        class="btn btn-outline-success"><i class="fas fa-edit"></i>
+                                                </button>
+                                            <?php elseif ($product['levering_aantal'] > 0) : ?>
+                                                <button type="submit" name="levering_aantal"
+                                                        class="btn btn-outline-warning"><i class="fas fa-edit"></i>
+                                                </button>
+                                            <?php else : ?>
+                                                <button type="submit" name="levering_aantal"
+                                                        class="btn btn-outline-danger"><i class="fas fa-edit"></i>
+                                                </button>
+                                            <?php endif; ?>
                                         </div>
-                                        <input type="number" class="form-control" id="aantal"
-                                               name="aantal"
-                                               placeholder="Aantal" value="<?= $product['product_aantal'] ?>"
-                                               required>
-                                        <?php if (!empty($product['levering_aantal'])) : ?>
-                                        <button type="submit" name="levering_aantal" class="btn btn-outline-success"><i class="fas fa-edit"></i></button>
-                                        <?php else : ?>
-                                            <button type="submit" name="levering_aantal" class="btn btn-outline-danger"><i class="fas fa-edit"></i></button>
-                                        <?php endif; ?>
-
                                     </div>
-
-                                </div>
                                 </form>
                             </td>
-
 
                         <?php } else { ?>
                             <td><?= $product['levering_aantal'] ?></td>

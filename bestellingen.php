@@ -6,15 +6,16 @@ check_loggedin($pdo_function);
 $msg = '';
 
 //Get orders
-$stmt = $pdo_function->prepare('SELECT * FROM orders WHERE user_id = ? ORDER BY order_datum DESC');
+$stmt = $pdo_function->prepare("SELECT * FROM orders WHERE user_id = ? ORDER BY order_datum DESC LIMIT 10");
 $stmt->execute([$_SESSION['user_id']]);
 $orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 if (isset($_GET['id'])) {
+
     //Get order_details
-    $stmt = $pdo_function->prepare('SELECT p.product_foto AS img, p.product_naam, od.* FROM order_details od 
-        JOIN producten p ON p.product_id = od.product_id WHERE order_nr = ?');
-    $stmt->execute([$_GET['id']]);
+    $stmt = $pdo_function->prepare("SELECT p.product_foto AS img, p.product_naam, od.product_prijs, od.product_aantal, od.product_optie FROM order_details od 
+        JOIN producten p ON p.product_id = od.product_id JOIN orders o ON od.order_nr = o.order_nr WHERE od.order_nr = ? and user_id = ?");
+    $stmt->execute([$_GET['id'], $_SESSION['user_id']]);
     $order_detail = $stmt->fetchAll(PDO::FETCH_ASSOC);
  if (!$order_detail) {
      $msg = 'Er is geen bestelling gevonden met dit nummer!';
@@ -112,7 +113,7 @@ if (isset($_GET['id'])) {
                                                                  height="32" alt="<?= $order['product_naam'] ?>">
                                                         <?php endif; ?>
                                                     <td><?= $order['product_naam'] ?></td>
-                                                    <td><?= $order['product_optie'] ?></td>
+                                                    <td><?= $order['product_optie'] ?></td>order_status
                                                     <td>€ <?= $order['product_prijs'] ?></td>
                                                     <td><?= $order['product_aantal'] ?></td>
                                                     <td>

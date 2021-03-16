@@ -3,9 +3,8 @@ $menuadmin = 3;
 $error = '';
 include 'main.php';
 $pdo_function = pdo_connect_mysql();
-// Check for search query
+
 if (isset($_GET['query']) && $_GET['query'] != '') {
-    // Escape the user query, prevent XSS attacks
     $search_query = htmlspecialchars($_GET['query'], ENT_QUOTES, 'UTF-8');
     $order_by_list = array('product_id', 'categorie_naam', 'product_naam', 'verpakking', 'eenheidsprijs');
     $order_by = isset($_GET['order_by']) && in_array($_GET['order_by'], $order_by_list) ? $_GET['order_by'] : 'product_id';

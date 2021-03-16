@@ -9,19 +9,6 @@ $msg = '';
 $stmt = $pdo_function->prepare('SELECT * FROM users WHERE user_id = ?');
 $stmt->execute([$_SESSION['user_id']]);
 $account = $stmt->fetch(PDO::FETCH_ASSOC);
-//Get orders
-$stmt = $pdo_function->prepare('SELECT * FROM orders WHERE user_id = ?');
-$stmt->execute([$_SESSION['user_id']]);
-$orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-if (isset($_GET['order_nr'])) {
-//Get order_details
-    $stmt = $pdo_function->prepare('SELECT p.product_foto AS img, p.product_naam, od.product_prijs, od.product_aantal, od.product_optie FROM order_details od 
-    JOIN producten p ON p.product_id = od.product_id WHERE order_nr = ?');
-    $stmt->execute([$_GET['order_nr']]);
-    $order_detail = $stmt->fetchAll(PDO::FETCH_ASSOC);
-}
-
 
 if (isset($_POST['voornaam'], $_POST['achternaam'], $_POST['wachtwoord'], $_POST['cwachtwoord'], $_POST['email'])) {
 

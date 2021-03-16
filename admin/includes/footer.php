@@ -5,9 +5,6 @@
             <div class="col">
                 <div class="d-flex justify-content-end">
                     <div class="p-2 bd-highlight">
-                        <p><i class="far fa-edit"></i> 10/03/2021</p>
-                    </div>
-                    <div class="p-2 bd-highlight">
                         <address>
                             <h5>Bart Leers <i class="far fa-copyright"></i> 2021 </h5>
                         </address>

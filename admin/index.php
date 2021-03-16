@@ -2,15 +2,19 @@
 $menuadmin = 1;
 include 'main.php';
 $pdo_function = pdo_connect_mysql();
-// Get totaal aantal orders op vandaag en rangschik op desc datum
+// Get totaal aantal orders op vandaag
 $stmt = $pdo_function->prepare("SELECT p.product_foto AS img, p.product_naam, o.*, od.product_prijs, od.product_aantal, od.product_optie FROM orders o JOIN order_details od ON od.order_nr = o.order_nr
     JOIN producten p ON p.product_id = od.product_id WHERE o.order_status = 'nieuw' AND cast(o.order_datum as DATE) = cast(now() as DATE) ORDER BY o.order_datum DESC");
 $stmt->execute();
 $orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
-// Get orders status
+// Get orders status nieuw
+$stmt = $pdo_function->prepare("SELECT COUNT(*) AS totaal FROM orders WHERE order_status = 'nieuw'");
+$stmt->execute();
+$order_status_nieuw = $stmt->fetch(PDO::FETCH_ASSOC);
+// Get orders status uitvoering
 $stmt = $pdo_function->prepare("SELECT COUNT(*) AS totaal FROM orders WHERE order_status = 'uitvoering'");
 $stmt->execute();
-$order_status = $stmt->fetch(PDO::FETCH_ASSOC);
+$order_status_uitvoering = $stmt->fetch(PDO::FETCH_ASSOC);
 // Get totaal aantal users
 $stmt = $pdo_function->prepare("SELECT COUNT(*) AS totaal FROM users");
 $stmt->execute();
@@ -50,14 +54,14 @@ $producten = $stmt->fetch(PDO::FETCH_ASSOC);
             <div class="content-block stat" onclick="location.href='orders.php'">
                 <div>
                     <h3>Nieuw</h3>
-                    <p><?=number_format(count($orders))?></p>
+                    <p><?=number_format($order_status_nieuw['totaal'])?></p>
                 </div>
                 <i class="fas fa-mail-bulk"></i>
             </div>
             <div class="content-block stat" onclick="location.href='orders.php?weergaven=uitvoering'">
                 <div>
                     <h3>In uitvoering</h3>
-                    <p><?=number_format($order_status['totaal'])?></p>
+                    <p><?=number_format($order_status_uitvoering['totaal'])?></p>
                 </div>
                 <i class="fas fa-mail-bulk"></i>
             </div>

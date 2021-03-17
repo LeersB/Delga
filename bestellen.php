@@ -66,6 +66,15 @@ if (isset($_POST['order_naam'], $_POST['order_adres'], $_POST['order_adres_2'], 
             $subtotaal + $levering,
             $order_nr
         );
+        send_order_alert_email(
+            mail_bestelling,
+            $producten_winkelmand,
+            $_POST['order_naam'],
+            $_POST['order_adres'],
+            $_POST['order_adres_2'],
+            $subtotaal + $levering,
+            $order_nr
+        );
         header('Location: besteld.php');
         exit;
     }
@@ -103,14 +112,16 @@ if (empty($_SESSION['delgashop'])) {
                 <h2>Details bestelling</h2>
 
                 <div class="row">
-                    <p class="legend col-md-12"><span>Beste <?= $account['voornaam']," ",$account['achternaam']?>, gelieve de volgende gegevens na te kijken voor u uw bestelling plaatst.</span></p>
+                    <p class="legend col-md-12"><span>Beste <?= $account['voornaam'], " ", $account['achternaam'] ?>, gelieve de volgende gegevens na te kijken voor u uw bestelling plaatst.</span>
+                    </p>
                     <div class="input-group col-md-4 sr-only">
                         <label class="sr-only" for="order_naam">Naam</label>
                         <div class="input-group mb-2">
                             <div class="input-group-prepend">
                                 <div class="input-group-text"><i class="fas fa-user"></i></div>
                             </div>
-                            <input type="text" class="form-control" value="<?= $account['voornaam']," ",$account['achternaam']?>"
+                            <input type="text" class="form-control"
+                                   value="<?= $account['voornaam'], " ", $account['achternaam'] ?>"
                                    id="order_naam" name="order_naam" placeholder="Naam" required>
                         </div>
                     </div>
@@ -270,7 +281,8 @@ if (empty($_SESSION['delgashop'])) {
 
                 </div>
                 <div><br></div>
-                <a class="btn btn-secondary" href="winkelmand.php" role="button"><i class="fas fa-times"></i> Annuleer</a>
+                <a class="btn btn-secondary" href="winkelmand.php" role="button"><i class="fas fa-times"></i>
+                    Annuleer</a>
                 <button class="btn btn-success" type="submit" name="bestellen"><i class="fas fa-check"></i> Plaats
                     bestelling
                 </button>

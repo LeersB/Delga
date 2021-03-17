@@ -81,4 +81,13 @@ function send_order_detail_email($email, $producten_winkelmand, $order_naam, $or
     $email_template = ob_get_clean();
     mail($email, $subject, $email_template, $headers);
 }
+// Functie verzenden order details email
+function send_order_alert_email($email, $producten_winkelmand, $order_naam, $order_adres, $order_adres_2, $subtotaal, $order_nr) {
+    $subject = 'Bestelling delga.be';
+    $headers = 'From: ' . mail_from . "\r\n" . 'Reply-To: ' . mail_from . "\r\n" . 'Return-Path: ' . mail_from . "\r\n" . 'X-Mailer: PHP/' . phpversion() . "\r\n" . 'MIME-Version: 1.0' . "\r\n" . 'Content-Type: text/html; charset=UTF-8' . "\r\n";
+    ob_start();
+    include 'templates/bestel-email.php';
+    $email_template = ob_get_clean();
+    mail($email, $subject, $email_template, $headers);
+}
 ?>

@@ -12,8 +12,10 @@ define('db_name', 'delgatest');
 // Email variables
 // account activatie
 define('account_activatie', false);
-// email adres
+// email adres verzending
 define('mail_from', 'Delga <noreply@delga.be>');
+// email adres berichtgeving
+define('mail_bestelling', 'Delga shop <info@leers.pro>');
 // Link to activation file
 define('activatie_link', 'https://test.delga.be/activatie.php');
 // Link to reset file

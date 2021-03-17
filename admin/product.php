@@ -148,8 +148,9 @@ if (isset($_GET['product_id'])) {
                                                href="product-opties.php?product_id=<?= $product['product_id'] ?>"
                                                role="button"><i class="fas fa-cart-plus"></i> Opties</a>
                                         <?php } else { ?>
-                                            <a class="btn btn-outline-secondary" href="optie.php" role="button"><i
-                                                        class="fas fa-cart-plus"></i> Opties</a>
+                                            <a class="btn btn-outline-secondary"
+                                               href="product-opties.php?product_id=<?= $product['product_id'] ?>"
+                                               role="button"><i class="fas fa-cart-plus"></i> Opties</a>
                                         <?php } ?>
                                     </div>
                                     <div class="col-md-3">

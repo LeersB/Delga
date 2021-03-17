@@ -78,7 +78,6 @@ $product_opties = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             <?php endif; ?>
                         </a>
                     </th>
-                    <th></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -88,14 +87,13 @@ $product_opties = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     </tr>
                 <?php else: ?>
                     <?php foreach ($product_opties as $product_optie): ?>
-                        <tr class="details" onclick="location.href='optie.php?optie_id=<?= $product_optie['optie_id'] ?>'">
+                        <tr class="details" onclick="location.href='product-opties.php?product_id=<?= $product_optie['product_id'] ?>'">
                             <td><?= $product_optie['optie_id'] ?></td>
                             <td><?= $product_optie['product_naam'] ?></td>
                             <td><?= $product_optie['optie_titel'] ?></td>
                             <td><?= $product_optie['optie_naam'] ?></td>
                             <td><?= $product_optie['eenheidsprijs'] ?></td>
-                            <td><a class="btn btn-outline-danger" href="optie-delete.php?optie_id=<?= $product_optie['optie_id'] ?>" role="button"><i class="fas fa-trash-alt"></i></a></td>
-                        </tr>
+                       </tr>
                     <?php endforeach; ?>
                 <?php endif; ?>
                 </tbody>

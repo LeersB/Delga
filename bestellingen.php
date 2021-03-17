@@ -6,7 +6,7 @@ check_loggedin($pdo_function);
 $msg = '';
 
 //Get orders
-$stmt = $pdo_function->prepare("SELECT * FROM orders WHERE user_id = ? ORDER BY order_datum DESC LIMIT 10");
+$stmt = $pdo_function->prepare("SELECT * FROM orders WHERE user_id = ? and order_status != 'geannuleerd' ORDER BY order_datum DESC LIMIT 10");
 $stmt->execute([$_SESSION['user_id']]);
 $orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
 

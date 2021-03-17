@@ -184,7 +184,6 @@ if (isset($_GET['product_id'])) {
                         <input type="text" class="form-control" id="product_naam" name="product_naam"
                                value="<?= $product['product_naam'] ?>" placeholder="Product naam" maxlength="60"
                                required>
-                        <div class="invalid-feedback">Dit veld is verplicht.</div>
                     </div>
                 </div>
                 <div class="input-group col-md-6">
@@ -196,7 +195,6 @@ if (isset($_GET['product_id'])) {
                         <input type="text" class="form-control" id="product_foto" name="product_foto"
                                value="<?= $product['product_foto'] ?>" placeholder="Product foto" maxlength="60"
                                required>
-                        <div class="invalid-feedback">Dit veld is verplicht.</div>
                     </div>
                 </div>
 
@@ -276,6 +274,7 @@ if (isset($_GET['product_id'])) {
 </main>
 
 <?php include('includes/footer.php'); ?>
+<script src="../js/form-validation.js"></script>
 
 </body>
 </html>

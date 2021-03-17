@@ -34,6 +34,11 @@ if (isset($_GET['order_nr'])) {
         // Update order status geannuleerd
         $stmt = $pdo_function->prepare('UPDATE orders SET opmerking = ?, leveringsdatum = ?, order_status = ? WHERE order_nr = ?');
         $stmt->execute([$_POST['opmerking'], NULL, 'geannuleerd', $_GET['order_nr']]);
+        send_annulatie_email(
+            $order['order_email'],
+            $order['order_nr'],
+            $order['order_naam']
+        );
         header('Location: orders.php');
         exit;
     }

@@ -113,11 +113,10 @@ if (isset($_GET['id'])) {
                                                                  height="32" alt="<?= $order['product_naam'] ?>">
                                                         <?php endif; ?>
                                                     <td><?= $order['product_naam'] ?></td>
-                                                    <td><?= $order['product_optie'] ?></td>order_status
+                                                    <td><?= $order['product_optie'] ?></td>
                                                     <td>€ <?= $order['product_prijs'] ?></td>
                                                     <td><?= $order['product_aantal'] ?></td>
-                                                    <td>
-                                                        € <?= number_format($order['product_prijs'] * $order['product_aantal'], 2) ?></td>
+                                                    <td>€ <?= number_format($order['product_prijs'] * $order['product_aantal'], 2) ?></td>
                                                 </tr>
                                             <?php endforeach; ?>
                                             </tbody>

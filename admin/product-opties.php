@@ -253,7 +253,7 @@ if (isset($_POST['optie_id'])) {
                                     <div class="input-group-text"><i class="fas fa-euro-sign"></i></div>
                                 </div>
                                 <input type="text" class="form-control" id="eenheidsprijs" name="eenheidsprijs"
-                                       placeholder="Prijs">
+                                       placeholder="Prijs" required>
                             </div>
                         </div>
                         <div class="col-2">

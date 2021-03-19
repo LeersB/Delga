@@ -12,36 +12,34 @@ $category_sql = '';
 if ($categorie != 'all') {
     $category_sql = "AND p.categorie_id = :categorie";
 }
-$sort = isset($_GET['sort']) ? $_GET['sort'] : 'sort1';
-// Totaal getoonde producten per pagina
-$num_products_on_each_page = 14;
-// Huidige pagina
-$current_page = isset($_GET['p']) && is_numeric($_GET['p']) ? (int)$_GET['p'] : 1;
+$sorteer = isset($_GET['sorteer']) ? $_GET['sorteer'] : '1';
+$aantal_op_pagina = 14;
+$huidige_pagina = isset($_GET['p']) && is_numeric($_GET['p']) ? (int)$_GET['p'] : 1;
 
-if ($sort == 'sort1') {
-    $stmt = $pdo_function->prepare("SELECT p.* FROM producten p WHERE product_level = 'actief'" . $category_sql . " ORDER BY p.categorie_id, p.product_naam ASC LIMIT :page,:num_products");
-} elseif ($sort == 'sort2') {
-    $stmt = $pdo_function->prepare("SELECT p.* FROM producten p WHERE product_level = 'actief'" . $category_sql . " ORDER BY p.product_naam ASC LIMIT :page,:num_products");
-} elseif ($sort == 'sort3') {
-    $stmt = $pdo_function->prepare("SELECT p.* FROM producten p WHERE product_level = 'actief'" . $category_sql . " ORDER BY p.product_naam DESC LIMIT :page,:num_products");
+if ($sorteer == '1') {
+    $stmt = $pdo_function->prepare("SELECT p.* FROM producten p WHERE product_level = 'actief'" . $category_sql . " ORDER BY p.categorie_id, p.product_naam ASC LIMIT :pagina,:aantal");
+} elseif ($sorteer == '2') {
+    $stmt = $pdo_function->prepare("SELECT p.* FROM producten p WHERE product_level = 'actief'" . $category_sql . " ORDER BY p.product_naam ASC LIMIT :pagina,:aantal");
+} elseif ($sorteer == '3') {
+    $stmt = $pdo_function->prepare("SELECT p.* FROM producten p WHERE product_level = 'actief'" . $category_sql . " ORDER BY p.product_naam DESC LIMIT :pagina,:aantal");
 } else {
-    $stmt = $pdo_function->prepare("SELECT p.* FROM producten p WHERE product_level = 'actief'" . $category_sql . " LIMIT :page,:num_products");
+    $stmt = $pdo_function->prepare("SELECT p.* FROM producten p WHERE product_level = 'actief'" . $category_sql . " LIMIT :pagina,:aantal");
 }
 if ($categorie != 'all') {
     $stmt->bindValue(':categorie', $categorie, PDO::PARAM_INT);
 }
-$stmt->bindValue(':page', ($current_page - 1) * $num_products_on_each_page, PDO::PARAM_INT);
-$stmt->bindValue(':num_products', $num_products_on_each_page, PDO::PARAM_INT);
+$stmt->bindValue(':pagina', ($huidige_pagina - 1) * $aantal_op_pagina, PDO::PARAM_INT);
+$stmt->bindValue(':aantal', $aantal_op_pagina, PDO::PARAM_INT);
 $stmt->execute();
-$products = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$producten = $stmt->fetchAll(PDO::FETCH_ASSOC);
 // Totaal aantal producten
 $stmt = $pdo_function->prepare("SELECT COUNT(*) FROM producten p WHERE product_level = 'actief'" . $category_sql);
 if ($categorie != 'all') {
     $stmt->bindValue(':categorie', $categorie, PDO::PARAM_INT);
 }
 $stmt->execute();
-$total_products = $stmt->fetchColumn();
-$total_pages = round($total_products / $num_products_on_each_page + 0.9, 1);
+$totaal_producten = $stmt->fetchColumn();
+$totaal_pagina = round($totaal_producten / $aantal_op_pagina + 0.9, 1);
 ?>
 <!DOCTYPE html>
 <html class="h-100" lang="nl">
@@ -67,7 +65,7 @@ $total_pages = round($total_products / $num_products_on_each_page + 0.9, 1);
         <div class="products content-wrapper">
             <h1>Producten</h1>
             <div class="products-header">
-                <p><?= $total_products ?> product(en) gevonden</p>
+                <p><?= $totaal_producten ?> product(en) gevonden</p>
             </div>
 
             <form action="" method="get" class="product-form">
@@ -86,27 +84,24 @@ $total_pages = round($total_products / $num_products_on_each_page + 0.9, 1);
                     </div>
                     <div class="input-group col-md-6 mb-2">
                         <div class="input-group-prepend">
-                            <label class="input-group-text" for="sort">Sorteren</label>
+                            <label class="input-group-text" for="sorteer">Sorteer</label>
                         </div>
-                        <select class="custom-select" name="sort" id="sort">
-                            <option value="sort1"<?= ($sort == 'sort1' ? ' selected' : '') ?> selected>Categorie
+                        <select class="custom-select" name="sorteer" id="sorteer">
+                            <option value="1"<?= ($sorteer == '1' ? ' selected' : '') ?> selected>Categorie
                             </option>
-                            <option value="sort2"<?= ($sort == 'sort2' ? ' selected' : '') ?>>Oplopend</option>
-                            <option value="sort3"<?= ($sort == 'sort3' ? ' selected' : '') ?>>Aflopend</option>
+                            <option value="2"<?= ($sorteer == '2' ? ' selected' : '') ?>>Oplopend</option>
+                            <option value="3"<?= ($sorteer == '3' ? ' selected' : '') ?>>Aflopend</option>
                         </select>
                     </div>
                 </div>
             </form>
         </div>
 
-        <div class="row"><br></div>
-
         <div class="row mb-2">
-            <?php foreach ($products as $product): ?>
+            <?php foreach ($producten as $product): ?>
                 <div class="col-md-6">
                     <div class="no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
                         <div class="card">
-
                             <div class="row no-gutters g-2">
                                 <div class="col-md-4">
                                     <?php if (empty($product['product_foto'])): ?>
@@ -131,7 +126,6 @@ $total_pages = round($total_products / $num_products_on_each_page + 0.9, 1);
                                     </div>
                                 </div>
                             </div>
-
                             <div class="card-footer">
                                 <div class="d-flex justify-content-between">
                                     <div class="p-2">
@@ -153,23 +147,23 @@ $total_pages = round($total_products / $num_products_on_each_page + 0.9, 1);
 
         <nav aria-label="Sorteren">
             <ul class="pagination">
-                <li class="page-item <?php if ($current_page == 1): ?>disabled<?php endif; ?>">
+                <li class="page-item <?php if ($huidige_pagina == 1): ?>disabled<?php endif; ?>">
                     <a class="page-link"
-                       href="producten.php?p=<?= $current_page - 1 ?>&categorie=<?= $categorie ?>&sort=<?= $sort ?>"
+                       href="producten.php?p=<?= $huidige_pagina - 1 ?>&categorie=<?= $categorie ?>&sorteer=<?= $sorteer ?>"
                        aria-label="Previous">
                         <span aria-hidden="true"><i class="fas fa-angle-double-left"></i></span>
                     </a>
                 </li>
-                <?php for ($page = 1; $page <= $total_pages; $page++) { ?>
-                    <li class="page-item <?php if ($current_page == $page): ?>active"
+                <?php for ($pagina = 1; $pagina <= $totaal_pagina; $pagina++) { ?>
+                    <li class="page-item <?php if ($huidige_pagina == $pagina): ?>active"
                         aria-current="page <?php endif; ?>">
                         <a class="page-link"
-                           href="producten.php?p=<?= $page; ?>&categorie=<?= $categorie ?>&sort=<?= $sort ?>"><?= $page; ?></a>
+                           href="producten.php?p=<?= $pagina; ?>&categorie=<?= $categorie ?>&sorteer=<?= $sorteer ?>"><?= $pagina; ?></a>
                     </li>
                 <?php } ?>
-                <li class="page-item <?php if ($total_products == ($current_page * $num_products_on_each_page) - $num_products_on_each_page + count($products)): ?>disabled<?php endif; ?>">
+                <li class="page-item <?php if ($totaal_producten == ($huidige_pagina * $aantal_op_pagina) - $aantal_op_pagina + count($producten)): ?>disabled<?php endif; ?>">
                     <a class="page-link"
-                       href="producten.php?p=<?= $current_page + 1 ?>&categorie=<?= $categorie ?>&sort=<?= $sort ?>"
+                       href="producten.php?p=<?= $huidige_pagina + 1 ?>&categorie=<?= $categorie ?>&sorteer=<?= $sorteer ?>"
                        aria-label="Next">
                         <span aria-hidden="true"><i class="fas fa-angle-double-right"></i></span>
                     </a>
@@ -177,15 +171,13 @@ $total_pages = round($total_products / $num_products_on_each_page + 0.9, 1);
             </ul>
         </nav>
 
-        <div class="row"><br></div>
-
     </div>
 </main>
 
 <?php include('includes/footer.php'); ?>
 <script>
     if (document.querySelector(".product-form .input-group .custom-select")) {
-        document.querySelector("#sort").onchange = () => document.querySelector(".product-form").submit();
+        document.querySelector("#sorteer").onchange = () => document.querySelector(".product-form").submit();
         document.querySelector("#categorie").onchange = () => document.querySelector(".product-form").submit();
     }
 </script>

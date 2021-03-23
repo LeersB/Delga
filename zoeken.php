@@ -3,13 +3,25 @@ $menu = 3;
 $error = '';
 include 'main.php';
 $pdo_function = pdo_connect_mysql();
+$aantal_op_pagina = 14;
+
 if (isset($_GET['query']) && $_GET['query'] != '') {
+    $huidige_pagina = isset($_GET['p']) && is_numeric($_GET['p']) ? (int)$_GET['p'] : 1;
     // Escape the user query, prevent XSS attacks
     $search_query = htmlspecialchars($_GET['query'], ENT_QUOTES, 'UTF-8');
-    $stmt = $pdo_function->prepare("SELECT * FROM producten WHERE product_level = 'actief' and product_naam LIKE ?");
-    $stmt->execute(['%' . $search_query . '%']);
+    $stmt = $pdo_function->prepare("SELECT * FROM producten WHERE product_level = 'actief' and product_naam LIKE :query LIMIT :pagina,:aantal");
+    $stmt->bindValue(':pagina', ($huidige_pagina - 1) * $aantal_op_pagina, PDO::PARAM_INT);
+    $stmt->bindValue(':aantal', $aantal_op_pagina, PDO::PARAM_INT);
+    $stmt->bindValue(':query', '%' . $search_query . '%');
+    $stmt->execute();
     $producten = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    $total_products = count($producten);
+    // Totaal aantal gevonden producten
+    $stmt = $pdo_function->prepare("SELECT COUNT(*) FROM producten WHERE product_level = 'actief' and product_naam LIKE :query");
+    $stmt->bindValue(':query', '%' . $search_query . '%');
+    $stmt->execute();
+    $totaal_producten = $stmt->fetchColumn();
+    $totaal_pagina = round($totaal_producten / $aantal_op_pagina + 0.9, 1);
+
 } else {
     $error = 'Er is geen zoekopdracht ingevuld!';
 }
@@ -40,19 +52,15 @@ if (isset($_GET['query']) && $_GET['query'] != '') {
         <?php else: ?>
 
             <div class="products content-wrapper">
-
                 <h2>Zoek resultaat voor "<?= $search_query ?>"</h2>
-                <p><?= $total_products ?> product(en) gevonden</p>
-
+                <p><?= $totaal_producten ?> product(en) gevonden</p>
                 <div class="row mb-2">
                     <?php foreach ($producten as $product): ?>
                         <div class="col-md-6">
                             <div class="no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
                                 <div class="card">
-
                                     <div class="row no-gutters g-2">
                                         <div class="col-md-4">
-
                                             <?php if (empty($product['product_foto'])): ?>
                                                 <svg class="card-img-top" role="img">
                                                     <title>Placeholder</title>
@@ -66,7 +74,6 @@ if (isset($_GET['query']) && $_GET['query'] != '') {
                                                      alt="<?= $product['product_naam'] ?>">
                                             <?php endif; ?>
                                         </div>
-
                                         <div class="col-md-8">
                                             <h5 class="card-header text-uppercase"> <?= $product['product_naam'] ?></h5>
                                             <div class="card-body">
@@ -78,11 +85,11 @@ if (isset($_GET['query']) && $_GET['query'] != '') {
                                         </div>
                                     </div>
                                     <div class="card-footer">
-                                        <p class="card-text text-secondary">€&nbsp;<?= number_format($product['eenheidsprijs'], 2) ?>
+                                        <p class="card-text text-secondary">
+                                            €&nbsp;<?= number_format($product['eenheidsprijs'], 2) ?>
                                             <a href="product.php?id=<?= $product['product_id'] ?>"
                                                class="btn btn-outline-secondary"><i class="fas fa-info"></i> Info</a>
                                         </p>
-
                                     </div>
                                 </div>
                             </div>
@@ -90,6 +97,32 @@ if (isset($_GET['query']) && $_GET['query'] != '') {
                     <?php endforeach; ?>
                 </div>
             </div>
+
+            <nav aria-label="Sorteren">
+                <ul class="pagination">
+                    <li class="page-item <?php if ($huidige_pagina == 1): ?>disabled<?php endif; ?>">
+                        <a class="page-link"
+                           href="zoeken.php?p=<?= $huidige_pagina - 1 ?>&query=<?= $search_query ?>"
+                           aria-label="Previous">
+                            <span aria-hidden="true"><i class="fas fa-angle-double-left"></i></span>
+                        </a>
+                    </li>
+                    <?php for ($pagina = 1; $pagina <= $totaal_pagina; $pagina++) { ?>
+                        <li class="page-item <?php if ($huidige_pagina == $pagina): ?>active"
+                            aria-current="page <?php endif; ?>">
+                            <a class="page-link"
+                               href="zoeken.php?p=<?= $pagina; ?>&query=<?= $search_query ?>"><?= $pagina; ?></a>
+                        </li>
+                    <?php } ?>
+                    <li class="page-item <?php if ($totaal_producten == ($huidige_pagina * $aantal_op_pagina) - $aantal_op_pagina + count($producten)): ?>disabled<?php endif; ?>">
+                        <a class="page-link"
+                           href="zoeken.php?p=<?= $huidige_pagina + 1 ?>&query=<?= $search_query ?>"
+                           aria-label="Next">
+                            <span aria-hidden="true"><i class="fas fa-angle-double-right"></i></span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
 
         <?php endif; ?>
 

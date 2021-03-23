@@ -3,15 +3,15 @@ $menu = 3;
 $error = '';
 include 'main.php';
 $pdo_function = pdo_connect_mysql();
-$aantal_op_pagina = 14;
+$aantal_pagina = aantal_pagina;
 
 if (isset($_GET['query']) && $_GET['query'] != '') {
     $huidige_pagina = isset($_GET['p']) && is_numeric($_GET['p']) ? (int)$_GET['p'] : 1;
     // Escape the user query, prevent XSS attacks
     $search_query = htmlspecialchars($_GET['query'], ENT_QUOTES, 'UTF-8');
     $stmt = $pdo_function->prepare("SELECT * FROM producten WHERE product_level = 'actief' and product_naam LIKE :query LIMIT :pagina,:aantal");
-    $stmt->bindValue(':pagina', ($huidige_pagina - 1) * $aantal_op_pagina, PDO::PARAM_INT);
-    $stmt->bindValue(':aantal', $aantal_op_pagina, PDO::PARAM_INT);
+    $stmt->bindValue(':pagina', ($huidige_pagina - 1) * $aantal_pagina, PDO::PARAM_INT);
+    $stmt->bindValue(':aantal', $aantal_pagina, PDO::PARAM_INT);
     $stmt->bindValue(':query', '%' . $search_query . '%');
     $stmt->execute();
     $producten = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -20,7 +20,7 @@ if (isset($_GET['query']) && $_GET['query'] != '') {
     $stmt->bindValue(':query', '%' . $search_query . '%');
     $stmt->execute();
     $totaal_producten = $stmt->fetchColumn();
-    $totaal_pagina = round($totaal_producten / $aantal_op_pagina + 0.9, 1);
+    $totaal_pagina = round($totaal_producten / $aantal_pagina + 0.9, 1);
 
 } else {
     $error = 'Er is geen zoekopdracht ingevuld!';
@@ -114,7 +114,7 @@ if (isset($_GET['query']) && $_GET['query'] != '') {
                                href="zoeken.php?p=<?= $pagina; ?>&query=<?= $search_query ?>"><?= $pagina; ?></a>
                         </li>
                     <?php } ?>
-                    <li class="page-item <?php if ($totaal_producten == ($huidige_pagina * $aantal_op_pagina) - $aantal_op_pagina + count($producten)): ?>disabled<?php endif; ?>">
+                    <li class="page-item <?php if ($totaal_producten == ($huidige_pagina * $aantal_pagina) - $aantal_pagina + count($producten)): ?>disabled<?php endif; ?>">
                         <a class="page-link"
                            href="zoeken.php?p=<?= $huidige_pagina + 1 ?>&query=<?= $search_query ?>"
                            aria-label="Next">

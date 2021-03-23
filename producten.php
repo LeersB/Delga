@@ -1,6 +1,7 @@
 <?php
 $menu = 3;
 include 'main.php';
+$aantal_pagina = aantal_pagina;
 
 $pdo_function = pdo_connect_mysql();
 $stmt = $pdo_function->query('SELECT * FROM categorie');
@@ -13,7 +14,6 @@ if ($categorie != 'all') {
     $category_sql = "AND p.categorie_id = :categorie";
 }
 $sorteer = isset($_GET['sorteer']) ? $_GET['sorteer'] : '1';
-$aantal_op_pagina = 14;
 $huidige_pagina = isset($_GET['p']) && is_numeric($_GET['p']) ? (int)$_GET['p'] : 1;
 
 if ($sorteer == '1') {
@@ -28,8 +28,8 @@ if ($sorteer == '1') {
 if ($categorie != 'all') {
     $stmt->bindValue(':categorie', $categorie, PDO::PARAM_INT);
 }
-$stmt->bindValue(':pagina', ($huidige_pagina - 1) * $aantal_op_pagina, PDO::PARAM_INT);
-$stmt->bindValue(':aantal', $aantal_op_pagina, PDO::PARAM_INT);
+$stmt->bindValue(':pagina', ($huidige_pagina - 1) * $aantal_pagina, PDO::PARAM_INT);
+$stmt->bindValue(':aantal', $aantal_pagina, PDO::PARAM_INT);
 $stmt->execute();
 $producten = $stmt->fetchAll(PDO::FETCH_ASSOC);
 // Totaal aantal producten
@@ -39,7 +39,7 @@ if ($categorie != 'all') {
 }
 $stmt->execute();
 $totaal_producten = $stmt->fetchColumn();
-$totaal_pagina = round($totaal_producten / $aantal_op_pagina + 0.9, 1);
+$totaal_pagina = round($totaal_producten / $aantal_pagina + 0.9, 1);
 ?>
 <!DOCTYPE html>
 <html class="h-100" lang="nl">
@@ -161,7 +161,7 @@ $totaal_pagina = round($totaal_producten / $aantal_op_pagina + 0.9, 1);
                            href="producten.php?p=<?= $pagina; ?>&categorie=<?= $categorie ?>&sorteer=<?= $sorteer ?>"><?= $pagina; ?></a>
                     </li>
                 <?php } ?>
-                <li class="page-item <?php if ($totaal_producten == ($huidige_pagina * $aantal_op_pagina) - $aantal_op_pagina + count($producten)): ?>disabled<?php endif; ?>">
+                <li class="page-item <?php if ($totaal_producten == ($huidige_pagina * $aantal_pagina) - $aantal_pagina + count($producten)): ?>disabled<?php endif; ?>">
                     <a class="page-link"
                        href="producten.php?p=<?= $huidige_pagina + 1 ?>&categorie=<?= $categorie ?>&sorteer=<?= $sorteer ?>"
                        aria-label="Next">

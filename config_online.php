@@ -22,4 +22,6 @@ define('activatie_link', 'https://test.delga.be/activatie.php');
 define('reset_link', 'https://test.delga.be/wachtwoord-reset.php');
 // Prijs levering
 define('leveringskost', 6);
+// aantal stuks per pagina
+define('aantal_pagina', 14);
 ?>

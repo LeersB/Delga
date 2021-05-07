@@ -21,7 +21,7 @@ function send_email_geannuleerd($order_email, $order_nr, $order_naam) {
     mail($order_email, $subject, $email_template, $headers);
 }
 //Functie verzenden email afgewerkt
-function send_email_afgewerkt($order_email, $order_nr, $order_naam) {
+function send_email_afgewerkt($order_email, $order_nr, $order_naam, $leveringsdatum) {
     $subject = 'Besteling afgewerkt delga.be';
     $headers = 'From: ' . mail_from . "\r\n" . 'Reply-To: ' . mail_from . "\r\n" . 'Return-Path: ' . mail_from . "\r\n" . 'X-Mailer: PHP/' . phpversion() . "\r\n" . 'MIME-Version: 1.0' . "\r\n" . 'Content-Type: text/html; charset=UTF-8' . "\r\n";
     ob_start();

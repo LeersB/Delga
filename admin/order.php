@@ -30,7 +30,8 @@ if (isset($_GET['order_nr'])) {
         send_email_afgewerkt(
             $order['order_email'],
             $order['order_nr'],
-            $order['order_naam']
+            $order['order_naam'],
+            $order['leveringsdatum']
         );
         header('Location: orders.php');
         exit;

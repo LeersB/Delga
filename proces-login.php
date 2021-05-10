@@ -9,9 +9,9 @@ $stmt->execute([ $_POST['email'] ]);
 $account = $stmt->fetch(PDO::FETCH_ASSOC);
 if ($account) {
     if (password_verify($_POST['wachtwoord'], $account['wachtwoord'])) {
-        // Check if the account is activated
+        // Controleer of account geactiveerd is
         if (account_activatie && $account['activatie_code'] != 'activated') {
-            // User has not activated their account, output the message
+            // user heeft account nog niet geactiveerd
             echo 'U moet uw account activeren voor u kan aanmelden, klik <u><a href="activatie-resend.php">hier</a></u> voor het opnieuw verzenden van de activatie email!';
         } else {
             // Verification success!
@@ -21,7 +21,7 @@ if ($account) {
             $_SESSION['voornaam'] = $account['voornaam'];
             $_SESSION['achternaam'] = $account['achternaam'];
             $_SESSION['user_level'] = $account['user_level'];
-            // if the user checked rememberme:
+            // if user rememberme heeft aangevinkt
             if (isset($_POST['rememberme'])) {
                 $cookiehash = !empty($account['rememberme']) ? $account['rememberme'] : password_hash($account['user_id'] . $account['email'] . 'yoursecretkey', PASSWORD_DEFAULT);
                 $days = 30;

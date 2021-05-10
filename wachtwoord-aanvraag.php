@@ -43,6 +43,7 @@ if (isset($_POST['email'])) {
         <div class="content">
             <form class="needs-validation" novalidate action="wachtwoord-aanvraag.php" method="post">
                 <div class="input-group col-md-12"><h2>Wachtwoord vergeten</h2></div>
+                <div class="input-group col-md-12"><p>Voer uw e-mailadres hieronder in om een wachtwoord reset link te ontvangen.</p></div>
                 <div class="input-group col-md-12">
                     <label class="sr-only" for="email">E-mailadres</label>
                     <div class="input-group mb-2">

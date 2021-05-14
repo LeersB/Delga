@@ -26,50 +26,29 @@ include 'main.php';
         <p class="text-center"><img alt="" height="118" src="images/delga_gif.gif" width="246"></p>
     </div>
     <div class="container">
-        <div class="jumbotron p-4 p-md-5 text-dark rounded bg-light">
+        <div class="jumbotron p-md-5 rounded bg-light">
             <div class="col-md-12 px-0">
                 <h1 class="display-4 font-italic">Info</h1>
-                <h2 class="lead my-3">HOE BENADEREN WIJ ONZE KLANTEN.</h2>
-                <p>De meeste producten heb ik mee in mijn wagen zodanig dat de klant de keuze kan maken over de
-                    verschillende producten die ik mee heb.</p>
-                <h2 class="lead my-3">WAAROM HEB IK AL DIE PRODUCTEN MEE.</h2>
-                <p>Dat biedt een zekere vertrouwen voor de klant.
-                    <br>Als de klant wantrouwig is over een bepaald product dan kan ik het bewuste product demonstreren,
-                    zodanig dat de klant overtuigd is van zijn koop.
-                    Wij staan garant voor onze producten.
-                    Wij geven raad en advies hoe de klant het product moet gebruiken.
-                    <br>Al onze producten zijn voorzien met een etiket waar nogmaals de volledige gebruiksaanwijzing op
-                    vermeld staat.
-                    <br>Indien de klant een uittreksel van een product wil dan kan hij een samenstelling en
-                    veiligheidsfiche
-                    volgens de Europese norm (16 punten) verkrijgen.
-                    <br>Wij leveren binnen de 24 uur of na afspraak.
+                <h2 class="lead my-3">Welkom op de nieuwe website van Delga Onderhoudsproducten.</h2>
+                <p>Sinds 1989 ben ik reeds zelfstandig en toer ik alle dagen in de week op de baan.
+                    <br>De meeste artikelen heb ik mee in de wagen, dit om de klanten de keuzen te laten maken.
                 </p>
-                <h2 class="lead my-3">HIER VOLGEN ENKELE REFERENTIES VAN KLANTEN.</h2>
-                <p>
-                    Park Merlo in Bredene
-                    <br>Camping Albratros in Westende
-                    <br>Camping De Blecker in Koksijde
-                    <br>Camping Duinenzwin in Bredene
-                    <br>Camping Noorderduinen in Koksijde
-                    <br>Restaurant Salons De Vrede
-                    <br>Ideal Caravans in Wetteren
-                    <br>Camping Oasis in Middelkerke
-                    <br>Restaurant Daiseldale in Dadizele
-                    <br>
+                <p>Heeft U vragen over producten dan leg ik die met plezier uit.<br>Ook een demonstratie of de gebruiksaanwijzing van dergelijk product uitleggen is mogelijk.
+                    <br>Dit laatste staat tevens ook altijd vermeld op het etiket.
                 </p>
-                <p>
-                    Dit is maar een bloemlezing uit onze klantenlijst.
-                </p>
-                <!--
-                <p class="lead mb-0"><a class="text-white font-weight-bold" href="#">Continue reading...</a></p>
-                -->
+                <p>Sommige klanten hebben een uittreksel nodig van een product.<br>Wij kunnen hiervan de samenstelling en veiligheidsfiche volgens Europese Norm bezorgen.</p>
+                <p>We leveren binnen de 24 uur of na afspraak.</p>
+                <p>Kunt U op onze website producten niet terugvinden, aarzel dan zeker niet om mij een mail te sturen om dit na te vragen.
+                    <br>De kans is groot dat ik U deze alsnog kan aanbieden want ons gamma is te groot en veelzijdig om alles hierop aan te bieden.</p>
+                <p>Dank voor jullie vertrouwen.</p>
+                <p>Delhaye Gabrïel<br>Zaakvoerder</p>
+
             </div>
         </div>
-        <div class="jumbotron p-4 p-md-5 text-dark rounded bg-light">
+        <div class="jumbotron p-md-5 rounded bg-light">
             <div class="row justify-content-center">
                 <div class="col-lg-8">
-                    <h3>
+                    <h4>
                         <dl class="row">
                             <dt class="col-lg-6">Zaakvoerder:</dt>
                             <dd class="col-lg-6">Delhaye&nbsp;Gabriël</dd>
@@ -89,7 +68,7 @@ include 'main.php';
                             <dt class="col-lg-6">BTW:</dt>
                             <dd class="col-lg-6">BE&nbsp;0524479592</dd>
                         </dl>
-                    </h3>
+                    </h4>
                 </div>
             </div>
         </div>

@@ -10,7 +10,7 @@
     <h1 style="padding:20px;box-sizing:border-box;font-size:24px;color:#394453;background-color:#EBFFD7;margin:0;"><img src="https://www.delga.be/images/delga_gif.gif" height="80"/></h1>
     <h1 style="padding:40px;box-sizing:border-box;font-size:24px;color:#394453;margin:0;">Beste <?=$order_naam?></h1>
     <p style="padding:10px 40px;margin:0;box-sizing:border-box;font-size:16px;">Uw bestelling met Order #<?=$order_nr?> is geannuleerd.</p>
-    <p style="padding:10px 40px;margin:0;box-sizing:border-box;font-size:16px;">Indien u meer info hierover wenst kunt u ons contacteren via e-mail naar info@delga.be.</p>
+    <p style="padding:10px 40px;margin:0;box-sizing:border-box;font-size:16px;">Indien u meer info hierover wenst kunt u ons contacteren via e-mail naar info@delga.be of telefonisch op +32 (0)495/36 11 49.</p>
     <h1 style="padding:40px;box-sizing:border-box;font-size:24px;color:#394453;background-color:#EBFFD7;margin:0;" align="right">delga.be &copy; 2021</h1>
 </div>
 </body>

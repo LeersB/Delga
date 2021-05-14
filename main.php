@@ -86,7 +86,7 @@ function send_order_alert_email($email, $producten_winkelmand, $order_naam, $ord
     $subject = 'Bestelling delga.be';
     $headers = 'From: ' . mail_from . "\r\n" . 'Reply-To: ' . mail_from . "\r\n" . 'Return-Path: ' . mail_from . "\r\n" . 'X-Mailer: PHP/' . phpversion() . "\r\n" . 'MIME-Version: 1.0' . "\r\n" . 'Content-Type: text/html; charset=UTF-8' . "\r\n";
     ob_start();
-    include 'templates/bestel-email.php';
+    include 'templates/bevestiging-email.php';
     $email_template = ob_get_clean();
     mail($email, $subject, $email_template, $headers);
 }

@@ -15,7 +15,6 @@ $product = array(
     'btw' => '21',
     'product_level' => 'niet-actief'
 );
-
 $product_opties = array(
     'optie_titel' => '',
     'optie_naam' => '',
@@ -39,7 +38,7 @@ if (isset($_GET['product_id'])) {
     $product_opties = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     if (isset($_POST['submit'])) {
-        // Upadte product
+        // Update product
         $stmt = $pdo_function->prepare('UPDATE producten SET categorie_id = ?, product_naam = ?, product_foto = ?, product_info = ?, omschrijving = ?, verpakking = ?, waarschuwing = ?, eenheidsprijs = ?, btw = ? , product_level = ? WHERE product_id = ?');
         $stmt->execute([$_POST['categorie_id'], $_POST['product_naam'], $_POST['product_foto'], $_POST['product_info'], $_POST['omschrijving'], $_POST['verpakking'], $_POST['waarschuwing'], $_POST['eenheidsprijs'], $_POST['btw'], $_POST['product_level'], $_GET['product_id']]);
         header('Location: producten.php');
@@ -61,8 +60,7 @@ if (isset($_GET['product_id'])) {
     }
 } else {
     // Create product
-    $page = 'Create';
-    if (isset($_POST['submit'])) {
+    if (isset($_POST['submit']) || isset($_POST['update'])) {
         $stmt = $pdo_function->prepare('INSERT IGNORE INTO producten (categorie_id, product_naam, product_foto, product_info, omschrijving, verpakking, waarschuwing, eenheidsprijs, btw, product_level) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
         $stmt->execute([$_POST['categorie_id'], $_POST['product_naam'], $_POST['product_foto'], $_POST['product_info'], $_POST['omschrijving'], $_POST['verpakking'], $_POST['waarschuwing'], $_POST['eenheidsprijs'], $_POST['btw'], $_POST['product_level']]);
         header('Location: producten.php');

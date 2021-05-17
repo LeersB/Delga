@@ -16,9 +16,7 @@ $product = array(
     'product_level' => 'niet-actief'
 );
 $product_opties = array(
-    'optie_titel' => '',
-    'optie_naam' => '',
-    'eenheidsprijs' => ''
+    'optie_id' => ''
 );
 $product_levels = array('actief', 'niet-actief');
 // Get categories van database
@@ -33,7 +31,7 @@ if (isset($_GET['product_id'])) {
     $product = $stmt->fetch(PDO::FETCH_ASSOC);
 
     // Get product_opties van database
-    $stmt = $pdo_function->prepare('SELECT * FROM product_opties WHERE product_id = ?');
+    $stmt = $pdo_function->prepare('SELECT optie_id FROM product_opties WHERE product_id = ?');
     $stmt->execute([$_GET['product_id']]);
     $product_opties = $stmt->fetchAll(PDO::FETCH_ASSOC);
 

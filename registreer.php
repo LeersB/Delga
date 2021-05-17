@@ -29,12 +29,11 @@ include 'main.php';
                 <div class="row">
                     <legend class="legend col-md-12"><span>Persoonlijke informatie</span></legend>
                     <div class="input-group col-md-6">
-
-                        <select for="user_level" id="user_level" name="user_level" class="custom-select">
+                        <label for="user_level"></label>
+                        <select id="user_level" name="user_level" class="custom-select">
                             <option value="Prive" selected>Particuliere gebruiker</option>
                             <option value="Bedrijf">Zakelijke gebruiker</option>
                         </select>
-
                     </div>
                     <div class="input-group col-md-12"><br></div>
                     <div class="input-group col-md-6">
@@ -218,7 +217,7 @@ include 'main.php';
                     </div>
                     <div class="input-group col-md-12"><br></div>
 
-                    <div class="col-md-12 msg"></div>
+                    <div class="col-md-12"><p class="msg"></p></div>
                     <div class="input-group col-md-12"><br></div>
                     <div class="col-12">
                         <a class="btn btn-secondary" href="login.php" role="button"><i class="fas fa-times"></i> Annuleer</a>
@@ -244,6 +243,8 @@ include 'main.php';
             $('#btw_nr').removeAttr('required');
         }
     });
+</script>
+<script type="text/javascript">
     $("#user_level").trigger("change");
 </script>
 <script>

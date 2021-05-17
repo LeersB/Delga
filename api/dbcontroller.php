@@ -1,13 +1,13 @@
 <?php
-include 'main.php';
-$pdo_function = pdo_connect_mysql();
+//include 'main.php';
+//$pdo_function = pdo_connect_mysql();
 
 class DBController {
     private $conn = "";
     private $host = "localhost";
-    private $user = "root";
-    private $password = "";
-    private $database = "blog_samples";
+    private $user = "delga";
+    private $password = "Hbutciaf-2304";
+    private $database = "delgatest";
 
     function __construct() {
         $conn = $this->connectDB();

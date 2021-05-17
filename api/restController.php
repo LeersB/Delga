@@ -1,5 +1,5 @@
 <?php
-require_once("MobileRestHandler.php");
+require_once("mobileRestHandler.php");
 
 $view = "";
 if(isset($_GET["view"]))
@@ -12,7 +12,7 @@ switch($view){
 
     case "all":
         // to handle REST Url /mobile/list/
-        $mobileRestHandler = new MobileRestHandler();
+        $mobileRestHandler = new mobileRestHandler();
         $mobileRestHandler->getAllMobiles();
         break;
 

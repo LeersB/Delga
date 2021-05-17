@@ -1,12 +1,12 @@
 <?php
-require_once("SimpleRest.php");
-require_once("Mobile.php");
+require_once("simpleRest.php");
+require_once("mobile.php");
 
-class MobileRestHandler extends SimpleRest {
+class mobileRestHandler extends simpleRest {
 
     function getAllMobiles() {
 
-        $mobile = new Mobile();
+        $mobile = new mobile();
         $rawData = $mobile->getAllMobile();
 
         if(empty($rawData)) {

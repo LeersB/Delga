@@ -212,7 +212,7 @@ if (empty($_SESSION['delgashop'])) {
                 <div class="cart content-wrapper">
 
                     <div class="table-responsive-md">
-                        <table class="table table-hover table-borderless">
+                        <table class="table table-borderless">
                             <thead class="table-secondary">
                             <tr>
                                 <th scope="col"></th>
@@ -227,15 +227,13 @@ if (empty($_SESSION['delgashop'])) {
                                 <tr>
                                     <td class="img">
                                         <?php if (!empty($product['meta']['product_foto']) && file_exists('images/producten/' . $product['meta']['product_foto'])): ?>
-                                            <a href="product.php?id=<?= $product['product_id'] ?>">
                                                 <img src="images/producten/<?= $product['meta']['product_foto'] ?>"
                                                      width="50" height="50"
                                                      alt="<?= $product['meta']['product_naam'] ?>">
-                                            </a>
                                         <?php endif; ?>
                                     </td>
                                     <td>
-                                        <a href="product.php?id=<?= $product['product_id'] ?>"><?= $product['meta']['product_naam'] ?></a>
+                                        <?= $product['meta']['product_naam'] ?>
                                     </td>
                                     <td class="prijs">
                                         <?= $product['opties'] ?>

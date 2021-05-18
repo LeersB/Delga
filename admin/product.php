@@ -58,7 +58,7 @@ if (isset($_GET['product_id'])) {
     }
 } else {
     // Create product
-    if (isset($_POST['submit']) || isset($_POST['update'])) {
+    if (isset($_POST['submit'])) {
         $stmt = $pdo_function->prepare('INSERT IGNORE INTO producten (categorie_id, product_naam, product_foto, product_info, omschrijving, verpakking, waarschuwing, eenheidsprijs, btw, product_level) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
         $stmt->execute([$_POST['categorie_id'], $_POST['product_naam'], $_POST['product_foto'], $_POST['product_info'], $_POST['omschrijving'], $_POST['verpakking'], $_POST['waarschuwing'], $_POST['eenheidsprijs'], $_POST['btw'], $_POST['product_level']]);
         header('Location: producten.php');
@@ -253,8 +253,10 @@ if (isset($_GET['product_id'])) {
                 <div class="col-12">
                     <a class="btn btn-secondary" href="producten.php" role="button"><i class="fas fa-times"></i>
                         Annuleer</a>
+                    <?php if (isset($_GET['product_id'])): ?>
                     <button type="submit" name="update" class="btn btn-success"><i class="fas fa-check"></i> Update
                     </button>
+                    <?php endif ?>
                     <button type="submit" name="submit" class="btn btn-success"><i class="fas fa-check-double"></i> Opslaan
                     </button>
                     <button type="submit" name="delete" class="btn btn-danger"><i class="fas fa-trash-alt"></i>

@@ -11,9 +11,8 @@ $stmt->execute([$_SESSION['user_id']]);
 $orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 if (isset($_GET['id'])) {
-
     //Get order_details
-    $stmt = $pdo_function->prepare("SELECT p.product_foto AS img, p.product_naam, od.product_prijs, od.product_aantal, od.product_optie FROM order_details od 
+    $stmt = $pdo_function->prepare("SELECT p.product_id, p.product_foto AS img, p.product_naam, od.product_prijs, od.product_aantal, od.product_optie FROM order_details od 
         JOIN producten p ON p.product_id = od.product_id JOIN orders o ON od.order_nr = o.order_nr WHERE od.order_nr = ? and user_id = ?");
     $stmt->execute([$_GET['id'], $_SESSION['user_id']]);
     $order_detail = $stmt->fetchAll(PDO::FETCH_ASSOC);

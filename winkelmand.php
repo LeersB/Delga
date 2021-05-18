@@ -45,14 +45,12 @@ if (isset($_POST['product_id'], $_POST['aantal']) && is_numeric($_POST['product_
 }
 // Verwijder product uit winkelmand
 if (isset($_GET['verwijder']) && is_numeric($_GET['verwijder']) && isset($_SESSION['delgashop']) && isset($_SESSION['delgashop'][$_GET['verwijder']])) {
-    // Remove the product from the shopping cart
     unset($_SESSION['delgashop'][$_GET['verwijder']]);
     header('location: winkelmand.php');
     exit;
 }
 // Leegmaken winkelmand
 if (isset($_POST['leegmaken']) && isset($_SESSION['delgashop'])) {
-    // Remove all products from the shopping cart
     unset($_SESSION['delgashop']);
     header('location: winkelmand.php');
     exit;
@@ -63,7 +61,6 @@ if ((isset($_POST['updaten']) || isset($_POST['bestellen'])) && isset($_SESSION[
     foreach ($_POST as $k => $v) {
         if (strpos($k, 'aantal') !== false && is_numeric($v)) {
             $product_id = str_replace('aantal-', '', $k);
-            // abs() function will prevent minus and (int) will make sure the number is an integer
             $aantal = abs((int)$v);
             if (is_numeric($product_id) && isset($_SESSION['delgashop'][$product_id]) && $aantal > 0) {
                 // Updaten nieuw aantal
@@ -130,87 +127,93 @@ if ($producten_winkelmand) {
             <h2>Winkelmand</h2>
 
             <?php if (empty($producten_winkelmand)): $levering = 0 ?>
-                <tr>
-                    <td colspan="7" style="text-align:center;">Er zijn geen producten toegevoegd aan uw winkelmand!</td>
-                </tr>
+                <p>Er zijn geen producten toegevoegd aan uw winkelmand!</p>
             <?php else: ?>
-            <form action="" method="post">
-                <div class="table-responsive-md">
-                    <table class="table table-hover table-borderless">
-                        <thead class="table-secondary">
-                        <tr>
-                            <th scope="col" colspan="2"></th>
-                            <th scope="col" colspan="2">Product</th>
-                            <th scope="col" class="rhide">Prijs</th>
-                            <th scope="col">Aantal</th>
-                            <th scope="col">Totaal</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <?php foreach ($producten_winkelmand as $num => $product): ?>
+                <form action="" method="post">
+                    <div class="table-responsive-md">
+                        <table class="table table-hover table-borderless">
+                            <thead class="table-secondary">
                             <tr>
-                                <td class="text-secondary"><a href="winkelmand.php?verwijder=<?= $num ?>" class="verwijder"><i
-                                                class="fas fa-trash-alt"></i></a></td>
-                                <td class="img">
-                                    <?php if (!empty($product['meta']['product_foto']) && file_exists('images/producten/' . $product['meta']['product_foto'])): ?>
-                                        <a href="product.php?id=<?= $product['product_id'] ?>">
-                                            <img src="images/producten/<?= $product['meta']['product_foto'] ?>"
-                                                 width="50" height="50" alt="<?= $product['meta']['product_naam'] ?>">
-                                        </a>
-                                    <?php endif; ?>
-                                </td>
-                                <td>
-                                    <a href="product.php?id=<?= $product['product_id'] ?>"><?= $product['meta']['product_naam'] ?></a>
-                                </td>
-                                <td class="prijs">
-                                    <?= $product['opties'] ?>
-                                    <input type="hidden" name="opties" value="<?= $product['opties'] ?>">
-                                </td>
-                                <?php if ($product['optie_eenheidsprijs'] > 0): ?>
-                                    <td class="prijs rhide">
-                                        € <?= number_format($product['optie_eenheidsprijs'], 2) ?></td>
-                                <?php else: ?>
-                                    <td class="prijs rhide">
-                                        € <?= number_format($product['meta']['eenheidsprijs'], 2) ?></td>
-                                <?php endif; ?>
-                                <td class="aantal">
-                                    <input type="number" class="form-control ajax-update" aria-label="Aantal"
-                                           name="aantal-<?= $num ?>"
-                                           value="<?= $product['aantal'] ?>" min="1" placeholder="Aantal" required>
-                                </td>
-                                <?php if ($product['optie_eenheidsprijs'] > 0): ?>
-                                    <td class="prijs product-totaal">
-                                        € <?= number_format($product['optie_eenheidsprijs'] * $product['aantal'], 2) ?></td>
-                                <?php else: ?>
-                                    <td class="prijs product-totaal">
-                                        € <?= number_format($product['meta']['eenheidsprijs'] * $product['aantal'], 2) ?></td>
-                                <?php endif; ?>
+                                <th scope="col" colspan="2"></th>
+                                <th scope="col" colspan="2">Product</th>
+                                <th scope="col" class="rhide">Prijs</th>
+                                <th scope="col">Aantal</th>
+                                <th scope="col">Totaal</th>
                             </tr>
-                        <?php endforeach; ?>
-                        </tbody>
-                    </table>
-                </div>
-                <div><br></div>
-                <div class="subtotaal">
-                    <span class="text">Subtotaal</span>
-                    <span class="prijs">€ <?= number_format($subtotaal, 2) ?></span>
-                </div>
-                <div class="verzending">
-                    <span class="text">Levering</span>
-                    <span class="prijs">€ <?= number_format($levering, 2) ?></span>
-                </div>
-                <div class="totaal">
-                    <span class="text">Totaal</span>
-                    <span class="prijs">€ <?= number_format($subtotaal + $levering, 2) ?></span>
-                </div>
-                <div><br></div>
-                <div class="buttons">
-                    <button class="btn btn-secondary" type="submit" name="leegmaken"><i class="fas fa-trash-alt"></i> Leegmaken</button>
-                    <button class="btn btn-secondary" type="submit" name="updaten"><i class="fas fa-redo-alt"></i> updaten</button>
-                    <button class="btn btn-success" type="submit" name="bestellen"><i class="fas fa-check"></i> Bestellen</button>
-                </div>
+                            </thead>
+                            <tbody>
+                            <?php foreach ($producten_winkelmand as $num => $product): ?>
+                                <tr>
+                                    <td class="text-secondary"><a href="winkelmand.php?verwijder=<?= $num ?>"
+                                                                  class="verwijder"><i
+                                                    class="fas fa-trash-alt"></i></a></td>
+                                    <td class="img">
+                                        <?php if (!empty($product['meta']['product_foto']) && file_exists('images/producten/' . $product['meta']['product_foto'])): ?>
+                                            <a href="product.php?id=<?= $product['product_id'] ?>">
+                                                <img src="images/producten/<?= $product['meta']['product_foto'] ?>"
+                                                     width="50" height="50"
+                                                     alt="<?= $product['meta']['product_naam'] ?>">
+                                            </a>
+                                        <?php endif; ?>
+                                    </td>
+                                    <td>
+                                        <a href="product.php?id=<?= $product['product_id'] ?>"><?= $product['meta']['product_naam'] ?></a>
+                                    </td>
+                                    <td class="prijs">
+                                        <?= $product['opties'] ?>
+                                        <input type="hidden" name="opties" value="<?= $product['opties'] ?>">
+                                    </td>
+                                    <?php if ($product['optie_eenheidsprijs'] > 0): ?>
+                                        <td class="prijs rhide">
+                                            € <?= number_format($product['optie_eenheidsprijs'], 2) ?></td>
+                                    <?php else: ?>
+                                        <td class="prijs rhide">
+                                            € <?= number_format($product['meta']['eenheidsprijs'], 2) ?></td>
+                                    <?php endif; ?>
+                                    <td class="aantal">
+                                        <input type="number" class="form-control ajax-update" aria-label="Aantal"
+                                               name="aantal-<?= $num ?>"
+                                               value="<?= $product['aantal'] ?>" min="1" placeholder="Aantal" required>
+                                    </td>
+                                    <?php if ($product['optie_eenheidsprijs'] > 0): ?>
+                                        <td class="prijs product-totaal">
+                                            € <?= number_format($product['optie_eenheidsprijs'] * $product['aantal'], 2) ?></td>
+                                    <?php else: ?>
+                                        <td class="prijs product-totaal">
+                                            € <?= number_format($product['meta']['eenheidsprijs'] * $product['aantal'], 2) ?></td>
+                                    <?php endif; ?>
+                                </tr>
+                            <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div><br></div>
+                    <div class="subtotaal">
+                        <span class="text">Subtotaal</span>
+                        <span class="prijs">€ <?= number_format($subtotaal, 2) ?></span>
+                    </div>
+                    <div class="verzending">
+                        <span class="text">Levering</span>
+                        <span class="prijs">€ <?= number_format($levering, 2) ?></span>
+                    </div>
+                    <div class="totaal">
+                        <span class="text">Totaal</span>
+                        <span class="prijs">€ <?= number_format($subtotaal + $levering, 2) ?></span>
+                    </div>
+                    <div><br></div>
+                    <div class="buttons">
+                        <button class="btn btn-secondary" type="submit" name="leegmaken"><i
+                                    class="fas fa-trash-alt"></i> Leegmaken
+                        </button>
+                        <button class="btn btn-secondary" type="submit" name="updaten"><i class="fas fa-redo-alt"></i>
+                            updaten
+                        </button>
+                        <button class="btn btn-success" type="submit" name="bestellen"><i class="fas fa-check"></i>
+                            Bestellen
+                        </button>
+                    </div>
 
-            </form>
+                </form>
             <?php endif; ?>
         </div>
 

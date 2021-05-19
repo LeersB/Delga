@@ -5,7 +5,6 @@
     </button>
     <div class="collapse navbar-collapse" id="navbar">
         <ul class="navbar-nav mr-auto">
-
             <?php
             switch ($menuadmin) {
                 case 1: //
@@ -44,14 +43,15 @@
                             <a class="dropdown-item" href="producten.php"><i class="fas fa-store"></i> Raadplegen</a>
                             <a class="dropdown-item" href="product.php"><i class="fas fa-pump-soap"></i> Toevoegen</a>
                             <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="product-prijs.php"><i class="fas fa-shopping-basket"></i>
+                                Prijs wijzigen</a>
+                            <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="images.php"><i class="far fa-image"></i> Afbeeldingen</a>
                             <a class="dropdown-item" href="opties.php"><i class="fas fa-cart-plus"></i> Opties</a>
-                            <a class="dropdown-item" href="categories.php"><i class="fas fa-list-ol"></i> Categorieën</a>
+                            <a class="dropdown-item" href="categories.php"><i class="fas fa-list-ol"></i>
+                                Categorieën</a>
                         </div>
                     </li>
-                    <!--<li class="nav-item">
-                        <a class="nav-link" href="settings.php"><i class="fas fa-tools"></i> Settings</a>
-                    </li>-->
                     <?php
                     break;
                 case 2: //
@@ -90,9 +90,13 @@
                             <a class="dropdown-item" href="producten.php"><i class="fas fa-store"></i> Raadplegen</a>
                             <a class="dropdown-item" href="product.php"><i class="fas fa-pump-soap"></i> Toevoegen</a>
                             <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="product-prijs.php"><i class="fas fa-shopping-basket"></i>
+                                Prijs wijzigen</a>
+                            <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="images.php"><i class="far fa-image"></i> Afbeeldingen</a>
                             <a class="dropdown-item" href="opties.php"><i class="fas fa-cart-plus"></i> Opties</a>
-                            <a class="dropdown-item" href="categories.php"><i class="fas fa-list-ol"></i> Categorieën</a>
+                            <a class="dropdown-item" href="categories.php"><i class="fas fa-list-ol"></i>
+                                Categorieën</a>
                         </div>
                     </li>
                     <?php
@@ -133,9 +137,13 @@
                             <a class="dropdown-item" href="producten.php"><i class="fas fa-store"></i> Raadplegen</a>
                             <a class="dropdown-item" href="product.php"><i class="fas fa-pump-soap"></i> Toevoegen</a>
                             <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="product-prijs.php"><i class="fas fa-shopping-basket"></i>
+                                Prijs wijzigen</a>
+                            <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="images.php"><i class="far fa-image"></i> Afbeeldingen</a>
                             <a class="dropdown-item" href="opties.php"><i class="fas fa-cart-plus"></i> Opties</a>
-                            <a class="dropdown-item" href="categories.php"><i class="fas fa-list-ol"></i> Categorieën</a>
+                            <a class="dropdown-item" href="categories.php"><i class="fas fa-list-ol"></i>
+                                Categorieën</a>
                         </div>
                     </li>
                     <?php
@@ -176,9 +184,13 @@
                             <a class="dropdown-item" href="producten.php"><i class="fas fa-store"></i> Raadplegen</a>
                             <a class="dropdown-item" href="product.php"><i class="fas fa-pump-soap"></i> Toevoegen</a>
                             <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="product-prijs.php"><i class="fas fa-shopping-basket"></i>
+                                Prijs wijzigen</a>
+                            <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="images.php"><i class="far fa-image"></i> Afbeeldingen</a>
                             <a class="dropdown-item" href="opties.php"><i class="fas fa-cart-plus"></i> Opties</a>
-                            <a class="dropdown-item" href="categories.php"><i class="fas fa-list-ol"></i> Categorieën</a>
+                            <a class="dropdown-item" href="categories.php"><i class="fas fa-list-ol"></i>
+                                Categorieën</a>
                         </div>
                     </li>
                     <?php
@@ -188,7 +200,8 @@
         </ul>
         <form class="form-inline mt-2 mt-sm-2" action="zoeken.php" method="get">
             <div class="input-group mr-sm-2">
-                <input type="text" class="form-control" name="query" placeholder="Product zoeken" aria-label="Product zoeken"
+                <input type="text" class="form-control" name="query" placeholder="Product zoeken"
+                       aria-label="Product zoeken"
                        aria-describedby="button-addon"
                        value="<?= isset($_GET['query']) ? htmlentities($_GET['query'], ENT_QUOTES) : '' ?>">
                 <div class="input-group-append">
@@ -202,7 +215,5 @@
                             class="fas fa-sign-out-alt"></i> Afmelden</a>
             </div>
         </form>
-
-
     </div>
 </nav>

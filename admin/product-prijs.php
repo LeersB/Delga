@@ -5,7 +5,8 @@ $pdo_function = pdo_connect_mysql();
 // Default input product values
 $product = array(
     'eenheidsprijs' => '',
-    'product_id' => ''
+    'product_id' => '',
+    'product_naam' => ''
 );
 
 $order_by_list = array('product_id', 'categorie_naam', 'product_naam', 'eenheidsprijs');
@@ -52,14 +53,14 @@ if (isset($_POST['submit'])) {
 <main class="flex-shrink-0" role="main">
     <div class="container">
 
-        <h2>Prijs aanpassen</h2>
+        <h2>Producten prijs wijzigen</h2>
 
         <?php if (isset($_POST['product'])) : ?>
             <form class="needs-validation" novalidate action="" method="post" autocomplete="off">
-                <div class="row">
+                <div class="row justify-content-end">
                     <div class="input-group col-md-12"><br></div>
 
-                    <div class=" sr-only input-group col-md-2">
+                    <div class="sr-only input-group col-md-2">
                         <label class="sr-only" for="product_id">product_id</label>
                         <div class="input-group mb-2">
                             <div class="input-group-prepend">
@@ -70,6 +71,7 @@ if (isset($_POST['submit'])) {
                                    required>
                         </div>
                     </div>
+                    <p>"<?= $product['product_naam'] ?>"</p>
                     <div class="input-group col-md-2">
                         <label class="sr-only" for="eenheidsprijs">Eenheidsprijs</label>
                         <div class="input-group mb-2">
@@ -91,8 +93,6 @@ if (isset($_POST['submit'])) {
                 </div>
             </form>
         <?php endif; ?>
-
-        <div class="input-group col-md-12"><br></div>
 
         <div class="content table-responsive-lg">
             <table class="table table-success table-hover table-borderless">

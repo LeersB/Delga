@@ -39,7 +39,7 @@ if (isset($_POST['submit'])) {
     <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
     <meta content="Delga contactgegevens" name="description">
     <meta content="Bart Leers" name="author">
-    <title>Delga admin opties</title>
+    <title>Delga admin product-prijs</title>
     <link href="../css/bootstrap.css" rel="stylesheet" type="text/css">
     <link href="../css/delga-admin.css" rel="stylesheet">
 </head>

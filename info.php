@@ -7,9 +7,9 @@ include 'main.php';
 <head>
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
-    <meta content="Delga contactgegevens" name="description">
+    <meta content="Delga info" name="description">
     <meta content="Bart Leers" name="author">
-    <title>Delga</title>
+    <title>Delga info</title>
     <link href="css/bootstrap.min.css" rel="stylesheet" type="text/css">
     <link href="css/delga.css" rel="stylesheet">
 </head>
@@ -41,7 +41,7 @@ include 'main.php';
                 <p>Kunt U op onze website producten niet terugvinden, aarzel dan zeker niet om mij een mail te sturen om dit na te vragen.
                     <br>De kans is groot dat ik U deze alsnog kan aanbieden want ons gamma is te groot en veelzijdig om alles hierop aan te bieden.</p>
                 <p>Dank voor jullie vertrouwen.</p>
-                <p>Delhaye Gabrïel<br>Zaakvoerder</p>
+                <p>Delhaye Gabriël<br>Zaakvoerder</p>
 
             </div>
         </div>

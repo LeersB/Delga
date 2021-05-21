@@ -62,7 +62,8 @@ if (isset($_SESSION['loggedin'])) {
 
 <?php include('includes/footer.php'); ?>
 
-<script>var disqus_config = (function () {
+<script>
+    var disqus_config = (function () {
         if (!localStorage.getItem('cookieconsent')) {
             document.body.innerHTML += '\
 <div class="cookieconsent" style="position:fixed;padding:20px;left:0;bottom:0;background-color:#555D5D;color:#FFF;text-align:center;width:100%;z-index:99999;">\

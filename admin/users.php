@@ -24,7 +24,6 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <?php include('includes/header.php'); ?>
 </header>
 
-
 <main class="flex-shrink-0" role="main">
     <div class="container">
 
@@ -50,10 +49,10 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <?php foreach ($users as $user): ?>
                         <tr class="details" onclick="location.href='user.php?user_id=<?= $user['user_id'] ?>'">
                             <td><?= $user['email'] ?></td>
-                            <td class="responsive-hidden"><?= $user['voornaam'], " ", $user['achternaam'] ?></td>
-                            <td class="responsive-hidden"><?= $user['adres_straat'], " ", $user['adres_nr'], " ", $user['adres_postcode'], " ", $user['adres_plaats'] ?></td>
-                            <td class="responsive-hidden"><?= $user['adres_straat_2'], " ", $user['adres_nr_2'], " ", $user['adres_postcode_2'], " ", $user['adres_plaats_2'] ?></td>
-                            <td class="responsive-hidden"><?= $user['user_level'] ?></td>
+                            <td><?= $user['voornaam'], " ", $user['achternaam'] ?></td>
+                            <td><?= $user['adres_straat'], " ", $user['adres_nr'], " ", $user['adres_postcode'], " ", $user['adres_plaats'] ?></td>
+                            <td><?= $user['adres_straat_2'], " ", $user['adres_nr_2'], " ", $user['adres_postcode_2'], " ", $user['adres_plaats_2'] ?></td>
+                            <td><?= $user['user_level'] ?></td>
                         </tr>
                     <?php endforeach; ?>
                 <?php endif; ?>

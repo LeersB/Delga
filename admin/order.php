@@ -2,7 +2,6 @@
 $menuadmin = 4;
 include 'main.php';
 $pdo_function = pdo_connect_mysql();
-
 $order_status = array('nieuw', 'uitvoering', 'afgewerkt', 'geannuleerd');
 
 if (isset($_GET['order_nr'])) {
@@ -17,6 +16,13 @@ if (isset($_GET['order_nr'])) {
     $order = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if (isset($_POST['order_uitvoering'])) {
+        // Update order status uitvoering
+        $stmt = $pdo_function->prepare('UPDATE orders SET order_status = ? WHERE order_nr = ?');
+        $stmt->execute(['uitvoering', $_GET['order_nr']]);
+        header('Location: order.php?order_nr=' . $_GET['order_nr']);
+        exit;
+    }
+    if (isset($_POST['order_update'])) {
         // Update order status uitvoering
         $stmt = $pdo_function->prepare('UPDATE orders SET opmerking = ?, leveringsdatum = ?, order_status = ? WHERE order_nr = ?');
         $stmt->execute([$_POST['opmerking'], $_POST['leveringsdatum'], 'uitvoering', $_GET['order_nr']]);
@@ -55,12 +61,10 @@ if (isset($_GET['order_nr'])) {
         header('Location: order.php?order_nr=' . $_GET['order_nr']);
         exit;
     }
-
 } else {
     header('Location: orders.php');
     exit;
 }
-
 ?>
 <!DOCTYPE html>
 <html class="h-100" lang="nl">
@@ -128,7 +132,7 @@ if (isset($_GET['order_nr'])) {
                     <div class="col-md-12">
                         <a class="btn btn-secondary" href="orders.php" role="button"><i class="fas fa-times"></i>
                             Annuleer</a>
-                        <button type="submit" name="order_uitvoering" class="btn btn-success"><i
+                        <button type="submit" name="order_update" class="btn btn-success"><i
                                     class="fas fa-check"></i> Update
                         </button>
                         <button type="submit" name="order_afgewerkt" class="btn btn-success"><i
@@ -264,7 +268,6 @@ if (isset($_GET['order_nr'])) {
                         <?php } ?>
                     </tr>
 
-
                 <?php endforeach; ?>
                 </tbody>
             </table>
@@ -277,4 +280,3 @@ if (isset($_GET['order_nr'])) {
 <script src="../js/form-validation.js"></script>
 </body>
 </html>
-

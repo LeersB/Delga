@@ -90,7 +90,7 @@ if (empty($_SESSION['delgashop'])) {
 <head>
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
-    <meta name=”robots” content=”noindex,nofollow”/>
+    <meta name=”robots” content=”noindex,nofollow”>
     <meta content="Delga contactgegevens" name="description">
     <meta content="Bart Leers" name="author">
     <title>Delga product info</title>

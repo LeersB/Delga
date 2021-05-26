@@ -33,14 +33,14 @@ if (isset($_POST['optie'])) {
 if (isset($_POST['optie_id'])) {
     if (isset($_POST['submit'])) {
         // Update product_opties
-        $stmt = $pdo_function->prepare('UPDATE product_opties SET optie_titel = ?, optie_naam = ?, eenheidsprijs = ?, product_id = ? WHERE optie_id = ?');
+        $stmt = $pdo_function->prepare('UPDATE product_opties SET optie_titel = ?, optie_naam = ?, eenheidsprijs = ?, product_id = ? WHERE optie_id = ? LIMIT 1');
         $stmt->execute([$_POST['optie_titel'], $_POST['optie_naam'], $_POST['eenheidsprijs'], $_POST['product_id'], $_POST['optie_id']]);
         header('Location: product-opties.php?product_id=' . $_POST['product_id']);
         exit;
     }
     if (isset($_POST['delete'])) {
         // Delete product_opties
-        $stmt = $pdo_function->prepare('DELETE FROM product_opties WHERE optie_id = ?');
+        $stmt = $pdo_function->prepare('DELETE FROM product_opties WHERE optie_id = ? LIMIT 1');
         $stmt->execute([$_POST['optie_id']]);
         header('Location: product-opties.php?product_id=' . $_POST['product_id']);
         exit;

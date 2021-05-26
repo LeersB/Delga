@@ -5,7 +5,7 @@ include 'main.php';
 
 $pdo_function = pdo_connect_mysql();
 if (isset($_GET['id'])) {
-    $stmt = $pdo_function->prepare("SELECT * FROM producten WHERE product_level = 'actief' and product_id = ?");
+    $stmt = $pdo_function->prepare("SELECT * FROM producten WHERE product_level = 'actief' AND product_id = ?");
     $stmt->execute([$_GET['id']]);
     $product = $stmt->fetch(PDO::FETCH_ASSOC);
     if (!$product) {

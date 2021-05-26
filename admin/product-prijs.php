@@ -26,7 +26,7 @@ if (isset($_POST['product'])) {
 
 if (isset($_POST['submit'])) {
     // Update product_opties
-    $stmt = $pdo_function->prepare('UPDATE producten SET eenheidsprijs = ? WHERE product_id = ?');
+    $stmt = $pdo_function->prepare('UPDATE producten SET eenheidsprijs = ? WHERE product_id = ? LIMIT 1');
     $stmt->execute([$_POST['eenheidsprijs'], $_POST['product_id']]);
     header('Location: product-prijs.php');
     exit;

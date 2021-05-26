@@ -50,7 +50,7 @@ else {
     if ($itemCount > 0) {
 
         $productArr = array();
-        $productArr["body"] = array();
+        $productArr["producten"] = array();
         $productArr["itemCount"] = $itemCount;
 
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
@@ -66,7 +66,7 @@ else {
                 "waarschuwing" => $waarschuwing,
                 "eenheidsprijs" => $eenheidsprijs
             );
-            array_push($productArr["body"], $e);
+            array_push($productArr["producten"], $e);
         }
         echo json_encode($productArr);
     } else {

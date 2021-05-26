@@ -21,6 +21,7 @@ if($item->product_naam != null){
     // create array
     $emp_arr = array(
         "product_id" =>  $item->product_id,
+        "categorie_id" =>  $item->categorie_id,
         "product_naam" => $item->product_naam,
         "product_foto" => $item->product_foto,
         "product_info" => $item->product_info,

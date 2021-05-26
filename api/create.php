@@ -15,6 +15,8 @@ $item = new Producten($db);
 
 $data = json_decode(file_get_contents("php://input"));
 
+// product values
+$item->categorie_id = $data->categorie_id;
 $item->product_naam = $data->product_naam;
 $item->product_foto = $data->product_foto;
 $item->product_info = $data->product_info;

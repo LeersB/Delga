@@ -17,7 +17,8 @@ $data = json_decode(file_get_contents("php://input"));
 
 $item->product_id = $data->product_id;
 
-// employee values
+// product values
+$item->categorie_id = $data->categorie_id;
 $item->product_naam = $data->product_naam;
 $item->product_foto = $data->product_foto;
 $item->product_info = $data->product_info;

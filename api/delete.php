@@ -15,7 +15,7 @@ $item = new Producten($db);
 
 $data = json_decode(file_get_contents("php://input"));
 
-$item->id = $data->id;
+$item->product_id = $data->product_id;
 
 if($item->deleteProduct()){
     echo json_encode("Product deleted.");

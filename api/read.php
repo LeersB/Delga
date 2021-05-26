@@ -26,6 +26,7 @@ if($itemCount > 0){
         extract($row);
         $e = array(
             "product_id" => $product_id,
+            "categorie_id" => $categorie_id,
             "product_naam" => $product_naam,
             "product_foto" => $product_foto,
             "product_info" => $product_info,

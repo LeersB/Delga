@@ -41,7 +41,7 @@ if (isset($_GET['id'])) {
 
         <?php if ($error): ?>
 
-            <p class="content-wrapper error"><?= $error ?></p>
+            <p><?= $error ?></p>
 
         <?php else: ?>
 
@@ -110,7 +110,6 @@ if (isset($_GET['id'])) {
         <div class="row"><br></div>
     </div>
 
-    </div>
 </main>
 
 <?php include('includes/footer.php'); ?>

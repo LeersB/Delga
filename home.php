@@ -3,13 +3,14 @@ $menu = 1;
 include 'main.php';
 $pdo_function = pdo_connect_mysql();
 check_loggedin($pdo_function);
-
-$stmt = $pdo_function->prepare('SELECT * FROM producten WHERE product_id = 27 OR product_id = 1');
-$stmt->execute();
-$producten = $stmt->fetchAll(PDO::FETCH_ASSOC);
-$stmt = $pdo_function->prepare('SELECT * FROM producten WHERE product_id = 39');
-$stmt->execute();
-$product = $stmt->fetch(PDO::FETCH_ASSOC);
+//statement producten
+$stmtProducten = $pdo_function->prepare('SELECT * FROM producten WHERE product_id = 27 OR product_id = 1');
+$stmtProducten->execute();
+$producten = $stmtProducten->fetchAll(PDO::FETCH_ASSOC);
+//statement product
+$stmtProduct = $pdo_function->prepare('SELECT * FROM producten WHERE product_id = 39');
+$stmtProduct->execute();
+$product = $stmtProduct->fetch(PDO::FETCH_ASSOC);
 ?>
 <!DOCTYPE html>
 <html class="h-100" lang="nl">

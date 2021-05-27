@@ -21,9 +21,9 @@ if ($_POST['cwachtwoord'] != $_POST['wachtwoord']) {
 }
 // Check account niet reeds bestaat.
 $pdo_function = pdo_connect_mysql();
-$stmt = $pdo_function->prepare('SELECT user_id, wachtwoord FROM users WHERE email = ?');
-$stmt->execute([$_POST['email']]);
-$account = $stmt->fetch(PDO::FETCH_ASSOC);
+$stmtAccount = $pdo_function->prepare('SELECT user_id, wachtwoord FROM users WHERE email = ?');
+$stmtAccount->execute([$_POST['email']]);
+$account = $stmtAccount->fetch(PDO::FETCH_ASSOC);
 if ($account) {
     echo 'Dit e-mailadres bestaat al!';
 } else {

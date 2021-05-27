@@ -4,9 +4,10 @@ include 'main.php';
 $aantal_pagina = aantal_pagina;
 
 $pdo_function = pdo_connect_mysql();
-$stmt = $pdo_function->query('SELECT * FROM categorie');
-$stmt->execute();
-$categories = $stmt->fetchAll(PDO::FETCH_ASSOC);
+// Statement categories
+$stmtCategories = $pdo_function->query('SELECT * FROM categorie');
+$stmtCategories->execute();
+$categories = $stmtCategories->fetchAll(PDO::FETCH_ASSOC);
 // Selecteer de huidige categorie anders selecteer all
 $categorie = isset($_GET['categorie']) ? $_GET['categorie'] : 'all';
 $category_sql = '';
@@ -32,13 +33,13 @@ $stmt->bindValue(':pagina', ($huidige_pagina - 1) * $aantal_pagina, PDO::PARAM_I
 $stmt->bindValue(':aantal', $aantal_pagina, PDO::PARAM_INT);
 $stmt->execute();
 $producten = $stmt->fetchAll(PDO::FETCH_ASSOC);
-// Totaal aantal producten
-$stmt = $pdo_function->prepare("SELECT COUNT(*) FROM producten p WHERE product_level = 'actief'" . $category_sql);
+// Statement Totaal aantal producten
+$stmtTotaal_producten = $pdo_function->prepare("SELECT COUNT(*) FROM producten p WHERE product_level = 'actief'" . $category_sql);
 if ($categorie != 'all') {
-    $stmt->bindValue(':categorie', $categorie, PDO::PARAM_INT);
+    $stmtTotaal_producten->bindValue(':categorie', $categorie, PDO::PARAM_INT);
 }
-$stmt->execute();
-$totaal_producten = $stmt->fetchColumn();
+$stmtTotaal_producten->execute();
+$totaal_producten = $stmtTotaal_producten->fetchColumn();
 $totaal_pagina = round($totaal_producten / $aantal_pagina + 0.9, 1);
 ?>
 <!DOCTYPE html>

@@ -11,7 +11,6 @@ $stmt = $pdo_function->prepare('SELECT * FROM producten WHERE product_id = 39');
 $stmt->execute();
 $product = $stmt->fetch(PDO::FETCH_ASSOC);
 ?>
-
 <!DOCTYPE html>
 <html class="h-100" lang="nl">
 <head>
@@ -38,9 +37,7 @@ $product = $stmt->fetch(PDO::FETCH_ASSOC);
         </div>
         <p class="text-center"><img alt="" height="118" src="images/delga_gif.gif" width="246"></p>
         <div class="row justify-content-md-center">
-
             <div class="col-md-8">
-
                 <div class="list-group">
                     <div class="list-group-item list-group-item-action">
                         <div class="d-flex w-100 justify-content-between">
@@ -48,7 +45,6 @@ $product = $stmt->fetch(PDO::FETCH_ASSOC);
                         </div>
                     </div>
                 </div>
-
                 <div id="carouselExampleCaptions" class="carousel slide" data-ride="carousel">
                     <div class="carousel-inner">
                         <div class="carousel-item active">
@@ -82,7 +78,6 @@ $product = $stmt->fetch(PDO::FETCH_ASSOC);
                                                         </div>
                                                     </div>
                                                 </div>
-
                                                 <div class="card-footer">
                                                     <div class="d-flex justify-content-between">
                                                         <div class="p-2">
@@ -129,7 +124,6 @@ $product = $stmt->fetch(PDO::FETCH_ASSOC);
                                                         </div>
                                                     </div>
                                                 </div>
-
                                                 <div class="card-footer">
                                                     <div class="d-flex justify-content-between">
                                                         <div class="p-2">
@@ -147,7 +141,6 @@ $product = $stmt->fetch(PDO::FETCH_ASSOC);
                         <?php endforeach; ?>
                     </div>
                 </div>
-
                 <a class="carousel-control-prev" href="#carouselExampleCaptions" role="button" data-slide="prev">
                         <span><i class="fa fa-angle-left" aria-hidden="true"
                                  style="color: black; font-size: xxx-large"></i></span>
@@ -159,10 +152,7 @@ $product = $stmt->fetch(PDO::FETCH_ASSOC);
                     <span class="sr-only">Next</span>
                 </a>
             </div>
-
-
         </div>
-    </div>
 
     </div>
 </main>

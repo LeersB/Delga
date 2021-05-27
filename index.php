@@ -7,7 +7,6 @@ if (isset($_SESSION['loggedin'])) {
     exit;
 }
 ?>
-
 <!DOCTYPE html>
 <html class="h-100" lang="nl">
 <head>
@@ -32,8 +31,7 @@ if (isset($_SESSION['loggedin'])) {
         <p class="text-center"><img alt="" height="118" src="images/delga_gif.gif" width="246"></p>
         <div class="jumbotron p-4 p-md-5 text-dark rounded bg-light">
             <div class="row justify-content-center">
-                <div class="col-lg-8">
-                    <h3>
+                <div class="col-lg-8 h3">
                         <dl class="row">
                             <dt class="col-lg-6">Zaakvoerder:</dt>
                             <dd class="col-lg-6">Delhaye&nbsp;Gabriël</dd>
@@ -53,7 +51,6 @@ if (isset($_SESSION['loggedin'])) {
                             <dt class="col-lg-6">BTW:</dt>
                             <dd class="col-lg-6">BE&nbsp;0524479592</dd>
                         </dl>
-                    </h3>
                 </div>
             </div>
         </div>

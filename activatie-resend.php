@@ -36,7 +36,7 @@ if (isset($_POST['email'])) {
     <?php include('includes/header.php'); ?>
 </header>
 
-<main class="flex-shrink-0" role="main">
+<main class="flex-shrink-0">
     <div class="container">
         <div class="content">
             <form class="needs-validation" novalidate action="activatie-resend.php" method="post">

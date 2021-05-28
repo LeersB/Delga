@@ -40,7 +40,7 @@ if (isset($_GET['id'])) {
     <?php include('includes/header.php'); ?>
 </header>
 
-<main class="flex-shrink-0" role="main">
+<main class="flex-shrink-0">
     <div class="container">
         <div class="content">
             <div class="jumbotron p-4 p-md-5 text-dark rounded bg-light">

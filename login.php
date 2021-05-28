@@ -40,13 +40,13 @@ if (isset($_COOKIE['rememberme']) && !empty($_COOKIE['rememberme'])) {
     <?php include('includes/header.php'); ?>
 </header>
 
-<main class="flex-shrink-0" role="main">
+<main class="flex-shrink-0">
     <div class="container">
         <div class="login-container row">
             <div class="col-sm-6 col-xs-12 pull-left">
                 <div class="block block-customer-login">
                     <div class="block-title">
-                        <h2 class="title" id="block-customer-login-heading" role="heading"><span>Log in met je Delga account</span>
+                        <h2 class="title" id="block-customer-login-heading"><span>Log in met je Delga account</span>
                         </h2>
                     </div>
                     <form class="needs-validation" novalidate action="proces-login.php" method="post" id="login-form">
@@ -89,7 +89,7 @@ if (isset($_COOKIE['rememberme']) && !empty($_COOKIE['rememberme'])) {
             <div class="col-sm-6 col-xs-12 pull-right">
                 <div class="block block-new-customer">
                     <div class="block-title">
-                        <h2 class="title" id="block-new-customer-heading" role="heading" aria-level="2"><span>Eerste keer hier? Welkom!</span>
+                        <h2 class="title" id="block-new-customer-heading" aria-level="2"><span>Eerste keer hier? Welkom!</span>
                         </h2>
                     </div>
                     <div class="block-content" aria-labelledby="block-new-customer-heading">

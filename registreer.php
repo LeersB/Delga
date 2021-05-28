@@ -21,7 +21,7 @@ include 'main.php';
     <?php include('includes/header.php'); ?>
 </header>
 
-<main class="flex-shrink-0" role="main">
+<main class="flex-shrink-0">
     <div class="container">
 
         <div class="register">
@@ -232,7 +232,7 @@ include 'main.php';
 </main>
 
 <?php include('includes/footer.php'); ?>
-<script type="text/javascript">
+<script>
     $("#user_level").change(function () {
         if ($(this).val() === "Bedrijf") {
             $('#zakelijkDiv').show();
@@ -245,7 +245,7 @@ include 'main.php';
         }
     });
 </script>
-<script type="text/javascript">
+<script>
     $("#user_level").trigger("change");
 </script>
 <script>

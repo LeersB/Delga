@@ -38,7 +38,7 @@ if (isset($_GET['email'], $_GET['code']) && !empty($_GET['code'])) {
     <?php include('includes/header.php'); ?>
 </header>
 
-<main class="flex-shrink-0" role="main">
+<main class="flex-shrink-0">
     <div class="container">
 
         <div class="content">

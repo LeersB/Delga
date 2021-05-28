@@ -26,7 +26,7 @@ if (isset($_SESSION['loggedin'])) {
     <?php include('includes/header.php'); ?>
 </header>
 
-<main class="flex-shrink-0" role="main">
+<main class="flex-shrink-0">
     <div class="container">
         <p class="text-center"><img alt="" height="118" src="images/delga_gif.gif" width="246"></p>
         <div class="jumbotron p-4 p-md-5 text-dark rounded bg-light">

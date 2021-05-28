@@ -38,7 +38,7 @@ if (isset($_GET['id'])) {
     <?php include('includes/header.php'); ?>
 </header>
 
-<main class="flex-shrink-0" role="main">
+<main class="flex-shrink-0">
     <div class="container">
 
         <?php if ($error): ?>

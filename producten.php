@@ -60,7 +60,7 @@ $totaal_pagina = round($totaal_producten / $aantal_pagina + 0.9, 1);
     <?php include('includes/header.php'); ?>
 </header>
 
-<main class="flex-shrink-0" role="main">
+<main class="flex-shrink-0">
     <div class="container">
 
         <div class="products content-wrapper">
@@ -69,7 +69,7 @@ $totaal_pagina = round($totaal_producten / $aantal_pagina + 0.9, 1);
                 <p><?= $totaal_producten ?> product(en) gevonden</p>
             </div>
 
-            <form action="" method="get" class="product-form">
+            <form action="producten.php" method="get" class="product-form">
                 <div class="row no-gutters">
                     <div class="input-group col-md-6 mb-2">
                         <div class="input-group-prepend">
@@ -88,8 +88,7 @@ $totaal_pagina = round($totaal_producten / $aantal_pagina + 0.9, 1);
                             <label class="input-group-text" for="sorteer">Sorteer</label>
                         </div>
                         <select class="custom-select" name="sorteer" id="sorteer">
-                            <option value="1"<?= ($sorteer == '1' ? ' selected' : '') ?> selected>Categorie
-                            </option>
+                            <option value="1"<?= ($sorteer == '1' ? ' selected' : '') ?>>Categorie</option>
                             <option value="2"<?= ($sorteer == '2' ? ' selected' : '') ?>>Oplopend</option>
                             <option value="3"<?= ($sorteer == '3' ? ' selected' : '') ?>>Aflopend</option>
                         </select>
@@ -157,7 +156,7 @@ $totaal_pagina = round($totaal_producten / $aantal_pagina + 0.9, 1);
                 </li>
                 <?php for ($pagina = 1; $pagina <= $totaal_pagina; $pagina++) { ?>
                     <li class="page-item <?php if ($huidige_pagina == $pagina): ?>active"
-                        aria-current="page <?php endif; ?>">
+                        aria-current="page<?php endif; ?>">
                         <a class="page-link"
                            href="producten.php?p=<?= $pagina; ?>&categorie=<?= $categorie ?>&sorteer=<?= $sorteer ?>"><?= $pagina; ?></a>
                     </li>

@@ -8,9 +8,9 @@
             </div>
             <div class="col-10">
                 <div class="d-flex justify-content-end">
-                    <div class="p-2 bd-highlight">
+                    <div class="p-2 bd-highlight h5">
                         <address>
-                            <h5>Bart Leers <i class="far fa-copyright"></i> 2021 </h5>
+                            Bart Leers <i class="far fa-copyright"></i> 2021
                         </address>
                     </div>
                 </div>

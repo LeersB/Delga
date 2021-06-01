@@ -31,26 +31,26 @@ if (isset($_SESSION['loggedin'])) {
         <p class="text-center"><img alt="" height="118" src="images/delga_gif.gif" width="246"></p>
         <div class="jumbotron p-4 p-md-5 text-dark rounded bg-light">
             <div class="row justify-content-center">
-                <div class="col-lg-8 h3">
-                        <dl class="row">
-                            <dt class="col-lg-6">Zaakvoerder:</dt>
-                            <dd class="col-lg-6">Delhaye&nbsp;Gabriël</dd>
-                            <dt class="col-lg-6">Adres:</dt>
-                            <dd class="col-lg-6">Voorzienigheidsstraat&nbsp;18<br>
-                                8500&nbsp;Kortrijk
-                            </dd>
-                            <dt class="col-lg-6">Telefoon:</dt>
-                            <dd class="col-lg-6">+32&nbsp;(0)56/22&nbsp;59&nbsp;62</dd>
-                            <dt class="col-lg-6">GSM:</dt>
-                            <dd class="col-lg-6">+32&nbsp;(0)495/36&nbsp;11&nbsp;49</dd>
-                            <dt class="col-lg-6">E-mailadres:</dt>
-                            <dd class="col-lg-6"><u><a href="mailto:info@delga.be?subject=info" class="text-primary">info@delga.be</a></u>
-                            </dd>
-                            <dt class="col-lg-6">HR:</dt>
-                            <dd class="col-lg-6">Kortrijk&nbsp;117.854</dd>
-                            <dt class="col-lg-6">BTW:</dt>
-                            <dd class="col-lg-6">BE&nbsp;0524479592</dd>
-                        </dl>
+                <div class="col-lg-8 h4">
+                    <dl class="row">
+                        <dt class="col-lg-6">Zaakvoerder:</dt>
+                        <dd class="col-lg-6">Delhaye&nbsp;Gabriël</dd>
+                        <dt class="col-lg-6">Adres:</dt>
+                        <dd class="col-lg-6">Voorzienigheidsstraat&nbsp;18<br>
+                            8500&nbsp;Kortrijk
+                        </dd>
+                        <dt class="col-lg-6">Telefoon:</dt>
+                        <dd class="col-lg-6">+32&nbsp;(0)56/22&nbsp;59&nbsp;62</dd>
+                        <dt class="col-lg-6">GSM:</dt>
+                        <dd class="col-lg-6">+32&nbsp;(0)495/36&nbsp;11&nbsp;49</dd>
+                        <dt class="col-lg-6">E-mailadres:</dt>
+                        <dd class="col-lg-6"><u><a href="mailto:info@delga.be?subject=info" class="text-primary">info@delga.be</a></u>
+                        </dd>
+                        <dt class="col-lg-6">HR:</dt>
+                        <dd class="col-lg-6">Kortrijk&nbsp;117.854</dd>
+                        <dt class="col-lg-6">BTW:</dt>
+                        <dd class="col-lg-6">BE&nbsp;0524479592</dd>
+                    </dl>
                 </div>
             </div>
         </div>
@@ -76,12 +76,12 @@ if (isset($_SESSION['loggedin'])) {
         }
     })();
 
-    document.querySelector(".search i").onclick = function() {
+    document.querySelector(".search i").onclick = function () {
         this.style.display = "none";
         this.parentElement.querySelector("input").style.display = "block";
         this.parentElement.querySelector("input").focus();
     };
-    document.querySelector(".search input").onkeyup = function(event) {
+    document.querySelector(".search input").onkeyup = function (event) {
         if (event.keyCode === 13 && this.value.length > 0) {
             window.location.href = encodeURI("zoeken.php?query=" + this.value);
         }

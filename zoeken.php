@@ -3,18 +3,21 @@ $menu = 3;
 $error = '';
 include 'main.php';
 $pdo_function = pdo_connect_mysql();
-$aantal_pagina = aantal_pagina;
 
-if (isset($_GET['query']) && $_GET['query'] != '') {
-    $huidige_pagina = isset($_GET['p']) && is_numeric($_GET['p']) ? (int)$_GET['p'] : 1;
+$aantal_pagina = aantal_pagina;
+$pagina = filter_input(INPUT_GET, 'p', FILTER_SANITIZE_NUMBER_INT);
+$query = filter_input(INPUT_GET, 'query', FILTER_SANITIZE_STRING);
+
+if (isset($query) && $query != '') {
+    $huidige_pagina = isset($pagina) && is_numeric($pagina) ? (int)$pagina : 1;
     // Escape the user query, prevent XSS attacks
-    $search_query = htmlspecialchars($_GET['query'], ENT_QUOTES, 'UTF-8');
-    $stmt = $pdo_function->prepare("SELECT * FROM producten WHERE product_level = 'actief' and product_naam LIKE :query LIMIT :pagina,:aantal");
-    $stmt->bindValue(':pagina', ($huidige_pagina - 1) * $aantal_pagina, PDO::PARAM_INT);
-    $stmt->bindValue(':aantal', $aantal_pagina, PDO::PARAM_INT);
-    $stmt->bindValue(':query', '%' . $search_query . '%');
-    $stmt->execute();
-    $producten = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $search_query = htmlspecialchars($query, ENT_QUOTES, 'UTF-8');
+    $stmtProducten = $pdo_function->prepare("SELECT * FROM producten WHERE product_level = 'actief' and product_naam LIKE :query LIMIT :pagina,:aantal");
+    $stmtProducten->bindValue(':pagina', ($huidige_pagina - 1) * $aantal_pagina, PDO::PARAM_INT);
+    $stmtProducten->bindValue(':aantal', $aantal_pagina, PDO::PARAM_INT);
+    $stmtProducten->bindValue(':query', '%' . $search_query . '%');
+    $stmtProducten->execute();
+    $producten = $stmtProducten->fetchAll(PDO::FETCH_ASSOC);
     // Totaal aantal gevonden producten
     $stmt = $pdo_function->prepare("SELECT COUNT(*) FROM producten WHERE product_level = 'actief' and product_naam LIKE :query");
     $stmt->bindValue(':query', '%' . $search_query . '%');

@@ -2,19 +2,21 @@
 $menu = 3;
 $error = '';
 include 'main.php';
-
 $pdo_function = pdo_connect_mysql();
-if (isset($_GET['id'])) {
+
+$id = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT);
+
+if (isset($id)) {
     //Statement Product
     $stmtProduct = $pdo_function->prepare("SELECT * FROM producten WHERE product_level = 'actief' AND product_id = ?");
-    $stmtProduct->execute([$_GET['id']]);
+    $stmtProduct->execute([$id]);
     $product = $stmtProduct->fetch(PDO::FETCH_ASSOC);
     if (!$product) {
         $error = 'Product bestaat niet!';
     }
     //Statement product_opties
     $stmtProduct_opties = $pdo_function->prepare('SELECT optie_titel, GROUP_CONCAT(optie_naam) AS opties, GROUP_CONCAT(eenheidsprijs) AS optie_eenheidsprijs FROM product_opties WHERE product_id = ? GROUP BY optie_titel');
-    $stmtProduct_opties->execute([$_GET['id']]);
+    $stmtProduct_opties->execute([$id]);
     $product_opties = $stmtProduct_opties->fetchAll(PDO::FETCH_ASSOC);
 } else {
     $error = 'Product bestaat niet!';

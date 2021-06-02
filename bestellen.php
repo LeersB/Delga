@@ -3,16 +3,25 @@ $menu = 3;
 include 'main.php';
 $pdo_function = pdo_connect_mysql();
 check_loggedin($pdo_function);
+
+$email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
+$order_naam = (string)filter_input(INPUT_POST, 'order_naam');
+$order_adres = (string)filter_input(INPUT_POST, 'order_adres');
+$order_adres_2 = (string)filter_input(INPUT_POST, 'order_adres_2');
+$opmerking = (string)filter_input(INPUT_POST, 'opmerking');
+$bestellen = filter_has_var(INPUT_POST, 'bestellen');
+
+// controle sessie variabelen voor producten in winkelmand delgashop
+$producten_winkelmand = isset($_SESSION['delgashop']) ? $_SESSION['delgashop'] : [];
+$subtotaal = 0.00;
+$levering = leveringskost;
+
 // Check if user is logged in
 if (isset($_SESSION['loggedin'])) {
     $stmt = $pdo_function->prepare('SELECT * FROM users WHERE user_id = ?');
     $stmt->execute([$_SESSION['user_id']]);
     $account = $stmt->fetch(PDO::FETCH_ASSOC);
 }
-// controle sessie variabelen voor producten in winkelmand delgashop
-$producten_winkelmand = isset($_SESSION['delgashop']) ? $_SESSION['delgashop'] : [];
-$subtotaal = 0.00;
-$levering = leveringskost;
 // If functie voor producten in winkelmand
 if ($producten_winkelmand) {
     $lijst_delgashop = implode(',', array_fill(0, count($producten_winkelmand), '?'));
@@ -32,11 +41,11 @@ if ($producten_winkelmand) {
     }
 }
 
-if (isset($_POST['order_naam'], $_POST['order_adres'], $_POST['order_adres_2'], $_SESSION['delgashop'])) {
+if (isset($order_naam, $order_adres, $order_adres_2, $_SESSION['delgashop'])) {
     if (isset($_SESSION['loggedin'])) {
         $user_id = $_SESSION['user_id'];
     }
-    if (isset($_POST['bestellen']) && $producten_winkelmand) {
+    if ($bestellen && $producten_winkelmand) {
         // Uniek ID genereren
         $order_nr = strtoupper(uniqid('2021-') . substr(md5(mt_rand()), 0, 1));
         $stmt = $pdo_function->prepare('INSERT INTO orders (order_nr, totaal_prijs, order_status, order_datum, order_email, order_naam, order_adres, order_adres_2, user_id, opmerking) VALUES (?,?,?,?,?,?,?,?,?,?)');
@@ -45,32 +54,32 @@ if (isset($_POST['order_naam'], $_POST['order_adres'], $_POST['order_adres_2'], 
             $subtotaal + $levering,
             'nieuw',
             date('Y-m-d H:i:s'),
-            isset($account['email']) && !empty($account['email']) ? $account['email'] : $_POST['email'],
-            $_POST['order_naam'],
-            $_POST['order_adres'],
-            $_POST['order_adres_2'],
+            isset($account['email']) && !empty($account['email']) ? $account['email'] : $email,
+            $order_naam,
+            $order_adres,
+            $order_adres_2,
             $user_id,
-            $_POST['opmerking']
+            $opmerking
         ]);
         foreach ($producten_winkelmand as $product) {
             $stmt = $pdo_function->prepare('INSERT INTO order_details (order_nr, product_id, product_prijs, product_aantal, product_optie) VALUES (?,?,?,?,?)');
             $stmt->execute([$order_nr, $product['product_id'], $product['optie_eenheidsprijs'] > 0 ? $product['optie_eenheidsprijs'] : $product['meta']['eenheidsprijs'], $product['aantal'], $product['opties']]);
         }
         send_order_detail_email(
-                isset($account['email']) && !empty($account['email']) ? $account['email'] : $_POST['email'],
+                isset($account['email']) && !empty($account['email']) ? $account['email'] : $email,
                 $producten_winkelmand,
-                $_POST['order_naam'],
-                $_POST['order_adres'],
-                $_POST['order_adres_2'],
+                $order_naam,
+                $order_adres,
+                $order_adres_2,
                 $subtotaal + $levering,
                 $order_nr
         );
         send_order_alert_email(
                 mail_bestelling,
                 $producten_winkelmand,
-                $_POST['order_naam'],
-                $_POST['order_adres'],
-                $_POST['order_adres_2'],
+                $order_naam,
+                $order_adres,
+                $order_adres_2,
                 $subtotaal + $levering,
                 $order_nr
         );

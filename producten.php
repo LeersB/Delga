@@ -1,22 +1,24 @@
 <?php
 $menu = 3;
 include 'main.php';
-$aantal_pagina = aantal_pagina;
 $pdo_function = pdo_connect_mysql();
+
+$aantal_pagina = aantal_pagina;
+$sort = filter_input(INPUT_GET, 'sorteer', FILTER_SANITIZE_NUMBER_INT);
+$pagina = filter_input(INPUT_GET, 'p', FILTER_SANITIZE_NUMBER_INT);
+$cat = filter_input(INPUT_GET, 'categorie', FILTER_SANITIZE_NUMBER_INT);
+
 // Statement categories
 $stmtCategories = $pdo_function->query('SELECT * FROM categorie');
 $stmtCategories->execute();
 $categories = $stmtCategories->fetchAll(PDO::FETCH_ASSOC);
 // Selecteer de huidige categorie anders selecteer all
-$cat = filter_input(INPUT_GET, 'categorie', FILTER_SANITIZE_NUMBER_INT);
 $categorie = isset($cat) ? $cat : '0';
 $category_sql = '';
 if ($categorie != '0') {
     $category_sql = "AND p.categorie_id = :categorie";
 }
-$sort = filter_input(INPUT_GET, 'sorteer', FILTER_SANITIZE_NUMBER_INT);
 $sorteer = isset($sort) ? $sort : '1';
-$pagina = filter_input(INPUT_GET, 'p', FILTER_SANITIZE_NUMBER_INT);
 $huidige_pagina = isset($pagina) && is_numeric($pagina) ? (int) $pagina : 1;
 
 if ($sorteer == '1') {

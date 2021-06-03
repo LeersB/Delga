@@ -3,29 +3,29 @@ $menuadmin = 1;
 include 'main.php';
 $pdo_function = pdo_connect_mysql();
 // Get totaal aantal orders op vandaag
-$stmt = $pdo_function->prepare("SELECT p.product_foto AS img, p.product_naam, o.*, od.product_prijs, od.product_aantal, od.product_optie FROM orders o JOIN order_details od ON od.order_nr = o.order_nr
+$stmt_orders = $pdo_function->prepare("SELECT p.product_foto AS img, p.product_naam, o.*, od.product_prijs, od.product_aantal, od.product_optie FROM orders o JOIN order_details od ON od.order_nr = o.order_nr
     JOIN producten p ON p.product_id = od.product_id WHERE o.order_status = 'nieuw' AND cast(o.order_datum as DATE) = cast(now() as DATE) ORDER BY o.order_datum DESC");
-$stmt->execute();
-$orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$stmt_orders->execute();
+$orders = $stmt_orders->fetchAll(PDO::FETCH_ASSOC);
 // Get orders status nieuw
-$stmt = $pdo_function->prepare("SELECT COUNT(*) AS totaal FROM orders WHERE order_status = 'nieuw'");
-$stmt->execute();
-$order_status_nieuw = $stmt->fetch(PDO::FETCH_ASSOC);
+$stmt_order_status_nieuw = $pdo_function->prepare("SELECT COUNT(*) AS totaal FROM orders WHERE order_status = 'nieuw'");
+$stmt_order_status_nieuw->execute();
+$order_status_nieuw = $stmt_order_status_nieuw->fetch(PDO::FETCH_ASSOC);
 // Get orders status uitvoering
-$stmt = $pdo_function->prepare("SELECT COUNT(*) AS totaal FROM orders WHERE order_status = 'uitvoering'");
-$stmt->execute();
-$order_status_uitvoering = $stmt->fetch(PDO::FETCH_ASSOC);
+$stmt_order_status_uitvoering = $pdo_function->prepare("SELECT COUNT(*) AS totaal FROM orders WHERE order_status = 'uitvoering'");
+$stmt_order_status_uitvoering->execute();
+$order_status_uitvoering = $stmt_order_status_uitvoering->fetch(PDO::FETCH_ASSOC);
 // Get totaal aantal users
-$stmt = $pdo_function->prepare("SELECT COUNT(*) AS totaal FROM users");
-$stmt->execute();
-$users = $stmt->fetch(PDO::FETCH_ASSOC);
+$stmt_users = $pdo_function->prepare("SELECT COUNT(*) AS totaal FROM users");
+$stmt_users->execute();
+$users = $stmt_users->fetch(PDO::FETCH_ASSOC);
 // Get totaal aantal producten
-$stmt = $pdo_function->prepare("SELECT COUNT(*) AS totaal FROM producten WHERE product_level = 'actief'");
-$stmt->execute();
-$producten_actief = $stmt->fetch(PDO::FETCH_ASSOC);
-$stmt = $pdo_function->prepare("SELECT COUNT(*) AS totaal FROM producten");
-$stmt->execute();
-$producten = $stmt->fetch(PDO::FETCH_ASSOC);
+$stmt_producten_actief = $pdo_function->prepare("SELECT COUNT(*) AS totaal FROM producten WHERE product_level = 'actief'");
+$stmt_producten_actief->execute();
+$producten_actief = $stmt_producten_actief->fetch(PDO::FETCH_ASSOC);
+$stmt_producten = $pdo_function->prepare("SELECT COUNT(*) AS totaal FROM producten");
+$stmt_producten->execute();
+$producten = $stmt_producten->fetch(PDO::FETCH_ASSOC);
 ?>
 <!DOCTYPE html>
 <html class="h-100" lang="nl">
@@ -45,7 +45,7 @@ $producten = $stmt->fetch(PDO::FETCH_ASSOC);
     <?php include('includes/header.php'); ?>
 </header>
 
-<main class="flex-shrink-0" role="main">
+<main class="flex-shrink-0">
     <div class="container">
 
         <h2>Dashboard voor vandaag</h2>
@@ -102,7 +102,7 @@ $producten = $stmt->fetch(PDO::FETCH_ASSOC);
                     <?php else: ?>
                         <?php foreach ($orders as $order): ?>
                             <tr class="details">
-                                <td class="img">
+                                <td>
                                     <?php if (!empty($order['img']) && file_exists('../images/producten/' . $order['img'])): ?>
                                         <img src="../images/producten/<?=$order['img']?>" width="32" height="32" alt="<?=$order['product_naam']?>">
                                     <?php endif; ?>
@@ -150,7 +150,6 @@ $producten = $stmt->fetch(PDO::FETCH_ASSOC);
                     </tbody>
                 </table>
             </div>
-
 
     </div>
 </main>

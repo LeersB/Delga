@@ -3,9 +3,12 @@ $menuadmin = 3;
 include 'main.php';
 $pdo_function = pdo_connect_mysql();
 
+$filter_order_by = filter_input(INPUT_GET, 'order_by', FILTER_SANITIZE_STRING);
+$filter_order_sort = filter_input(INPUT_GET, 'order_sort', FILTER_SANITIZE_STRING);
+
 $order_by_list = array('categorie_id', 'categorie_naam');
-$order_by = isset($_GET['order_by']) && in_array($_GET['order_by'], $order_by_list) ? $_GET['order_by'] : 'categorie_id';
-$order_sort = isset($_GET['order_sort']) && $_GET['order_sort'] == 'DESC' ? 'DESC' : 'ASC';
+$order_by = isset($filter_order_by) && in_array($filter_order_by, $order_by_list) ? $filter_order_by : 'categorie_id';
+$order_sort = isset($filter_order_sort) && $filter_order_sort == 'DESC' ? 'DESC' : 'ASC';
 
 $stmt = $pdo_function->prepare('SELECT * FROM  categorie ORDER BY ' . $order_by . ' ' . $order_sort);
 $stmt->execute();
@@ -29,7 +32,7 @@ $categories = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <?php include('includes/header.php'); ?>
 </header>
 
-<main class="flex-shrink-0" role="main">
+<main class="flex-shrink-0">
     <div class="container">
 
         <h2>Categorieën</h2>
@@ -54,7 +57,6 @@ $categories = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             <?php endif; ?>
                         </a>
                     </th>
-                    <!--<th></th>-->
                 </tr>
                 </thead>
                 <tbody>
@@ -83,4 +85,3 @@ $categories = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 </body>
 </html>
-

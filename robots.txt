@@ -1,0 +1,8 @@
+# All other directories on the site are allowed by default.
+User-agent: *
+Disallow: /admin/
+Disallow: /images/
+Disallow: /includes/
+Disallow: /templates/
+Disallow: /js/
+Disallow: /css/

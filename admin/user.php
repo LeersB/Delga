@@ -1,7 +1,10 @@
 <?php
 $menuadmin = 2;
-include 'main.php';
+include '../admin/main.php';
 $pdo_function = pdo_connect_mysql();
+
+$filter_user_id = filter_input(INPUT_GET, 'user_id', FILTER_VALIDATE_INT);
+
 // Default input user array
 $user = array(
     'email' => '',
@@ -24,23 +27,23 @@ $user = array(
     'user_level' => 'Prive'
 );
 $user_levels = array('Prive', 'Bedrijf', 'Admin');
-if (isset($_GET['user_id'])) {
+if (isset($filter_user_id)) {
     $stmt = $pdo_function->prepare('SELECT * FROM users WHERE user_id = ?');
-    $stmt->execute([$_GET['user_id']]);
+    $stmt->execute([$filter_user_id]);
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
     $page = 'Edit';
     if (isset($_POST['submit'])) {
         // Update account
         $stmt = $pdo_function->prepare('UPDATE users SET email = ?, wachtwoord = ?, voornaam = ?, achternaam = ?, adres_straat = ?, adres_nr = ?, adres_postcode = ?, adres_plaats = ?, adres_straat_2 = ?, adres_nr_2 = ?, adres_postcode_2 = ?, adres_plaats_2 = ?, telefoon_nr = ?, bedrijfsnaam = ?, btw_nr = ?, activatie_code = ?, terugkeer_code = ?, user_level = ? WHERE user_id = ?');
         $wachtwoord = $user['wachtwoord'] != $_POST['wachtwoord'] ? password_hash($_POST['wachtwoord'], PASSWORD_DEFAULT) : $user['wachtwoord'];
-        $stmt->execute([$_POST['email'], $wachtwoord, $_POST['voornaam'], $_POST['achternaam'], $_POST['adres_straat'], $_POST['adres_nr'], $_POST['adres_postcode'], $_POST['adres_plaats'], $_POST['adres_straat_2'], $_POST['adres_nr_2'], $_POST['adres_postcode_2'], $_POST['adres_plaats_2'], $_POST['telefoon_nr'], $_POST['bedrijfsnaam'], $_POST['btw_nr'], $_POST['activatie_code'], $_POST['terugkeer_code'], $_POST['user_level'], $_GET['user_id']]);
+        $stmt->execute([$_POST['email'], $wachtwoord, $_POST['voornaam'], $_POST['achternaam'], $_POST['adres_straat'], $_POST['adres_nr'], $_POST['adres_postcode'], $_POST['adres_plaats'], $_POST['adres_straat_2'], $_POST['adres_nr_2'], $_POST['adres_postcode_2'], $_POST['adres_plaats_2'], $_POST['telefoon_nr'], $_POST['bedrijfsnaam'], $_POST['btw_nr'], $_POST['activatie_code'], $_POST['terugkeer_code'], $_POST['user_level'], $filter_user_id]);
         header('Location: users.php');
         exit;
     }
     if (isset($_POST['delete'])) {
         // Delete account
         $stmt = $pdo_function->prepare('DELETE FROM users WHERE user_id = ?');
-        $stmt->execute([$_GET['user_id']]);
+        $stmt->execute([$filter_user_id]);
         header('Location: users.php');
         exit;
     }
@@ -71,17 +74,15 @@ if (isset($_GET['user_id'])) {
     <body class="d-flex flex-column h-100">
 
         <header>
-            <?php include('includes/header.php'); ?>
+            <?php include('../admin/includes/header.php'); ?>
         </header>
 
         <main class="flex-shrink-0">
             <div class="container">
 
-                <div class="content">
-
-                    <form class="needs-validation" novalidate action="" method="post" autocomplete="off">
+                    <form novalidate action="" method="post" autocomplete="off">
                         <div class="row">
-                            <legend class="legend col-md-12"><span>Persoonlijke informatie</span></legend>
+                            <h5 class="col-md-12">Persoonlijke informatie</h5>
                             <div class="input-group col-md-6">
                                 <label class="sr-only" for="voornaam">Voornaam</label>
                                 <div class="input-group mb-2">
@@ -136,9 +137,7 @@ if (isset($_GET['user_id'])) {
                                 </div>
                             </div>
                             <div class="input-group col-md-12"><br></div>
-
-                            <legend class="legend col-md-12"><span>Adres Gegevens</span></legend>
-                            <h5 class="legend col-md-12"><span>Facturatieadres</span></h5>
+                            <h5 class="col-md-12">Facturatieadres</h5>
                             <div class="input-group col-md-9">
                                 <label class="sr-only" for="adres_straat">Adres</label>
                                 <div class="input-group mb-2">
@@ -184,7 +183,7 @@ if (isset($_GET['user_id'])) {
                                 </div>
                             </div>
                             <div class="input-group col-md-12"><br></div>
-                            <h5 class="legend col-md-12"><span>Leveringsadres</span></h5>
+                            <h5 class="col-md-12">Leveringsadres</h5>
                             <div class="input-group col-md-9">
                                 <label class="sr-only" for="adres_straat_2">Adres</label>
                                 <div class="input-group mb-2">
@@ -231,9 +230,7 @@ if (isset($_GET['user_id'])) {
                             </div>
                             <div class="input-group col-md-12"><br></div>
 
-
-                            <legend class="legend col-md-12"><span>Inloggegevens</span></legend>
-
+                            <h5 class="col-md-12">Inloggegevens</h5>
                             <div class="input-group col-md-12">
                                 <label class="sr-only" for="email">E-mailadres</label>
                                 <div class="input-group mb-2">
@@ -251,7 +248,7 @@ if (isset($_GET['user_id'])) {
                                     <div class="input-group-prepend">
                                         <div class="input-group-text"><i class="fas fa-lock"></i></div>
                                     </div>
-                                    <input type="password" class="form-control" id="wachtwoord" name="wachtwoord"
+                                    <input type="text" class="form-control" id="wachtwoord" name="wachtwoord"
                                            value="<?= $user['wachtwoord'] ?>" placeholder="Wachtwoord" required>
                                     <div class="invalid-feedback">Dit veld is verplicht.</div>
                                 </div>
@@ -290,12 +287,11 @@ if (isset($_GET['user_id'])) {
                             <div class="input-group col-md-12"><br></div>
                         </div>
                     </form>
-                </div>
 
             </div>
         </main>
 
-        <?php include('includes/footer.php'); ?>
+        <?php include('../admin/includes/footer.php'); ?>
 
     </body>
 </html>

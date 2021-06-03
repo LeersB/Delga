@@ -1,6 +1,6 @@
 <?php
 $menuadmin = 3;
-include 'main.php';
+include '../admin/main.php';
 $pdo_function = pdo_connect_mysql();
 
 $filter_order_by = filter_input(INPUT_GET, 'order_by', FILTER_SANITIZE_STRING);
@@ -51,7 +51,7 @@ if (isset($_POST['submit'])) {
     <body class="d-flex flex-column h-100">
 
         <header>
-            <?php include('includes/header.php'); ?>
+            <?php include('../admin/includes/header.php'); ?>
         </header>
 
         <main class="flex-shrink-0">
@@ -174,7 +174,7 @@ if (isset($_POST['submit'])) {
             </div>
         </main>
 
-        <?php include('includes/footer.php'); ?>
+        <?php include('../admin/includes/footer.php'); ?>
         <script src="../js/form-validation.js"></script>
     </body>
 </html>

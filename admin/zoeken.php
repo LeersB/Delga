@@ -1,7 +1,7 @@
 <?php
 $menuadmin = 3;
 $error = '';
-include 'main.php';
+include '../admin/main.php';
 $pdo_function = pdo_connect_mysql();
 
 $filter_order_by = filter_input(INPUT_GET, 'order_by', FILTER_SANITIZE_STRING);
@@ -37,7 +37,7 @@ if (isset($query) && $query != '') {
     <body class="d-flex flex-column h-100">
 
         <header>
-            <?php include('includes/header.php'); ?>
+            <?php include('../admin/includes/header.php'); ?>
         </header>
 
         <main class="flex-shrink-0">
@@ -131,6 +131,6 @@ if (isset($query) && $query != '') {
             </div>
         </main>
 
-        <?php include('includes/footer.php'); ?>
+        <?php include('../admin/includes/footer.php'); ?>
     </body>
 </html>

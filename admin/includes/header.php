@@ -10,7 +10,7 @@
                 case 1: //
                     ?>
                     <li class="nav-item active">
-                        <a class="nav-link" href="index.php"><i class="fas fa-home"></i> Home<span
+                        <a class="nav-link" href="../admin/index.php"><i class="fas fa-home"></i> Home<span
                                     class="sr-only">(current)</span></a>
                     </li>
                     <li class="nav-item dropdown">
@@ -19,9 +19,9 @@
                             <i class="fas fa-mail-bulk"></i> Orders
                         </a>
                         <div class="dropdown-menu" aria-labelledby="ordersDropdown">
-                            <a class="dropdown-item" href="orders.php"><i class="fas fa-mail-bulk"></i> Raadplegen</a>
+                            <a class="dropdown-item" href="../admin/orders.php"><i class="fas fa-mail-bulk"></i> Raadplegen</a>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="order-details.php"><i class="fas fa-list-ol"></i> Raadplegen</a>
+                            <a class="dropdown-item" href="../admin/order-details.php"><i class="fas fa-list-ol"></i> Raadplegen</a>
                         </div>
                     </li>
                     <li class="nav-item dropdown">
@@ -30,8 +30,8 @@
                             <i class="fas fa-users"></i> Users
                         </a>
                         <div class="dropdown-menu" aria-labelledby="userDropdown">
-                            <a class="dropdown-item" href="users.php"><i class="fas fa-users"></i> Raadplegen</a>
-                            <a class="dropdown-item" href="user.php"><i class="fas fa-user"></i> Toevoegen</a>
+                            <a class="dropdown-item" href="../admin/users.php"><i class="fas fa-users"></i> Raadplegen</a>
+                            <a class="dropdown-item" href="../admin/user.php"><i class="fas fa-user"></i> Toevoegen</a>
                         </div>
                     </li>
                     <li class="nav-item dropdown">
@@ -40,15 +40,15 @@
                             <i class="fas fa-store"></i> Producten
                         </a>
                         <div class="dropdown-menu" aria-labelledby="productDropdown">
-                            <a class="dropdown-item" href="producten.php"><i class="fas fa-store"></i> Raadplegen</a>
-                            <a class="dropdown-item" href="product.php"><i class="fas fa-pump-soap"></i> Toevoegen</a>
+                            <a class="dropdown-item" href="../admin/producten.php"><i class="fas fa-store"></i> Raadplegen</a>
+                            <a class="dropdown-item" href="../admin/product.php"><i class="fas fa-pump-soap"></i> Toevoegen</a>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="product-prijs.php"><i class="fas fa-shopping-basket"></i>
+                            <a class="dropdown-item" href="../admin/product-prijs.php"><i class="fas fa-shopping-basket"></i>
                                 Prijs wijzigen</a>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="images.php"><i class="far fa-image"></i> Afbeeldingen</a>
-                            <a class="dropdown-item" href="opties.php"><i class="fas fa-cart-plus"></i> Opties</a>
-                            <a class="dropdown-item" href="categories.php"><i class="fas fa-list-ol"></i>
+                            <a class="dropdown-item" href="../admin/images.php"><i class="far fa-image"></i> Afbeeldingen</a>
+                            <a class="dropdown-item" href="../admin/opties.php"><i class="fas fa-cart-plus"></i> Opties</a>
+                            <a class="dropdown-item" href="../admin/categories.php"><i class="fas fa-list-ol"></i>
                                 Categorieën</a>
                         </div>
                     </li>
@@ -57,7 +57,7 @@
                 case 2: //
                     ?>
                     <li class="nav-item ">
-                        <a class="nav-link" href="index.php"><i class="fas fa-home"></i> Home</a>
+                        <a class="nav-link" href="../admin/index.php"><i class="fas fa-home"></i> Home</a>
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" id="ordersDropdown" role="button" data-toggle="dropdown"
@@ -65,9 +65,9 @@
                             <i class="fas fa-mail-bulk"></i> Orders
                         </a>
                         <div class="dropdown-menu" aria-labelledby="ordersDropdown">
-                            <a class="dropdown-item" href="orders.php"><i class="fas fa-mail-bulk"></i> Raadplegen</a>
+                            <a class="dropdown-item" href="../admin/orders.php"><i class="fas fa-mail-bulk"></i> Raadplegen</a>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="order-details.php"><i class="fas fa-list-ol"></i> Raadplegen</a>
+                            <a class="dropdown-item" href="../admin/order-details.php"><i class="fas fa-list-ol"></i> Raadplegen</a>
                         </div>
                     </li>
                     <li class="nav-item dropdown active">
@@ -77,8 +77,8 @@
                                     class="sr-only">(current)</span>
                         </a>
                         <div class="dropdown-menu" aria-labelledby="userDropdown">
-                            <a class="dropdown-item" href="users.php"><i class="fas fa-users"></i> Raadplegen</a>
-                            <a class="dropdown-item" href="user.php"><i class="fas fa-user"></i> Toevoegen</a>
+                            <a class="dropdown-item" href="../admin/users.php"><i class="fas fa-users"></i> Raadplegen</a>
+                            <a class="dropdown-item" href="../admin/user.php"><i class="fas fa-user"></i> Toevoegen</a>
                         </div>
                     </li>
                     <li class="nav-item dropdown">
@@ -87,15 +87,15 @@
                             <i class="fas fa-store"></i> Producten
                         </a>
                         <div class="dropdown-menu" aria-labelledby="productenDropdown">
-                            <a class="dropdown-item" href="producten.php"><i class="fas fa-store"></i> Raadplegen</a>
-                            <a class="dropdown-item" href="product.php"><i class="fas fa-pump-soap"></i> Toevoegen</a>
+                            <a class="dropdown-item" href="../admin/producten.php"><i class="fas fa-store"></i> Raadplegen</a>
+                            <a class="dropdown-item" href="../admin/product.php"><i class="fas fa-pump-soap"></i> Toevoegen</a>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="product-prijs.php"><i class="fas fa-shopping-basket"></i>
+                            <a class="dropdown-item" href="../admin/product-prijs.php"><i class="fas fa-shopping-basket"></i>
                                 Prijs wijzigen</a>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="images.php"><i class="far fa-image"></i> Afbeeldingen</a>
-                            <a class="dropdown-item" href="opties.php"><i class="fas fa-cart-plus"></i> Opties</a>
-                            <a class="dropdown-item" href="categories.php"><i class="fas fa-list-ol"></i>
+                            <a class="dropdown-item" href="../admin/images.php"><i class="far fa-image"></i> Afbeeldingen</a>
+                            <a class="dropdown-item" href="../admin/opties.php"><i class="fas fa-cart-plus"></i> Opties</a>
+                            <a class="dropdown-item" href="../admin/categories.php"><i class="fas fa-list-ol"></i>
                                 Categorieën</a>
                         </div>
                     </li>
@@ -104,7 +104,7 @@
                 case 3: //
                     ?>
                     <li class="nav-item ">
-                        <a class="nav-link" href="index.php"><i class="fas fa-home"></i> Home</a>
+                        <a class="nav-link" href="../admin/index.php"><i class="fas fa-home"></i> Home</a>
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" id="ordersDropdown" role="button" data-toggle="dropdown"
@@ -112,9 +112,9 @@
                             <i class="fas fa-mail-bulk"></i> Orders
                         </a>
                         <div class="dropdown-menu" aria-labelledby="ordersDropdown">
-                            <a class="dropdown-item" href="orders.php"><i class="fas fa-mail-bulk"></i> Raadplegen</a>
+                            <a class="dropdown-item" href="../admin/orders.php"><i class="fas fa-mail-bulk"></i> Raadplegen</a>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="order-details.php"><i class="fas fa-list-ol"></i> Raadplegen</a>
+                            <a class="dropdown-item" href="../admin/order-details.php"><i class="fas fa-list-ol"></i> Raadplegen</a>
                         </div>
                     </li>
                     <li class="nav-item dropdown">
@@ -123,8 +123,8 @@
                             <i class="fas fa-users"></i> Users
                         </a>
                         <div class="dropdown-menu" aria-labelledby="userDropdown">
-                            <a class="dropdown-item" href="users.php"><i class="fas fa-users"></i> Raadplegen</a>
-                            <a class="dropdown-item" href="user.php"><i class="fas fa-user"></i> Toevoegen</a>
+                            <a class="dropdown-item" href="../admin/users.php"><i class="fas fa-users"></i> Raadplegen</a>
+                            <a class="dropdown-item" href="../admin/user.php"><i class="fas fa-user"></i> Toevoegen</a>
                         </div>
                     </li>
                     <li class="nav-item dropdown active">
@@ -134,15 +134,15 @@
                                     class="sr-only">(current)</span>
                         </a>
                         <div class="dropdown-menu" aria-labelledby="productenDropdown">
-                            <a class="dropdown-item" href="producten.php"><i class="fas fa-store"></i> Raadplegen</a>
-                            <a class="dropdown-item" href="product.php"><i class="fas fa-pump-soap"></i> Toevoegen</a>
+                            <a class="dropdown-item" href="../admin/producten.php"><i class="fas fa-store"></i> Raadplegen</a>
+                            <a class="dropdown-item" href="../admin/product.php"><i class="fas fa-pump-soap"></i> Toevoegen</a>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="product-prijs.php"><i class="fas fa-shopping-basket"></i>
+                            <a class="dropdown-item" href="../admin/product-prijs.php"><i class="fas fa-shopping-basket"></i>
                                 Prijs wijzigen</a>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="images.php"><i class="far fa-image"></i> Afbeeldingen</a>
-                            <a class="dropdown-item" href="opties.php"><i class="fas fa-cart-plus"></i> Opties</a>
-                            <a class="dropdown-item" href="categories.php"><i class="fas fa-list-ol"></i>
+                            <a class="dropdown-item" href="../admin/images.php"><i class="far fa-image"></i> Afbeeldingen</a>
+                            <a class="dropdown-item" href="../admin/opties.php"><i class="fas fa-cart-plus"></i> Opties</a>
+                            <a class="dropdown-item" href="../admin/categories.php"><i class="fas fa-list-ol"></i>
                                 Categorieën</a>
                         </div>
                     </li>
@@ -151,7 +151,7 @@
                 case 4: //
                     ?>
                     <li class="nav-item ">
-                        <a class="nav-link" href="index.php"><i class="fas fa-home"></i> Home</a>
+                        <a class="nav-link" href="../admin/index.php"><i class="fas fa-home"></i> Home</a>
                     </li>
                     <li class="nav-item dropdown active">
                         <a class="nav-link dropdown-toggle" id="ordersDropdown" role="button" data-toggle="dropdown"
@@ -160,9 +160,9 @@
                                     class="sr-only">(current)</span>
                         </a>
                         <div class="dropdown-menu" aria-labelledby="ordersDropdown">
-                            <a class="dropdown-item" href="orders.php"><i class="fas fa-mail-bulk"></i> Raadplegen</a>
+                            <a class="dropdown-item" href="../admin/orders.php"><i class="fas fa-mail-bulk"></i> Raadplegen</a>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="order-details.php"><i class="fas fa-list-ol"></i> Raadplegen</a>
+                            <a class="dropdown-item" href="../admin/order-details.php"><i class="fas fa-list-ol"></i> Raadplegen</a>
                         </div>
                     </li>
                     <li class="nav-item dropdown">
@@ -171,8 +171,8 @@
                             <i class="fas fa-users"></i> Users
                         </a>
                         <div class="dropdown-menu" aria-labelledby="userDropdown">
-                            <a class="dropdown-item" href="users.php"><i class="fas fa-users"></i> Raadplegen</a>
-                            <a class="dropdown-item" href="user.php"><i class="fas fa-user"></i> Toevoegen</a>
+                            <a class="dropdown-item" href="../admin/users.php"><i class="fas fa-users"></i> Raadplegen</a>
+                            <a class="dropdown-item" href="../admin/user.php"><i class="fas fa-user"></i> Toevoegen</a>
                         </div>
                     </li>
                     <li class="nav-item dropdown">
@@ -181,15 +181,15 @@
                             <i class="fas fa-store"></i> Producten
                         </a>
                         <div class="dropdown-menu" aria-labelledby="productenDropdown">
-                            <a class="dropdown-item" href="producten.php"><i class="fas fa-store"></i> Raadplegen</a>
-                            <a class="dropdown-item" href="product.php"><i class="fas fa-pump-soap"></i> Toevoegen</a>
+                            <a class="dropdown-item" href="../admin/producten.php"><i class="fas fa-store"></i> Raadplegen</a>
+                            <a class="dropdown-item" href="../admin/product.php"><i class="fas fa-pump-soap"></i> Toevoegen</a>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="product-prijs.php"><i class="fas fa-shopping-basket"></i>
+                            <a class="dropdown-item" href="../admin/product-prijs.php"><i class="fas fa-shopping-basket"></i>
                                 Prijs wijzigen</a>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="images.php"><i class="far fa-image"></i> Afbeeldingen</a>
-                            <a class="dropdown-item" href="opties.php"><i class="fas fa-cart-plus"></i> Opties</a>
-                            <a class="dropdown-item" href="categories.php"><i class="fas fa-list-ol"></i>
+                            <a class="dropdown-item" href="../admin/images.php"><i class="far fa-image"></i> Afbeeldingen</a>
+                            <a class="dropdown-item" href="../admin/opties.php"><i class="fas fa-cart-plus"></i> Opties</a>
+                            <a class="dropdown-item" href="../admin/categories.php"><i class="fas fa-list-ol"></i>
                                 Categorieën</a>
                         </div>
                     </li>
@@ -198,7 +198,7 @@
             }
             ?>
         </ul>
-        <form class="form-inline mt-2 mt-sm-2" action="zoeken.php" method="get">
+        <form class="form-inline mt-2 mt-sm-2" action="../admin/zoeken.php" method="get">
             <div class="input-group mr-sm-2">
                 <input type="text" class="form-control" name="query" placeholder="Product zoeken"
                        aria-label="Product zoeken"

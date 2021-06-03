@@ -1,6 +1,6 @@
 <?php
 $menuadmin = 2;
-include 'main.php';
+include '../admin/main.php';
 $pdo_function = pdo_connect_mysql();
 $stmt = $pdo_function->prepare('SELECT * FROM users');
 $stmt->execute();
@@ -21,7 +21,7 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <body class="d-flex flex-column h-100">
 
         <header>
-            <?php include('includes/header.php'); ?>
+            <?php include('../admin/includes/header.php'); ?>
         </header>
 
         <main class="flex-shrink-0">
@@ -63,7 +63,7 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
             </div>
         </main>
 
-        <?php include('includes/footer.php'); ?>
+        <?php include('../admin/includes/footer.php'); ?>
 
     </body>
 </html>

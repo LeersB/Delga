@@ -1,16 +1,17 @@
 <?php
 $menuadmin = 4;
-include 'main.php';
+include '../admin/main.php';
 $pdo_function = pdo_connect_mysql();
 
 $filter_order_by = filter_input(INPUT_GET, 'order_by', FILTER_SANITIZE_STRING);
 $filter_order_sort = filter_input(INPUT_GET, 'order_sort', FILTER_SANITIZE_STRING);
+$filter_weergaven = filter_input(INPUT_GET, 'weergaven', FILTER_SANITIZE_STRING);
 
 $order_by_list = array('order_id','order_datum');
 $order_by = isset($filter_order_by) && in_array($filter_order_by, $order_by_list) ? $filter_order_by : 'order_id';
 $order_sort = isset($filter_order_sort) && $filter_order_sort == 'DESC' ? 'DESC' : 'ASC';
 
-$weergaven = isset($_GET['weergaven']) ? $_GET['weergaven'] : 'nieuw';
+$weergaven = $filter_weergaven ?? 'nieuw';
 // Get orders
 if ($weergaven == 'nieuw') {
     $stmt = $pdo_function->prepare("SELECT * FROM orders WHERE order_status = 'nieuw' ORDER BY " . $order_by . ' ' . $order_sort);
@@ -23,7 +24,6 @@ if ($weergaven == 'nieuw') {
 }
 $stmt->execute();
 $orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
 ?>
 <!DOCTYPE html>
 <html class="h-100" lang="nl">
@@ -40,7 +40,7 @@ $orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <body class="d-flex flex-column h-100">
 
 <header>
-    <?php include('includes/header.php'); ?>
+    <?php include('../admin/includes/header.php'); ?>
 </header>
 
 <main class="flex-shrink-0">
@@ -118,7 +118,7 @@ $orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </div>
 </main>
 
-<?php include('includes/footer.php'); ?>
+<?php include('../admin/includes/footer.php'); ?>
 <script>
     if (document.querySelector(".product-form .input-group .custom-select")) {
         document.querySelector("#weergaven").onchange = () => document.querySelector(".product-form").submit();

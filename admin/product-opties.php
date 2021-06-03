@@ -1,7 +1,10 @@
 <?php
 $menuadmin = 3;
-include 'main.php';
+include '../admin/main.php';
 $pdo_function = pdo_connect_mysql();
+
+$filter_product_id = filter_input(INPUT_GET, 'product_id', FILTER_VALIDATE_INT);
+
 // Default input product values
 $optie = array(
     'optie_id' => '',
@@ -11,15 +14,15 @@ $optie = array(
     'product_id' => ''
 );
 
-if (isset($_GET['product_id'])) {
+if (isset($filter_product_id)) {
     // Get product van database
     $stmt = $pdo_function->prepare('SELECT * FROM producten WHERE product_id = ?');
-    $stmt->execute([$_GET['product_id']]);
+    $stmt->execute([$filter_product_id]);
     $product = $stmt->fetch(PDO::FETCH_ASSOC);
 
     // Get product_opties van database
     $stmt = $pdo_function->prepare('SELECT * FROM product_opties WHERE product_id = ?');
-    $stmt->execute([$_GET['product_id']]);
+    $stmt->execute([$filter_product_id]);
     $opties = $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
@@ -70,7 +73,7 @@ if (isset($_POST['optie_id'])) {
     <body class="d-flex flex-column h-100">
 
         <header>
-            <?php include('includes/header.php'); ?>
+            <?php include('../admin/includes/header.php'); ?>
         </header>
 
         <main class="flex-shrink-0">
@@ -325,7 +328,7 @@ if (isset($_POST['optie_id'])) {
             </div>
         </main>
 
-        <?php include('includes/footer.php'); ?>
+        <?php include('../admin/includes/footer.php'); ?>
         <script src="../js/form-validation.js"></script>
         
     </body>

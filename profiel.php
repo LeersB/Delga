@@ -124,8 +124,8 @@ if (isset($_POST['voornaam'], $_POST['achternaam'], $_POST['wachtwoord'], $_POST
                                             <form class="needs-validation" novalidate action="profiel.php?action=edit"
                                                   method="post">
                                                 <div class="row">
-                                                    <legend class="legend col-md-12">
-                                                        <span>Persoonlijke informatie</span></legend>
+                                                    <div class="input-group col-md-12"><br></div>
+                                                    <div class="col-md-12 h5">Persoonlijke informatie</div>
                                                     <div class="input-group col-md-6">
                                                         <label class="sr-only" for="voornaam">Voornaam</label>
                                                         <div class="input-group mb-2">
@@ -198,9 +198,7 @@ if (isset($_POST['voornaam'], $_POST['achternaam'], $_POST['wachtwoord'], $_POST
                                                         </div>
                                                         <div class="input-group col-md-12"><br></div>
                                                     <?php endif; ?>
-                                                    <legend class="legend col-md-12"><span>Adres Gegevens</span>
-                                                    </legend>
-                                                    <h5 class="legend col-md-12"><span>Facturatieadres</span></h5>
+                                                    <div class="col-md-12 h5">Facturatieadres</div>
                                                     <div class="input-group col-md-9">
                                                         <label class="sr-only" for="adres_straat">Adres</label>
                                                         <div class="input-group mb-2">
@@ -257,7 +255,7 @@ if (isset($_POST['voornaam'], $_POST['achternaam'], $_POST['wachtwoord'], $_POST
                                                         </div>
                                                     </div>
                                                     <div class="input-group col-md-12"><br></div>
-                                                    <h5 class="legend col-md-12"><span>Leveringsadres</span></h5>
+                                                    <div class="col-md-12 h5">Leveringsadres</div>
                                                     <div class="input-group col-md-9">
                                                         <label class="sr-only" for="adres_straat_2">Adres</label>
                                                         <div class="input-group mb-2">
@@ -316,7 +314,7 @@ if (isset($_POST['voornaam'], $_POST['achternaam'], $_POST['wachtwoord'], $_POST
                                                     </div>
                                                     <div class="input-group col-md-12"><br></div>
 
-                                                    <legend class="legend col-md-12"><span>Inloggegevens</span></legend>
+                                                    <div class="col-md-12 h5">Inloggegevens</div>
                                                     <div class="input-group col-md-12">
                                                         <label class="sr-only" for="email">E-mailadres</label>
                                                         <div class="input-group mb-2">

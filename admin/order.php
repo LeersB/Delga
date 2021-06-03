@@ -1,39 +1,39 @@
 <?php
 $menuadmin = 4;
-include 'main.php';
+include '../admin/main.php';
 $pdo_function = pdo_connect_mysql();
 $order_status = array('nieuw', 'uitvoering', 'afgewerkt', 'geannuleerd');
-$order_nr = filter_input(INPUT_GET, 'order_nr', FILTER_SANITIZE_STRING);
+$filter_order_nr = filter_input(INPUT_GET, 'order_nr', FILTER_SANITIZE_STRING);
 
-if (isset($order_nr)) {
+if (isset($filter_order_nr)) {
     // Get order_details
     $stmtOrders = $pdo_function->prepare("SELECT p.product_foto AS img, p.product_naam, o.*, od.order_details_id, od.product_prijs, od.product_aantal, od.product_optie, od.levering_aantal FROM orders o JOIN order_details od ON od.order_nr = o.order_nr
     JOIN producten p ON p.product_id = od.product_id WHERE o.order_nr = ? ");
-    $stmtOrders->execute([$order_nr]);
+    $stmtOrders->execute([$filter_order_nr]);
     $orders = $stmtOrders->fetchAll(PDO::FETCH_ASSOC);
     // Get order
     $stmtOrder = $pdo_function->prepare("SELECT * FROM orders WHERE order_nr = ? ");
-    $stmtOrder->execute([$order_nr]);
+    $stmtOrder->execute([$filter_order_nr]);
     $order = $stmtOrder->fetch(PDO::FETCH_ASSOC);
 
     if (isset($_POST['order_uitvoering'])) {
         // Update order status uitvoering
         $stmt = $pdo_function->prepare('UPDATE orders SET order_status = ? WHERE order_nr = ?');
-        $stmt->execute(['uitvoering', $order_nr]);
-        header('Location: order.php?order_nr=' . $order_nr);
+        $stmt->execute(['uitvoering', $filter_order_nr]);
+        header('Location: order.php?order_nr=' . $filter_order_nr);
         exit;
     }
     if (isset($_POST['order_update'])) {
         // Update order status uitvoering
         $stmt = $pdo_function->prepare('UPDATE orders SET opmerking = ?, leveringsdatum = ?, order_status = ? WHERE order_nr = ?');
-        $stmt->execute([$_POST['opmerking'], $_POST['leveringsdatum'], 'uitvoering', $order_nr]);
-        header('Location: order.php?order_nr=' . $order_nr);
+        $stmt->execute([$_POST['opmerking'], $_POST['leveringsdatum'], 'uitvoering', $filter_order_nr]);
+        header('Location: order.php?order_nr=' . $filter_order_nr);
         exit;
     }
     if (isset($_POST['order_afgewerkt'])) {
         // Update order status afgewerkt
         $stmt = $pdo_function->prepare('UPDATE orders SET opmerking = ?, leveringsdatum = ?, order_status = ? WHERE order_nr = ?');
-        $stmt->execute([$_POST['opmerking'], $_POST['leveringsdatum'], 'afgewerkt', $order_nr]);
+        $stmt->execute([$_POST['opmerking'], $_POST['leveringsdatum'], 'afgewerkt', $filter_order_nr]);
         send_email_afgewerkt(
                 $order['order_email'],
                 $order['order_nr'],
@@ -46,7 +46,7 @@ if (isset($order_nr)) {
     if (isset($_POST['order_annuleren'])) {
         // Update order status geannuleerd
         $stmt = $pdo_function->prepare('UPDATE orders SET opmerking = ?, leveringsdatum = ?, order_status = ? WHERE order_nr = ?');
-        $stmt->execute([$_POST['opmerking'], NULL, 'geannuleerd', $order_nr]);
+        $stmt->execute([$_POST['opmerking'], NULL, 'geannuleerd', $filter_order_nr]);
         send_email_geannuleerd(
                 $order['order_email'],
                 $order['order_nr'],
@@ -59,7 +59,7 @@ if (isset($order_nr)) {
         // Update order status geannuleerd
         $stmt = $pdo_function->prepare('UPDATE order_details SET levering_aantal = ? WHERE order_details_id = ?');
         $stmt->execute([$_POST['aantal'], $_POST['details_id']]);
-        header('Location: order.php?order_nr=' . $order_nr);
+        header('Location: order.php?order_nr=' . $filter_order_nr);
         exit;
     }
 } else {
@@ -82,7 +82,7 @@ if (isset($order_nr)) {
     <body class="d-flex flex-column h-100">
 
         <header>
-            <?php include('includes/header.php'); ?>
+            <?php include('../admin/includes/header.php'); ?>
         </header>
 
         <main class="flex-shrink-0">
@@ -277,7 +277,7 @@ if (isset($order_nr)) {
             </div>
         </main>
 
-        <?php include('includes/footer.php'); ?>
+        <?php include('../admin/includes/footer.php'); ?>
         <script src="../js/form-validation.js"></script>
     </body>
 </html>

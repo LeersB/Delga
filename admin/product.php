@@ -1,9 +1,13 @@
 <?php
 $menuadmin = 3;
-include 'main.php';
+include '../admin/main.php';
 $pdo_function = pdo_connect_mysql();
+
+$filter_product_id = filter_input(INPUT_GET, 'product_id', FILTER_VALIDATE_INT);
+
 // Default input product values
 $product = array(
+    'product_id' => '',
     'categorie_id' => '',
     'product_naam' => '',
     'product_foto' => '',
@@ -16,7 +20,8 @@ $product = array(
     'product_level' => 'niet-actief'
 );
 $product_opties = array(
-    'optie_id' => ''
+    'optie_id' => '',
+    'product_id' => ''
 );
 $product_levels = array('actief', 'niet-actief');
 // Get categories van database
@@ -24,35 +29,35 @@ $stmt_categories = $pdo_function->prepare('SELECT * FROM categorie');
 $stmt_categories->execute();
 $categories = $stmt_categories->fetchAll(PDO::FETCH_ASSOC);
 
-if (isset($_GET['product_id'])) {
+if (isset($filter_product_id)) {
     // Get product van database
     $stmt_product = $pdo_function->prepare('SELECT * FROM producten WHERE product_id = ?');
-    $stmt_product->execute([$_GET['product_id']]);
+    $stmt_product->execute([$filter_product_id]);
     $product = $stmt_product->fetch(PDO::FETCH_ASSOC);
 
     // Get product_opties van database
     $stmt_product_opties = $pdo_function->prepare('SELECT optie_id FROM product_opties WHERE product_id = ?');
-    $stmt_product_opties->execute([$_GET['product_id']]);
+    $stmt_product_opties->execute([$filter_product_id]);
     $product_opties = $stmt_product_opties->fetchAll(PDO::FETCH_ASSOC);
 
     if (isset($_POST['submit'])) {
         // Update product
         $stmt = $pdo_function->prepare('UPDATE producten SET categorie_id = ?, product_naam = ?, product_foto = ?, product_info = ?, omschrijving = ?, verpakking = ?, waarschuwing = ?, eenheidsprijs = ?, btw = ? , product_level = ? WHERE product_id = ? LIMIT 1');
-        $stmt->execute([$_POST['categorie_id'], $_POST['product_naam'], $_POST['product_foto'], $_POST['product_info'], $_POST['omschrijving'], $_POST['verpakking'], $_POST['waarschuwing'], $_POST['eenheidsprijs'], $_POST['btw'], $_POST['product_level'], $_GET['product_id']]);
+        $stmt->execute([$_POST['categorie_id'], $_POST['product_naam'], $_POST['product_foto'], $_POST['product_info'], $_POST['omschrijving'], $_POST['verpakking'], $_POST['waarschuwing'], $_POST['eenheidsprijs'], $_POST['btw'], $_POST['product_level'], $filter_product_id]);
         header('Location: producten.php');
         exit;
     }
     if (isset($_POST['update'])) {
         // Update product in scherm
         $stmt = $pdo_function->prepare('UPDATE producten SET categorie_id = ?, product_naam = ?, product_foto = ?, product_info = ?, omschrijving = ?, verpakking = ?, waarschuwing = ?, eenheidsprijs = ?, btw = ? , product_level = ? WHERE product_id = ? LIMIT 1');
-        $stmt->execute([$_POST['categorie_id'], $_POST['product_naam'], $_POST['product_foto'], $_POST['product_info'], $_POST['omschrijving'], $_POST['verpakking'], $_POST['waarschuwing'], $_POST['eenheidsprijs'], $_POST['btw'], $_POST['product_level'], $_GET['product_id']]);
-        header('Location: product.php?product_id=' . $_GET['product_id']);
+        $stmt->execute([$_POST['categorie_id'], $_POST['product_naam'], $_POST['product_foto'], $_POST['product_info'], $_POST['omschrijving'], $_POST['verpakking'], $_POST['waarschuwing'], $_POST['eenheidsprijs'], $_POST['btw'], $_POST['product_level'], $filter_product_id]);
+        header('Location: product.php?product_id=' . $filter_product_id);
         exit;
     }
     if (isset($_POST['delete'])) {
         // Delete product
         $stmt = $pdo_function->prepare('DELETE FROM producten WHERE product_id = ? LIMIT 1');
-        $stmt->execute([$_GET['product_id']]);
+        $stmt->execute([$filter_product_id]);
         header('Location: producten.php');
         exit;
     }
@@ -81,7 +86,7 @@ if (isset($_GET['product_id'])) {
     <body class="d-flex flex-column h-100">
 
         <header>
-            <?php include('includes/header.php'); ?>
+            <?php include('../admin/includes/header.php'); ?>
         </header>
 
         <main class="flex-shrink-0">
@@ -138,17 +143,6 @@ if (isset($_GET['product_id'])) {
                                                            placeholder="btw" required>
                                                 </div>
                                             </div>
-                                            <div class="col-md-2">
-                                                <?php if ($product_opties != null) { ?>
-                                                    <a class="btn btn-outline-success"
-                                                       href="product-opties.php?product_id=<?= $product['product_id'] ?>"
-                                                       role="button"><i class="fas fa-cart-plus"></i> Opties</a>
-                                                   <?php } else { ?>
-                                                    <a class="btn btn-outline-secondary"
-                                                       href="product-opties.php?product_id=<?= $product['product_id'] ?>"
-                                                       role="button"><i class="fas fa-cart-plus"></i> Opties</a>
-                                                   <?php } ?>
-                                            </div>
                                             <div class="col-md-3">
                                                 <div class="input-group mb-2">
                                                     <label class="sr-only" for="product_level">Level</label>
@@ -161,6 +155,18 @@ if (isset($_GET['product_id'])) {
                                                         <?php endforeach; ?>
                                                     </select>
                                                 </div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <?php if (isset($filter_product_id)): ?>
+                                                <?php if ($product_opties != null) { ?>
+                                                    <a class="btn btn-outline-success"
+                                                       href="product-opties.php?product_id=<?= $product['product_id'] ?>"
+                                                       role="button"><i class="fas fa-cart-plus"></i> Opties</a>
+                                                   <?php } else { ?>
+                                                    <a class="btn btn-outline-secondary"
+                                                       href="product-opties.php?product_id=<?= $product['product_id'] ?>"
+                                                       role="button"><i class="fas fa-cart-plus"></i> Opties</a>
+                                                   <?php } endif?>
                                             </div>
                                         </div>
                                     </div>
@@ -253,7 +259,7 @@ if (isset($_GET['product_id'])) {
                         <div class="col-12">
                             <a class="btn btn-secondary" href="producten.php" role="button"><i class="fas fa-times"></i>
                                 Annuleer</a>
-                            <?php if (isset($_GET['product_id'])): ?>
+                            <?php if (isset($filter_product_id)): ?>
                                 <button type="submit" name="update" class="btn btn-success"><i class="fas fa-check"></i> Update
                                 </button>
                             <?php endif ?>
@@ -270,7 +276,7 @@ if (isset($_GET['product_id'])) {
             </div>
         </main>
 
-        <?php include('includes/footer.php'); ?>
+        <?php include('../admin/includes/footer.php'); ?>
         <script src="../js/form-validation.js"></script>
 
     </body>

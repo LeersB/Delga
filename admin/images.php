@@ -1,6 +1,6 @@
 <?php
 $menuadmin = 3;
-include 'main.php';
+include '../admin/main.php';
 $error = '';
 if (isset($_FILES['upload_images'])) {
     $upload_images = $_FILES['upload_images'];
@@ -33,7 +33,7 @@ $imgs = glob('../images/producten/*.{jpg,png,gif,jpeg,webp}', GLOB_BRACE);
     <body class="d-flex flex-column h-100">
 
         <header>
-            <?php include('includes/header.php'); ?>
+            <?php include('../admin/includes/header.php'); ?>
         </header>
 
         <main class="flex-shrink-0">
@@ -70,7 +70,7 @@ $imgs = glob('../images/producten/*.{jpg,png,gif,jpeg,webp}', GLOB_BRACE);
             </div>
         </main>
 
-        <?php include('includes/footer.php'); ?>
+        <?php include('../admin/includes/footer.php'); ?>
 
         <script>
             // Add the following code if you want the name of the file appear on select

@@ -1,6 +1,6 @@
 <?php
 $menuadmin = 1;
-include 'main.php';
+include '../admin/main.php';
 $pdo_function = pdo_connect_mysql();
 // Get totaal aantal orders op vandaag
 $stmt_orders = $pdo_function->prepare("SELECT p.product_foto AS img, p.product_naam, o.*, od.product_prijs, od.product_aantal, od.product_optie FROM orders o JOIN order_details od ON od.order_nr = o.order_nr
@@ -42,7 +42,7 @@ $producten = $stmt_producten->fetch(PDO::FETCH_ASSOC);
 <body class="d-flex flex-column h-100">
 
 <header>
-    <?php include('includes/header.php'); ?>
+    <?php include('../admin/includes/header.php'); ?>
 </header>
 
 <main class="flex-shrink-0">
@@ -154,7 +154,7 @@ $producten = $stmt_producten->fetch(PDO::FETCH_ASSOC);
     </div>
 </main>
 
-<?php include('includes/footer.php'); ?>
+<?php include('../admin/includes/footer.php'); ?>
 <script>
     document.querySelectorAll(".details").forEach(function(detail) {
         detail.onclick = function() {

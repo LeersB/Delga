@@ -42,6 +42,7 @@ if (isset($_GET['id'])) {
 
 <main class="flex-shrink-0">
     <div class="container">
+
         <div class="content">
             <div class="jumbotron p-4 p-md-5 text-dark rounded bg-light">
                 <div class="content profile">
@@ -132,6 +133,7 @@ if (isset($_GET['id'])) {
                 </div>
             </div>
         </div>
+
     </div>
 </main>
 

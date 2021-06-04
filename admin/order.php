@@ -89,21 +89,17 @@ if (isset($filter_order_nr)) {
             <div class="container">
                 <h5>Order status: <?= $order['order_status'] ?></h5>
 
-                <form class="needs-validation" novalidate action="" method="post" autocomplete="off">
-                    <div class="row">
-
-                        <div class="input-group col-md-12"><br></div>
-
+                <form novalidate action="" method="post" autocomplete="off">
+                    <div class="row pb-3">
                         <?php if ($order['order_status'] == 'nieuw') { ?>
-
                             <div class="col-md-12 mt-2">
                                 <a class="btn btn-secondary" href="orders.php" role="button"><i class="fas fa-times"></i>
                                     Annuleer</a>
                                 <button type="submit" name="order_uitvoering" class="btn btn-success"><i
-                                        class="fas fa-check"></i> Order in uitvoering
+                                        class="fas fa-check"></i> Uitvoeren
                                 </button>
-                                <button type="submit" name="order_annuleren" class="btn btn-danger"><i class="fas fa-times"></i>
-                                    Order annuleren
+                                <button type="submit" name="order_annuleren" class="btn btn-danger"><i class="fas fa-trash-alt"></i>
+                                    Weigeren
                                 </button>
                             </div>
 
@@ -129,7 +125,6 @@ if (isset($filter_order_nr)) {
                                               rows="3" maxlength="400"><?= $order['opmerking'] ?></textarea>
                                 </div>
                             </div>
-
                             <div class="col-md-12">
                                 <a class="btn btn-secondary" href="orders.php" role="button"><i class="fas fa-times"></i>
                                     Annuleer</a>
@@ -140,6 +135,7 @@ if (isset($filter_order_nr)) {
                                         class="fas fa-check-double"></i> Order afgewerkt
                                 </button>
                             </div>
+
                         <?php } else { ?>
                             <div class="col-md-12">
                                 <a class="btn btn-secondary" href="orders.php" role="button"><i class="fas fa-times"></i>
@@ -147,12 +143,10 @@ if (isset($filter_order_nr)) {
                             </div>
                         <?php } ?>
 
-                        <div class="input-group col-md-12"><br></div>
-
                     </div>
                 </form>
 
-                <div class="content table-responsive-lg">
+                <div class="content">
                     <table class="table table-light table-borderless">
                         <tbody>
                             <tr>
@@ -201,7 +195,8 @@ if (isset($filter_order_nr)) {
                     <table class="table table-hover table-success table-borderless">
                         <thead class="table-light">
                             <tr>
-                                <th colspan="2">Product</th>
+                                <th class="responsive-hidden"></th>
+                                <th>Product</th>
                                 <th class="responsive-hidden">Prijs</th>
                                 <th>Aantal</th>
                                 <th class="responsive-hidden">Totaal</th>
@@ -212,7 +207,7 @@ if (isset($filter_order_nr)) {
                             <?php foreach ($orders as $product): ?>
 
                                 <tr class="details">
-                                    <td class="img">
+                                    <td class="responsive-hidden">
                                         <?php if (!empty($product['img']) && file_exists('../images/producten/' . $product['img'])): ?>
                                             <img src="../images/producten/<?= $product['img'] ?>" width="32" height="32"
                                                  alt="<?= $product['product_naam'] ?>">
@@ -226,7 +221,7 @@ if (isset($filter_order_nr)) {
                                     <?php if ($product['order_status'] == 'uitvoering') { ?>
 
                                         <td>
-                                            <form class="needs-validation" novalidate action="" method="post" autocomplete="off">
+                                            <form novalidate action="" method="post" autocomplete="off">
                                                 <div class="input-group sr-only">
                                                     <label class="sr-only" for="details_id">ID</label>
                                                     <div class="input-group mb-2">
@@ -237,7 +232,7 @@ if (isset($filter_order_nr)) {
                                                 </div>
                                                 <div class="input-group">
                                                     <label class="sr-only" for="aantal">Aantal</label>
-                                                    <div class="input-group mb-2">
+                                                    <div class="input-group">
                                                         <div class="input-group-prepend">
                                                             <div class="input-group-text"><?= $product['levering_aantal'] ?>&nbsp;<i
                                                                     class="fas fa-pump-soap"></i></div>

@@ -12,7 +12,7 @@ $order_sort = isset($filter_order_sort) && $filter_order_sort == 'ASC' ? 'ASC' :
 
 // Get orders
 $stmt = $pdo_function->prepare("SELECT p.product_foto AS img, p.product_naam, o.*, od.product_prijs, od.product_aantal, od.product_optie FROM orders o JOIN order_details od ON od.order_nr = o.order_nr
-    JOIN producten p ON p.product_id = od.product_id WHERE o.order_status = 'nieuw' ORDER BY ' . $order_by . ' " . $order_sort);
+    JOIN producten p ON p.product_id = od.product_id WHERE o.order_status = 'nieuw' AND o.order_status = 'uitvoering' ORDER BY ' . $order_by . ' " . $order_sort);
 $stmt->execute();
 $orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
@@ -44,7 +44,7 @@ $orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         <thead class="table-light">
                             <tr>
                                 <th colspan="2">
-                                    <a href="orders.php?order_by=order_id&order_sort=<?= $order_sort == 'ASC' ? 'DESC' : 'ASC' ?>">
+                                    <a href="orders-details.php?order_by=order_id&order_sort=<?= $order_sort == 'ASC' ? 'DESC' : 'ASC' ?>">
                                         <i class="fas fa-hashtag"></i>
                                         <?php if ($order_by == 'order_id'): ?>
                                             <i class="fas fa-sort-numeric-<?= str_replace(array('ASC', 'DESC'), array('down', 'down-alt'), $order_sort) ?>"></i>
@@ -52,7 +52,7 @@ $orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                     </a>
                                 </th>
                                 <th>
-                                    <a href="orders.php?order_by=product_naam&order_sort=<?= $order_sort == 'ASC' ? 'DESC' : 'ASC' ?>">
+                                    <a href="orders-details.php?order_by=product_naam&order_sort=<?= $order_sort == 'ASC' ? 'DESC' : 'ASC' ?>">
                                         Product
                                         <?php if ($order_by == 'product_naam'): ?>
                                             <i class="fas fa-sort-alpha-<?= str_replace(array('ASC', 'DESC'), array('down', 'down-alt'), $order_sort) ?>"></i>
@@ -60,7 +60,7 @@ $orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                     </a>
                                 </th>
                                 <th class="responsive-hidden">
-                                    <a href="orders.php?order_by=order_datum&order_sort=<?= $order_sort == 'ASC' ? 'DESC' : 'ASC' ?>">
+                                    <a href="orders-details.php?order_by=order_datum&order_sort=<?= $order_sort == 'ASC' ? 'DESC' : 'ASC' ?>">
                                         Datum
                                         <?php if ($order_by == 'order_datum'): ?>
                                             <i class="fas fa-sort-numeric-<?= str_replace(array('ASC', 'DESC'), array('down', 'down-alt'), $order_sort) ?>"></i>
@@ -72,7 +72,7 @@ $orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                 <th>Totaal</th>
                                 <th class="responsive-hidden">Email</th>
                                 <th class="responsive-hidden">
-                                    <a href="orders.php?order_by=order_status&order_sort=<?= $order_sort == 'ASC' ? 'DESC' : 'ASC' ?>">
+                                    <a href="orders-details.php?order_by=order_status&order_sort=<?= $order_sort == 'ASC' ? 'DESC' : 'ASC' ?>">
                                         Status
                                         <?php if ($order_by == 'order_status'): ?>
                                             <i class="fas fa-sort-alpha-<?= str_replace(array('ASC', 'DESC'), array('down', 'down-alt'), $order_sort) ?>"></i>

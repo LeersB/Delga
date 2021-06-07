@@ -4,11 +4,11 @@ include 'main.php';
 $pdo_function = pdo_connect_mysql();
 check_loggedin($pdo_function);
 //statement producten
-$stmtProducten = $pdo_function->prepare('SELECT * FROM producten WHERE product_id = 27 OR product_id = 1');
+$stmtProducten = $pdo_function->prepare('SELECT * FROM producten WHERE product_id = 37 OR product_id = 1');
 $stmtProducten->execute();
 $producten = $stmtProducten->fetchAll(PDO::FETCH_ASSOC);
 //statement product
-$stmtProduct = $pdo_function->prepare('SELECT * FROM producten WHERE product_id = 39');
+$stmtProduct = $pdo_function->prepare('SELECT * FROM producten WHERE product_id = 34');
 $stmtProduct->execute();
 $product = $stmtProduct->fetch(PDO::FETCH_ASSOC);
 ?>

@@ -25,10 +25,10 @@ include 'main.php';
     <div class="container">
 
         <div class="register">
-            <h2>Maak je Delga account aan</h2>
+            <h2>Maak uw Delga account aan</h2>
             <form class="needs-validation" novalidate action="proces-registreer.php" method="post" autocomplete="off">
                 <div class="row">
-                    <legend class="legend col-md-12"><span>Persoonlijke informatie</span></legend>
+                    <div class="col-md-12 h5">Persoonlijke informatie</div>
                     <div class="input-group col-md-6">
                         <label for="user_level"></label>
                         <select id="user_level" name="user_level" class="custom-select">
@@ -93,8 +93,7 @@ include 'main.php';
                             </div>
                         </div>
                     </div>
-                    <legend class="legend col-md-12"><span>Adres Gegevens</span></legend>
-                    <h5 class="legend col-md-12"><span>Facturatieadres</span></h5>
+                    <div class="col-md-12 h5">Facturatieadres</div>
                     <div class="input-group col-md-9">
                         <label class="sr-only" for="adres_straat">Facturatieadres</label>
                         <div class="input-group mb-2">
@@ -137,7 +136,7 @@ include 'main.php';
                         </div>
                     </div>
                     <div class="input-group col-md-12"><br></div>
-                    <h5 class="legend col-md-12"><span>Leveringsadres</span></h5>
+                    <div class="col-md-12 h5">Leveringsadres</div>
                     <div class="input-group col-md-9">
                         <label class="sr-only" for="adres_straat_2">Leveringsadres</label>
                         <div class="input-group mb-2">
@@ -181,7 +180,7 @@ include 'main.php';
                     </div>
                     <div class="input-group col-md-12"><br></div>
 
-                    <legend class="legend col-md-12"><span>Inloggegevens</span></legend>
+                    <div class="col-md-12 h5">Inloggegevens</div>
 
                     <div class="input-group col-md-12">
                         <label class="sr-only" for="email">E-mailadres</label>
@@ -218,7 +217,7 @@ include 'main.php';
                     </div>
                     <div class="input-group col-md-12"><br></div>
 
-                    <div class="col-md-12"><p class="msg"></p></div>
+                    <div class="col-md-12 h5"><p class="msg"></p></div>
                     <div class="input-group col-md-12"><br></div>
                     <div class="col-12">
                         <a class="btn btn-secondary" href="login.php" role="button"><i class="fas fa-times"></i> Annuleer</a>
@@ -228,6 +227,7 @@ include 'main.php';
                 </div>
             </form>
         </div>
+
     </div>
 </main>
 

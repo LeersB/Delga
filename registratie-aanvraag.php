@@ -172,9 +172,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (account_activatie) {
                 $activatie_link = activatie_link . '?email=' . $_POST['email'] . '&code=' . $uniqid;
                 send_activatie_email($_POST['email'], $activatie_link, $_POST['voornaam'], $_POST['achternaam']);
-                echo 'Bekijk uw email voor het activeren van je account!';
+                header('Location: registratie-voltooid.php');
+                exit;
             } else {
-                //echo 'Je bent succesvol geregistreerd, u kan zich nu aanmelden!';
                 header('Location: registratie-voltooid.php');
                 exit;
             }

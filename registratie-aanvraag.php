@@ -4,7 +4,7 @@ include 'main.php';
 $msg = '';
 $error = '';
 
-$_SESSION['voornaam'] = $filter_voornaam = filter_input(INPUT_POST, 'voornaam', FILTER_SANITIZE_STRING);
+$filter_voornaam = filter_input(INPUT_POST, 'voornaam', FILTER_SANITIZE_STRING);
 $filter_achternaam = filter_input(INPUT_POST, 'achternaam', FILTER_SANITIZE_STRING);
 $filter_adres_straat = filter_input(INPUT_POST, 'adres_straat', FILTER_SANITIZE_STRING);
 $filter_adres_nr = filter_input(INPUT_POST, 'adres_nr', FILTER_SANITIZE_STRING);
@@ -24,20 +24,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     //Persoonlijke informatie
-    if (empty($_POST['voornaam'])) {
+    if (empty($filter_voornaam)) {
         $error = 'Vervolledig het registratie formulier!';
     } else {
-        $voornaam = validate($_POST['voornaam']);
+        $voornaam = validate($filter_voornaam);
         if (!preg_match('/^[a-zA-Z0-9\s]+$/', $voornaam)) {
-            $error = 'Voornaam can only contain letters, numbers and white spaces';
+            $error = 'Ongeldige voornaam';
+        } else {
+            $_SESSION['voornaam'] = $voornaam;
         }
     }
-    if (empty($_POST['achternaam'])) {
+    if (empty($filter_achternaam)) {
         $error = 'Vervolledig het registratie formulier!';
     } else {
-        $achternaam = validate($_POST['achternaam']);
+        $achternaam = validate($filter_achternaam);
         if (!preg_match('/^[a-zA-Z0-9\s]+$/', $achternaam)) {
-            $error = 'Achternaam can only contain letters, numbers and white spaces';
+            $error = 'Ongeldige achternaam';
         }
     }
     if (empty($_POST['telefoon_nr'])) {
@@ -45,19 +47,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         $telefoon_nr = validate($_POST['telefoon_nr']);
         if (!preg_match('/^[0-9\s]+$/', $telefoon_nr)) {
-            $error = 'Telefoon nummer can only contain numbers and white spaces';
+            $error = 'Ongeldige telefoon nummer';
         }
     }
     if (!empty($_POST['bedrijfsnaam'])) {
         $bedrijfsnaam = validate($_POST['bedrijfsnaam']);
         if (!preg_match('/^[a-zA-Z0-9\s]+$/', $bedrijfsnaam)) {
-            $error = 'Bedrijfsnaam can only contain letters, numbers and white spaces';
+            $error = 'Ongeldige bedrijfsnaam';
         }
     }
     if (!empty($_POST['btw_nr'])) {
         $btw_nr = validate($_POST['btw_nr']);
         if (!preg_match('/^[a-zA-Z0-9\s]+$/', $btw_nr)) {
-            $error = 'Btw nummer can only contain letters, numbers and white spaces';
+            $error = 'Ongeldige btw nummer';
         }
     }
 
@@ -67,7 +69,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         $adres_straat = validate($_POST['adres_straat']);
         if (!preg_match('/^[a-zA-Z0-9\s]+$/', $adres_straat)) {
-            $error = 'Straatnaam can only contain letters, numbers and white spaces';
+            $error = 'Ongeldige straatnaam';
         }
     }
     if (empty($_POST['adres_nr'])) {
@@ -75,7 +77,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         $adres_nr = validate($_POST['adres_nr']);
         if (!preg_match('/^[a-zA-Z0-9\s]+$/', $adres_nr)) {
-            $error = 'Adres nummer can only contain letters, numbers and white spaces';
+            $error = 'Ongeldige adres nummer';
         }
     }
     if (empty($_POST['adres_postcode'])) {
@@ -91,7 +93,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         $adres_plaats = validate($_POST['adres_plaats']);
         if (!preg_match('/^[a-zA-Z0-9\s]+$/', $adres_plaats)) {
-            $error = 'Plaats can only contain letters, numbers and white spaces';
+            $error = 'Ongeldige plaats';
         }
     }
     // Leveringsadres
@@ -100,7 +102,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         $adres_straat_2 = validate($_POST['adres_straat_2']);
         if (!preg_match('/^[a-zA-Z0-9\s]+$/', $adres_straat_2)) {
-            $error = 'Straatnaam can only contain letters, numbers and white spaces';
+            $error = 'Ongeldige straatnaam';
         }
     }
     if (empty($_POST['adres_nr_2'])) {
@@ -108,7 +110,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         $adres_nr_2 = validate($_POST['adres_nr_2']);
         if (!preg_match('/^[a-zA-Z0-9\s]+$/', $adres_nr_2)) {
-            $error = 'Adres nummer can only contain letters, numbers and white spaces';
+            $error = 'Ongeldige adres nummer';
         }
     }
     if (empty($_POST['adres_postcode_2'])) {
@@ -116,7 +118,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         $adres_postcode_2 = validate($_POST['adres_postcode_2']);
         if (!preg_match('/^[0-9\s]+$/', $adres_postcode_2)) {
-            $error = 'Postcode can only contain numbers and white spaces';
+            $error = 'Postcode kan enkel 4 cijfers bevatten';
         }
     }
     if (empty($_POST['adres_plaats_2'])) {
@@ -124,7 +126,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         $adres_plaats_2 = validate($_POST['adres_plaats_2']);
         if (!preg_match('/^[a-zA-Z0-9\s]+$/', $adres_plaats_2)) {
-            $error = 'Plaats can only contain letters, numbers and white spaces';
+            $error = 'Ongeldige plaats';
         }
     }
 

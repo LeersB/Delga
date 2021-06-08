@@ -42,9 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $error = 'Ongeldige achternaam';
         }
     }
-    if (empty($_POST['telefoon_nr'])) {
-        $error = 'Vervolledig het registratie formulier!';
-    } else {
+    if (!empty($_POST['telefoon_nr'])) {
         $telefoon_nr = validate($_POST['telefoon_nr']);
         if (!preg_match('/^[0-9\s]+$/', $telefoon_nr)) {
             $error = 'Ongeldige telefoon nummer';
@@ -409,7 +407,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                    placeholder="Bevestig wachtwoord" required>
                         </div>
                     </div>
-                    <div class="col-md-12 h5"><p><?php if (isset($error)) echo $error ?> <?php if (isset($msg)) echo $msg ?></p></div>
+                    <div class="col-md-12 h5">
+                        <p><?php if (isset($error)) echo $error ?><?php if (isset($msg)) echo $msg ?></p></div>
 
                     <div class="col-12">
                         <a class="btn btn-secondary" href="login.php" role="button"><i class="fas fa-times"></i>

@@ -97,7 +97,7 @@ if (isset($_COOKIE['rememberme']) && !empty($_COOKIE['rememberme'])) {
                             veilig.</p>
                         <div class="actions-toolbar padding-top10">
                             <div class="primary">
-                                <a href="registreer.php" class="action create btn btn-secondary"><span>Een Delga account aanmaken</span></a>
+                                <a href="registratie-aanvraag.php" class="action create btn btn-secondary"><span>Een Delga account aanmaken</span></a>
                             </div>
                             <div class="input-group col-md-12"><br></div>
                         </div>

@@ -4,41 +4,46 @@ include 'main.php';
 $pdo_function = pdo_connect_mysql();
 check_loggedin($pdo_function);
 $msg = '';
+include 'registratie-filter.php';
+//global variabelen van registratie-filter.php
+global $error;
+global $voornaam;
+global $achternaam;
+global $telefoon_nr;
+global $bedrijfsnaam;
+global $btw_nr;
+global $adres_straat;
+global $adres_nr;
+global $adres_postcode;
+global $adres_plaats;
+global $adres_straat_2;
+global $adres_nr_2;
+global $adres_postcode_2;
+global $adres_plaats_2;
+global $email;
+global $wachtwoord;
 
 //Get user
 $stmt = $pdo_function->prepare('SELECT * FROM users WHERE user_id = ?');
 $stmt->execute([$_SESSION['user_id']]);
 $account = $stmt->fetch(PDO::FETCH_ASSOC);
 
-if (isset($_POST['voornaam'], $_POST['achternaam'], $_POST['wachtwoord'], $_POST['cwachtwoord'], $_POST['email'])) {
 
-    if (empty($_POST['voornaam']) || (empty($_POST['achternaam'])) || empty($_POST['email'])) {
-        $msg = 'Vervolledig het formulier!';
-    } else if (!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
-        $msg = 'E-mailadres is niet geldig!';
-    } else if (!preg_match('/^[a-zA-Z]+$/', $_POST['voornaam'])) {
-        $msg = 'Voornaam mag alleen uit letters bestaan!';
-    } else if (!preg_match('/^[a-zA-Z]+$/', $_POST['achternaam'])) {
-        $msg = 'Achternaam mag alleen uit letters bestaan!';
-    } else if (!empty($_POST['wachtwoord']) && (strlen($_POST['wachtwoord']) > 16 || strlen($_POST['wachtwoord']) < 8)) {
-        $msg = 'Wachtwoord moet tussen 8 en 16 karakters lang zijn!';
-    } else if ($_POST['cwachtwoord'] != $_POST['wachtwoord']) {
-        $msg = 'Wachtwoorden komen niet overeen!';
-    }
-    if (empty($msg)) {
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (empty($error)) {
         $stmt = $pdo_function->prepare('SELECT COUNT(*) FROM users WHERE (email = ?) AND email != ?');
-        $stmt->execute([$_POST['email'], $account['email']]);
+        $stmt->execute([$email, $account['email']]);
         if ($result = $stmt->fetchColumn()) {
             $msg = 'Een account met dit e-mailadres bestaat reeds!';
         } else {
             // update profiel
-            $uniqid = account_activatie && $account['email'] != $_POST['email'] ? uniqid() : $account['activatie_code'];
+            $uniqid = account_activatie && $account['email'] != $email ? uniqid() : $account['activatie_code'];
             $stmt = $pdo_function->prepare('UPDATE users SET email = ?, wachtwoord = ?, voornaam = ?, achternaam = ?, adres_straat = ?, adres_nr = ?, adres_postcode = ?, adres_plaats = ?, adres_straat_2 = ?, adres_nr_2 = ?, adres_postcode_2 = ?, adres_plaats_2 = ?, telefoon_nr = ?, bedrijfsnaam = ?, btw_nr = ?, activatie_code = ? WHERE user_id = ?');
-            $wachtwoord = !empty($_POST['wachtwoord']) ? password_hash($_POST['wachtwoord'], PASSWORD_DEFAULT) : $account['wachtwoord'];
-            $stmt->execute([$_POST['email'], $wachtwoord, $_POST['voornaam'], $_POST['achternaam'], $_POST['adres_straat'], $_POST['adres_nr'], $_POST['adres_postcode'], $_POST['adres_plaats'], $_POST['adres_straat_2'], $_POST['adres_nr_2'], $_POST['adres_postcode_2'], $_POST['adres_plaats_2'], $_POST['telefoon_nr'], $_POST['bedrijfsnaam'], $_POST['btw_nr'], $uniqid, $_SESSION['user_id']]);
-            if (account_activatie && $account['email'] != $_POST['email']) {
-                $activatie_link = activatie_link . '?email=' . $_POST['email'] . '&code=' . $uniqid;
-                send_activatie_email($_POST['email'], $activatie_link, $_POST['voornaam'], $_POST['achternaam']);
+            $wachtwoord_hash = !empty($wachtwoord) ? password_hash($wachtwoord, PASSWORD_DEFAULT) : $account['wachtwoord'];
+            $stmt->execute([$email, $wachtwoord_hash, $voornaam, $achternaam, $adres_straat, $adres_nr, $adres_postcode, $adres_plaats, $adres_straat_2, $adres_nr_2, $adres_postcode_2, $adres_plaats_2, $telefoon_nr, $bedrijfsnaam, $btw_nr, $uniqid, $_SESSION['user_id']]);
+            if (account_activatie && $account['email'] != $email) {
+                $activatie_link = activatie_link . '?email=' . $email . '&code=' . $uniqid;
+                send_activatie_email($email, $activatie_link, $voornaam, $achternaam);
                 unset($_SESSION['loggedin']);
                 $msg = 'U hebt het e-mailadres aangepast, u moet deze eerst terug activeren voor u kunt aanmelden!';
             } else {
@@ -358,7 +363,8 @@ if (isset($_POST['voornaam'], $_POST['achternaam'], $_POST['wachtwoord'], $_POST
                                                                    placeholder="Bevestig wachtwoord">
                                                         </div>
                                                     </div>
-                                                    <div class="col-md-12 text-danger msg"><?= $msg ?></div>
+                                                    <div class="col-md-12 text-danger h5">
+                                                        <p><?php if (isset($error)) echo $error ?><?php if (isset($msg)) echo $msg ?></p></div>
                                                     <div class="input-group col-md-12"><br></div>
                                                     <div class="col-12">
                                                         <a class="btn btn-secondary" href="profiel.php" role="button"><i

@@ -30,13 +30,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 //Persoonlijke informatie
     if (!empty($filter_voornaam)) {
         $_SESSION['voornaam'] = $voornaam = validate($filter_voornaam);
-        if (!preg_match('/^[a-zA-Z0-9\s]+$/', $voornaam)) {
+        if (!preg_match('/^[a-zA-Z0-9\s\W]+$/', $voornaam)) {
             $error = 'Ongeldige voornaam';
         }
     }
     if (!empty($filter_achternaam)) {
         $achternaam = validate($filter_achternaam);
-        if (!preg_match('/^[a-zA-Z0-9\s]+$/', $achternaam)) {
+        if (!preg_match('/^[a-zA-Z0-9\s\W]+$/', $achternaam)) {
             $error = 'Ongeldige achternaam';
         }
     }
@@ -50,7 +50,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
     if (!empty($filter_bedrijfsnaam)) {
         $bedrijfsnaam = validate($filter_bedrijfsnaam);
-        if (!preg_match('/^[a-zA-Z0-9\s]+$/', $bedrijfsnaam)) {
+        if (!preg_match('/^[a-zA-Z0-9\s\W]+$/', $bedrijfsnaam)) {
             $error = 'Ongeldige bedrijfsnaam';
         }
     } else {

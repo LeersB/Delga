@@ -3,18 +3,26 @@ $menu = 4;
 include 'main.php';
 $msg = '';
 $error = '';
-
+//Filters Persoonlijke informatie
 $filter_voornaam = filter_input(INPUT_POST, 'voornaam', FILTER_SANITIZE_STRING);
 $filter_achternaam = filter_input(INPUT_POST, 'achternaam', FILTER_SANITIZE_STRING);
+$filter_telefoon_nr = filter_input(INPUT_POST, 'telefoon_nr', FILTER_SANITIZE_STRING);
+$filter_bedrijfsnaam = filter_input(INPUT_POST, 'bedrijfsnaam', FILTER_SANITIZE_STRING);
+$filter_btw_nr = filter_input(INPUT_POST, 'btw_nr', FILTER_SANITIZE_STRING);
+//Filters Facturatieadres
 $filter_adres_straat = filter_input(INPUT_POST, 'adres_straat', FILTER_SANITIZE_STRING);
 $filter_adres_nr = filter_input(INPUT_POST, 'adres_nr', FILTER_SANITIZE_STRING);
 $filter_adres_postcode = filter_input(INPUT_POST, 'adres_postcode', FILTER_SANITIZE_NUMBER_INT);
 $filter_adres_plaats = filter_input(INPUT_POST, 'adres_plaats', FILTER_SANITIZE_STRING);
+//Filters Leveringsadres
 $filter_adres_straat_2 = filter_input(INPUT_POST, 'adres_straat_2', FILTER_SANITIZE_STRING);
 $filter_adres_nr_2 = filter_input(INPUT_POST, 'adres_nr_2', FILTER_SANITIZE_STRING);
 $filter_adres_postcode_2 = filter_input(INPUT_POST, 'adres_postcode_2', FILTER_SANITIZE_NUMBER_INT);
 $filter_adres_plaats_2 = filter_input(INPUT_POST, 'adres_plaats_2', FILTER_SANITIZE_STRING);
+//Filters Inloggegevens
 $filter_email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
+$filter_wachtwoord = filter_input(INPUT_POST, 'wachtwoord');
+$filter_cwachtwoord = filter_input(INPUT_POST, 'cwachtwoord');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // primary validate function
@@ -24,154 +32,158 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     //Persoonlijke informatie
-    if (empty($filter_voornaam)) {
-        $error = 'Vervolledig het registratie formulier!';
-    } else {
-        $voornaam = validate($filter_voornaam);
+    if (!empty($filter_voornaam)) {
+        $_SESSION['voornaam'] = $voornaam = validate($filter_voornaam);
         if (!preg_match('/^[a-zA-Z0-9\s]+$/', $voornaam)) {
             $error = 'Ongeldige voornaam';
-        } else {
-            $_SESSION['voornaam'] = $voornaam;
         }
     }
-    if (empty($filter_achternaam)) {
-        $error = 'Vervolledig het registratie formulier!';
-    } else {
+    if (!empty($filter_achternaam)) {
         $achternaam = validate($filter_achternaam);
         if (!preg_match('/^[a-zA-Z0-9\s]+$/', $achternaam)) {
             $error = 'Ongeldige achternaam';
         }
     }
-    if (!empty($_POST['telefoon_nr'])) {
-        $telefoon_nr = validate($_POST['telefoon_nr']);
-        if (!preg_match('/^[0-9\s]+$/', $telefoon_nr)) {
-            $error = 'Ongeldige telefoon nummer';
+    if (!empty($filter_telefoon_nr)) {
+        $telefoon_nr = validate($filter_telefoon_nr);
+        if (!preg_match('/^[+][0-9\s]+$/', $telefoon_nr)) {
+            $error = 'Ongeldige telefoon nummer, voorbeeld: +32495361149';
         }
+    } else {
+        $telefoon_nr = "";
     }
-    if (!empty($_POST['bedrijfsnaam'])) {
-        $bedrijfsnaam = validate($_POST['bedrijfsnaam']);
+    if (!empty($filter_bedrijfsnaam)) {
+        $bedrijfsnaam = validate($filter_bedrijfsnaam);
         if (!preg_match('/^[a-zA-Z0-9\s]+$/', $bedrijfsnaam)) {
             $error = 'Ongeldige bedrijfsnaam';
         }
+    } else {
+        $bedrijfsnaam = "";
     }
-    if (!empty($_POST['btw_nr'])) {
-        $btw_nr = validate($_POST['btw_nr']);
+    if (!empty($filter_btw_nr)) {
+        $btw_nr = validate($filter_btw_nr);
         if (!preg_match('/^[a-zA-Z0-9\s]+$/', $btw_nr)) {
             $error = 'Ongeldige btw nummer';
         }
+    } else {
+        $btw_nr = "";
     }
 
     // Facturatieadres
-    if (empty($_POST['adres_straat'])) {
+    if (empty($filter_adres_straat)) {
         $error = 'Vervolledig het registratie formulier!';
     } else {
-        $adres_straat = validate($_POST['adres_straat']);
+        $adres_straat = validate($filter_adres_straat);
         if (!preg_match('/^[a-zA-Z0-9\s]+$/', $adres_straat)) {
             $error = 'Ongeldige straatnaam';
         }
     }
-    if (empty($_POST['adres_nr'])) {
+    if (empty($filter_adres_nr)) {
         $error = 'Vervolledig het registratie formulier!';
     } else {
-        $adres_nr = validate($_POST['adres_nr']);
+        $adres_nr = validate($filter_adres_nr);
         if (!preg_match('/^[a-zA-Z0-9\s]+$/', $adres_nr)) {
             $error = 'Ongeldige adres nummer';
         }
     }
-    if (empty($_POST['adres_postcode'])) {
+    if (empty($filter_adres_postcode)) {
         $error = 'Vervolledig het registratie formulier!';
     } else {
-        $adres_postcode = validate($_POST['adres_postcode']);
+        $adres_postcode = validate($filter_adres_postcode);
         if (!preg_match('/^[0-9]+$/', $adres_postcode)) {
             $error = 'Postcode kan enkel 4 cijfers bevatten';
         }
     }
-    if (empty($_POST['adres_plaats'])) {
+    if (empty($filter_adres_plaats)) {
         $error = 'Vervolledig het registratie formulier!';
     } else {
-        $adres_plaats = validate($_POST['adres_plaats']);
+        $adres_plaats = validate($filter_adres_plaats);
         if (!preg_match('/^[a-zA-Z0-9\s]+$/', $adres_plaats)) {
             $error = 'Ongeldige plaats';
         }
     }
     // Leveringsadres
-    if (empty($_POST['adres_straat_2'])) {
-        $error = 'Vervolledig het registratie formulier!';
+    if (isset($_POST['adres_factuur'])) {
+        $adres_straat_2 = validate($filter_adres_straat);
+        $adres_nr_2 = validate($filter_adres_nr);
+        $adres_postcode_2 = validate($filter_adres_postcode);
+        $adres_plaats_2 = validate($filter_adres_plaats);
     } else {
-        $adres_straat_2 = validate($_POST['adres_straat_2']);
-        if (!preg_match('/^[a-zA-Z0-9\s]+$/', $adres_straat_2)) {
-            $error = 'Ongeldige straatnaam';
+        if (empty($filter_adres_straat_2)) {
+            $error = 'Vervolledig het registratie formulier!';
+        } else {
+            $adres_straat_2 = validate($filter_adres_straat_2);
+            if (!preg_match('/^[a-zA-Z0-9\s]+$/', $adres_straat_2)) {
+                $error = 'Ongeldige straatnaam';
+            }
         }
-    }
-    if (empty($_POST['adres_nr_2'])) {
-        $error = 'Vervolledig het registratie formulier!';
-    } else {
-        $adres_nr_2 = validate($_POST['adres_nr_2']);
-        if (!preg_match('/^[a-zA-Z0-9\s]+$/', $adres_nr_2)) {
-            $error = 'Ongeldige adres nummer';
+        if (empty($filter_adres_nr_2)) {
+            $error = 'Vervolledig het registratie formulier!';
+        } else {
+            $adres_nr_2 = validate($filter_adres_nr_2);
+            if (!preg_match('/^[a-zA-Z0-9\s]+$/', $adres_nr_2)) {
+                $error = 'Ongeldige adres nummer';
+            }
         }
-    }
-    if (empty($_POST['adres_postcode_2'])) {
-        $error = 'Vervolledig het registratie formulier!';
-    } else {
-        $adres_postcode_2 = validate($_POST['adres_postcode_2']);
-        if (!preg_match('/^[0-9\s]+$/', $adres_postcode_2)) {
-            $error = 'Postcode kan enkel 4 cijfers bevatten';
+        if (empty($filter_adres_postcode_2)) {
+            $error = 'Vervolledig het registratie formulier!';
+        } else {
+            $adres_postcode_2 = validate($filter_adres_postcode_2);
+            if (!preg_match('/^[0-9\s]+$/', $adres_postcode_2)) {
+                $error = 'Postcode kan enkel 4 cijfers bevatten';
+            }
         }
-    }
-    if (empty($_POST['adres_plaats_2'])) {
-        $error = 'Vervolledig het registratie formulier!';
-    } else {
-        $adres_plaats_2 = validate($_POST['adres_plaats_2']);
-        if (!preg_match('/^[a-zA-Z0-9\s]+$/', $adres_plaats_2)) {
-            $error = 'Ongeldige plaats';
+        if (empty($filter_adres_plaats_2)) {
+            $error = 'Vervolledig het registratie formulier!';
+        } else {
+            $adres_plaats_2 = validate($filter_adres_plaats_2);
+            if (!preg_match('/^[a-zA-Z0-9\s]+$/', $adres_plaats_2)) {
+                $error = 'Ongeldige plaats';
+            }
         }
     }
 
     // Inloggegevens
-    if (empty($_POST['email'])) {
-        $error = 'Vervolledig het registratie formulier!';
+    if (empty($filter_email)) {
+        $error = 'Ongeldig e-mailadres';
     } else {
-        $email = validate($_POST['email']);
-        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            $error = 'Ongeldige email';
-        }
+        $email = $filter_email;
     }
-    if (empty($_POST['wachtwoord'])) {
+    if (empty($filter_wachtwoord)) {
         $error = 'Vervolledig het registratie formulier!';
     } else {
-        $wachtwoord = validate($_POST['wachtwoord']);
+        $wachtwoord = $filter_wachtwoord;
         if (strlen($wachtwoord) > 16 || strlen($wachtwoord) < 8) {
             $error = 'Wachtwoord moet tussen 8 en 16 karakters lang zijn!';
         }
     }
-    if (empty($_POST['cwachtwoord'])) {
+    if (empty($filter_cwachtwoord)) {
         $error = 'Vervolledig het registratie formulier!';
     } else {
-        $cwachtwoord = validate($_POST['cwachtwoord']);
+        $cwachtwoord = $filter_cwachtwoord;
         if (strlen($cwachtwoord) > 16 || strlen($cwachtwoord) < 8) {
             $error = 'Wachtwoord moet tussen 8 en 16 karakters lang zijn!';
         }
     }
-    if ($_POST['cwachtwoord'] != $_POST['wachtwoord']) {
+    if ($filter_cwachtwoord != $filter_wachtwoord) {
         $error = 'Wachtwoorden komen niet overeen!';
     }
 
     if (empty($error)) {
         $pdo_function = pdo_connect_mysql();
         $stmtAccount = $pdo_function->prepare('SELECT user_id, wachtwoord FROM users WHERE email = ?');
-        $stmtAccount->execute([$_POST['email']]);
+        $stmtAccount->execute([$email]);
         $account = $stmtAccount->fetch(PDO::FETCH_ASSOC);
         if ($account) {
             $msg = 'Een account met dit e-mailadres bestaat al!';
         } else {
             $stmt = $pdo_function->prepare('INSERT INTO users (email, wachtwoord, activatie_code, registratie_datum, voornaam, achternaam, adres_straat, adres_nr, adres_postcode, adres_plaats, adres_straat_2, adres_nr_2, adres_postcode_2, adres_plaats_2, telefoon_nr, bedrijfsnaam, btw_nr, user_level) VALUES (?, ?, ?, NOW(), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
-            $wachtwoord = password_hash($_POST['wachtwoord'], PASSWORD_DEFAULT);
+            $wachtwoord_hash = password_hash($wachtwoord, PASSWORD_DEFAULT);
             $uniqid = account_activatie ? uniqid() : 'activated';
-            $stmt->execute([$_POST['email'], $wachtwoord, $uniqid, $_POST['voornaam'], $_POST['achternaam'], $_POST['adres_straat'], $_POST['adres_nr'], $_POST['adres_postcode'], $_POST['adres_plaats'], $_POST['adres_straat_2'], $_POST['adres_nr_2'], $_POST['adres_postcode_2'], $_POST['adres_plaats_2'], $_POST['telefoon_nr'], $_POST['bedrijfsnaam'], $_POST['btw_nr'], $_POST['user_level']]);
+            $stmt->execute([$email, $wachtwoord_hash, $uniqid, $voornaam, $achternaam, $adres_straat, $adres_nr, $adres_postcode, $adres_plaats, $adres_straat_2, $adres_nr_2, $adres_postcode_2, $adres_plaats_2, $telefoon_nr, $bedrijfsnaam, $btw_nr, $_POST['user_level']]);
             if (account_activatie) {
-                $activatie_link = activatie_link . '?email=' . $_POST['email'] . '&code=' . $uniqid;
-                send_activatie_email($_POST['email'], $activatie_link, $_POST['voornaam'], $_POST['achternaam']);
+                $activatie_link = activatie_link . '?email=' . $email . '&code=' . $uniqid;
+                send_activatie_email($email, $activatie_link, $voornaam, $achternaam);
                 header('Location: registratie-voltooid.php');
                 exit;
             } else {
@@ -183,7 +195,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 ?>
 <!DOCTYPE html>
-<html class="h-100" lang="nl">
+<html class="h-100" lang="nl" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
@@ -324,49 +336,61 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </div>
                     <div class="input-group col-md-12"><br></div>
                     <div class="col-md-12 h5">Leveringsadres</div>
-                    <div class="input-group col-md-9">
-                        <label class="sr-only" for="adres_straat_2">Leveringsadres</label>
-                        <div class="input-group mb-2">
-                            <div class="input-group-prepend">
-                                <div class="input-group-text"><i class="fas fa-house-user"></i></div>
-                            </div>
-                            <input type="text" class="form-control" id="adres_straat_2" name="adres_straat_2"
-                                   placeholder="Leveringsadres" maxlength="80" required
-                                   value="<?php if (isset($adres_straat_2)) echo $adres_straat_2 ?>">
-                        </div>
-                    </div>
-                    <div class="input-group col-md-3">
-                        <label class="sr-only" for="adres_nr_2">Nr. / Bus</label>
-                        <div class="input-group mb-2">
-                            <div class="input-group-prepend">
-                                <div class="input-group-text"><i class="fas fa-house-user"></i></div>
-                            </div>
-                            <input type="text" class="form-control" id="adres_nr_2" name="adres_nr_2"
-                                   placeholder="Nr. / Bus" maxlength="20" required
-                                   value="<?php if (isset($adres_nr_2)) echo $adres_nr_2 ?>">
+
+                    <div class="col-md-12">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="adres_factuur" name="adres_factuur">
+                            <label class="form-check-label" for="adres_factuur">Hetzelfde als facturatieadres</label>
                         </div>
                     </div>
 
-                    <div class="input-group col-md-6">
-                        <label class="sr-only" for="adres_postcode_2">Postcode</label>
-                        <div class="input-group mb-2">
-                            <div class="input-group-prepend">
-                                <div class="input-group-text"><i class="fas fa-house-user"></i></div>
+                    <div class="form-group col-md-12" id="leveringsadres">
+                        <div class="row">
+                            <div class="input-group col-md-9">
+                                <label class="sr-only" for="adres_straat_2">Leveringsadres</label>
+                                <div class="input-group mb-2">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text"><i class="fas fa-house-user"></i></div>
+                                    </div>
+                                    <input type="text" class="form-control" id="adres_straat_2" name="adres_straat_2"
+                                           placeholder="Leveringsadres" maxlength="80" required
+                                           value="<?php if (isset($adres_straat_2)) echo $adres_straat_2 ?>">
+                                </div>
                             </div>
-                            <input type="text" class="form-control" id="adres_postcode_2" name="adres_postcode_2"
-                                   placeholder="Postcode" maxlength="4" required
-                                   value="<?php if (isset($adres_postcode_2)) echo $adres_postcode_2 ?>">
-                        </div>
-                    </div>
-                    <div class="input-group col-md-6">
-                        <label class="sr-only" for="adres_plaats_2">Plaats</label>
-                        <div class="input-group mb-2">
-                            <div class="input-group-prepend">
-                                <div class="input-group-text"><i class="fas fa-house-user"></i></div>
+                            <div class="input-group col-md-3">
+                                <label class="sr-only" for="adres_nr_2">Nr. / Bus</label>
+                                <div class="input-group mb-2">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text"><i class="fas fa-house-user"></i></div>
+                                    </div>
+                                    <input type="text" class="form-control" id="adres_nr_2" name="adres_nr_2"
+                                           placeholder="Nr. / Bus" maxlength="20" required
+                                           value="<?php if (isset($adres_nr_2)) echo $adres_nr_2 ?>">
+                                </div>
                             </div>
-                            <input type="text" class="form-control" id="adres_plaats_2" name="adres_plaats_2"
-                                   placeholder="Plaats" maxlength="50" required
-                                   value="<?php if (isset($adres_plaats_2)) echo $adres_plaats_2 ?>">
+                            <div class="input-group col-md-6">
+                                <label class="sr-only" for="adres_postcode_2">Postcode</label>
+                                <div class="input-group mb-2">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text"><i class="fas fa-house-user"></i></div>
+                                    </div>
+                                    <input type="text" class="form-control" id="adres_postcode_2"
+                                           name="adres_postcode_2"
+                                           placeholder="Postcode" maxlength="4" required
+                                           value="<?php if (isset($adres_postcode_2)) echo $adres_postcode_2 ?>">
+                                </div>
+                            </div>
+                            <div class="input-group col-md-6">
+                                <label class="sr-only" for="adres_plaats_2">Plaats</label>
+                                <div class="input-group mb-2">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text"><i class="fas fa-house-user"></i></div>
+                                    </div>
+                                    <input type="text" class="form-control" id="adres_plaats_2" name="adres_plaats_2"
+                                           placeholder="Plaats" maxlength="50" required
+                                           value="<?php if (isset($adres_plaats_2)) echo $adres_plaats_2 ?>">
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="input-group col-md-12"><br></div>
@@ -437,6 +461,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $('#bedrijfsnaam').removeAttr('required');
             $('#btw_nr').removeAttr('required');
         }
+    });
+</script>
+<script>
+    $(function () {
+        $("#adres_factuur").change(function () {
+            if ($(this).val() === "Yes") {
+                $('#leveringsadres').show();
+                $(this).val("No");
+                $('#adres_straat_2').attr('required', '');
+                $('#adres_nr_2').attr('required', '');
+                $('#adres_postcode_2').attr('required', '');
+                $('#adres_plaats_2').attr('required', '');
+            } else {
+                $('#leveringsadres').hide();
+                $(this).val("Yes");
+                $('#adres_straat_2').removeAttr('required');
+                $('#adres_nr_2').removeAttr('required');
+                $('#adres_postcode_2').removeAttr('required');
+                $('#adres_plaats_2').removeAttr('required');
+            }
+        });
     });
 </script>
 <script>

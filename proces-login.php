@@ -10,7 +10,7 @@ $account = $stmt->fetch(PDO::FETCH_ASSOC);
 if ($account) {
     if (password_verify($_POST['wachtwoord'], $account['wachtwoord'])) {
         // Controleer of account geactiveerd is
-        if (account_activatie && $account['activatie_code'] != 'activated') {
+        if ($account['activatie_code'] != 'activated') {
             // user heeft account nog niet geactiveerd
             echo 'U moet uw account activeren voor u kan aanmelden, klik <u><a href="activatie-resend.php">hier</a></u> voor het opnieuw verzenden van de activatie email!';
         } else {

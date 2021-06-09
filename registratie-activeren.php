@@ -3,14 +3,17 @@ $menu = 1;
 include 'main.php';
 $msg = '';
 $pdo_function = pdo_connect_mysql();
-if (isset($_GET['email'], $_GET['code']) && !empty($_GET['code'])) {
+$filter_email = filter_input(INPUT_GET, 'email', FILTER_VALIDATE_EMAIL);
+$filter_code = filter_input(INPUT_GET, 'code', FILTER_SANITIZE_STRING);
+
+if (isset($filter_email, $filter_code) && !empty($filter_code)) {
     $stmt = $pdo_function->prepare('SELECT * FROM users WHERE email = ? AND activatie_code = ?');
-    $stmt->execute([ $_GET['email'], $_GET['code'] ]);
+    $stmt->execute([ $filter_email, $filter_code ]);
     $account = $stmt->fetch(PDO::FETCH_ASSOC);
     if ($account) {
         $stmt = $pdo_function->prepare('UPDATE users SET activatie_code = ? WHERE email = ? AND activatie_code = ?');
         $activated = 'activated';
-        $stmt->execute([ $activated, $_GET['email'], $_GET['code'] ]);
+        $stmt->execute([ $activated, $filter_email, $filter_code ]);
         $msg = 'Uw account is geactiveerd, je kan zich nu <a href="login.php">aanmelden</a>.';
     } else {
         $msg = 'Uw account is reeds geactiveerd of bestaat niet!';

@@ -17,7 +17,7 @@ define('mail_from', 'Delga <shop@delga.be>');
 // email adres berichtgeving
 define('mail_bestelling', 'Delga shop <shop@delga.be>');
 // Link to activation file
-define('activatie_link', 'https://www.delga.be/activatie.php');
+define('activatie_link', 'https://www.delga.be/registratie-activeren.php');
 // Link to reset file
 define('reset_link', 'https://www.delga.be/wachtwoord-reset.php');
 // Prijs levering

@@ -40,6 +40,8 @@ include 'main.php';
                 <p>We leveren binnen de 24 uur of na afspraak.</p>
                 <p>Kunt U op onze website producten niet terugvinden, aarzel dan zeker niet om mij een mail te sturen om dit na te vragen.
                     <br>De kans is groot dat ik U deze alsnog kan aanbieden want ons gamma is te groot en veelzijdig om alles hierop aan te bieden.</p>
+
+                <p>Onze privacy policy kunt U <a href="privacy.php" class="text-primary"><u>hier</u></a> vinden.</p>
                 <p>Dank voor jullie vertrouwen.</p>
                 <p>Delhaye Gabriël<br>Zaakvoerder</p>
 

@@ -29,8 +29,6 @@ include 'main.php';
         <div class="jumbotron p-md-5 rounded bg-light">
             <div class="col-md-12 px-0">
                 <h1 class="display-4 font-italic">Privacy policy</h1>
-                <h2 class="lead my-3">(versie 12/10/2020)</h2>
-
 
                 <p class="lead my-3">Beste klant,</p>
 
@@ -53,7 +51,7 @@ include 'main.php';
                     <br>U kan steeds onze verkoopsvoorwaarden ontvangen, gelieve ons hiervoor te contacteren.
                     <br>Indien U toch bezwaar maakt tegen deze verwerking van uw persoonsgegevens,
                     <br>kan U zich richten tot "Onderhoudsproducten Delga" per e-mail naar
-                    <a href="mailto:info@delga.be?subject=info" class="text-primary">info@delga.be</a>.</p>
+                    <a href="mailto:info@delga.be?subject=info" class="text-primary"><u>info@delga.be</u></a>.</p>
 
                 <p>Verder willen wij U er op wijzen dat U het recht heeft om ten allen tijde uw voorkeuren aan te
                     passen,

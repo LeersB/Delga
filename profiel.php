@@ -1,49 +1,31 @@
 <?php
 $menu = 5;
 include 'main.php';
+include 'registratie-filter.php';
 $pdo_function = pdo_connect_mysql();
 check_loggedin($pdo_function);
 $msg = '';
-include 'registratie-filter.php';
-//global variabelen van registratie-filter.php
-global $error;
-global $voornaam;
-global $achternaam;
-global $telefoon_nr;
-global $bedrijfsnaam;
-global $btw_nr;
-global $adres_straat;
-global $adres_nr;
-global $adres_postcode;
-global $adres_plaats;
-global $adres_straat_2;
-global $adres_nr_2;
-global $adres_postcode_2;
-global $adres_plaats_2;
-global $email;
-global $wachtwoord;
 
 //Get user
 $stmt = $pdo_function->prepare('SELECT * FROM users WHERE user_id = ?');
 $stmt->execute([$_SESSION['user_id']]);
 $account = $stmt->fetch(PDO::FETCH_ASSOC);
 
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (empty($error)) {
+    if (empty($GLOBALS['error'])) {
         $stmt = $pdo_function->prepare('SELECT COUNT(*) FROM users WHERE (email = ?) AND email != ?');
-        $stmt->execute([$email, $account['email']]);
+        $stmt->execute([$GLOBALS['email'], $account['email']]);
         if ($result = $stmt->fetchColumn()) {
             $msg = 'Een account met dit e-mailadres bestaat reeds!';
         } else {
             // update profiel
-            $uniqid = account_activatie && $account['email'] != $email ? uniqid() : $account['activatie_code'];
+            $uniqid = account_activatie && $account['email'] != $GLOBALS['email'] ? uniqid() : $account['activatie_code'];
             $stmt = $pdo_function->prepare('UPDATE users SET email = ?, wachtwoord = ?, voornaam = ?, achternaam = ?, adres_straat = ?, adres_nr = ?, adres_postcode = ?, adres_plaats = ?, adres_straat_2 = ?, adres_nr_2 = ?, adres_postcode_2 = ?, adres_plaats_2 = ?, telefoon_nr = ?, bedrijfsnaam = ?, btw_nr = ?, activatie_code = ? WHERE user_id = ?');
-            $wachtwoord_hash = !empty($wachtwoord) ? password_hash($wachtwoord, PASSWORD_DEFAULT) : $account['wachtwoord'];
-            $stmt->execute([$email, $wachtwoord_hash, $voornaam, $achternaam, $adres_straat, $adres_nr, $adres_postcode, $adres_plaats, $adres_straat_2, $adres_nr_2, $adres_postcode_2, $adres_plaats_2, $telefoon_nr, $bedrijfsnaam, $btw_nr, $uniqid, $_SESSION['user_id']]);
-            if (account_activatie && $account['email'] != $email) {
-                $activatie_link = activatie_link . '?email=' . $email . '&code=' . $uniqid;
-                send_activatie_email($email, $activatie_link, $voornaam, $achternaam);
+            $wachtwoord_hash = !empty($GLOBALS['wachtwoord']) ? password_hash($GLOBALS['wachtwoord'], PASSWORD_DEFAULT) : $account['wachtwoord'];
+            $stmt->execute([$GLOBALS['email'], $wachtwoord_hash, $GLOBALS['voornaam'], $GLOBALS['achternaam'], $GLOBALS['adres_straat'], $GLOBALS['adres_nr'], $GLOBALS['adres_postcode'], $GLOBALS['adres_plaats'], $GLOBALS['adres_straat_2'], $GLOBALS['adres_nr_2'], $GLOBALS['adres_postcode_2'], $GLOBALS['adres_plaats_2'], $GLOBALS['telefoon_nr'], $GLOBALS['bedrijfsnaam'], $GLOBALS['btw_nr'], $uniqid, $_SESSION['user_id']]);
+            if (account_activatie && $account['email'] != $GLOBALS['email']) {
+                $activatie_link = activatie_link . '?email=' . $GLOBALS['email'] . '&code=' . $uniqid;
+                send_activatie_email($GLOBALS['email'], $activatie_link, $GLOBALS['voornaam'], $GLOBALS['achternaam']);
                 unset($_SESSION['loggedin']);
                 $msg = 'U hebt het e-mailadres aangepast, u moet deze eerst terug activeren voor u kunt aanmelden!';
             } else {

@@ -1,42 +1,25 @@
 <?php
 $menu = 4;
 include 'main.php';
-$msg = '';
 include 'registratie-filter.php';
-//global variabelen van registratie-filter.php
-global $error;
-global $voornaam;
-global $achternaam;
-global $telefoon_nr;
-global $bedrijfsnaam;
-global $btw_nr;
-global $adres_straat;
-global $adres_nr;
-global $adres_postcode;
-global $adres_plaats;
-global $adres_straat_2;
-global $adres_nr_2;
-global $adres_postcode_2;
-global $adres_plaats_2;
-global $email;
-global $wachtwoord;
+$msg = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (empty($error)) {
+    if (empty($GLOBALS['error'])) {
         $pdo_function = pdo_connect_mysql();
         $stmtAccount = $pdo_function->prepare('SELECT user_id, wachtwoord FROM users WHERE email = ?');
-        $stmtAccount->execute([$email]);
+        $stmtAccount->execute([$GLOBALS['email']]);
         $account = $stmtAccount->fetch(PDO::FETCH_ASSOC);
         if ($account) {
             $msg = 'Een account met dit e-mailadres bestaat al!';
         } else {
             $stmt = $pdo_function->prepare('INSERT INTO users (email, wachtwoord, activatie_code, registratie_datum, voornaam, achternaam, adres_straat, adres_nr, adres_postcode, adres_plaats, adres_straat_2, adres_nr_2, adres_postcode_2, adres_plaats_2, telefoon_nr, bedrijfsnaam, btw_nr, user_level) VALUES (?, ?, ?, NOW(), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
-            $wachtwoord_hash = password_hash($wachtwoord, PASSWORD_DEFAULT);
+            $wachtwoord_hash = password_hash($GLOBALS['wachtwoord'], PASSWORD_DEFAULT);
             $uniqid = account_activatie ? uniqid() : 'activated';
-            $stmt->execute([$email, $wachtwoord_hash, $uniqid, $voornaam, $achternaam, $adres_straat, $adres_nr, $adres_postcode, $adres_plaats, $adres_straat_2, $adres_nr_2, $adres_postcode_2, $adres_plaats_2, $telefoon_nr, $bedrijfsnaam, $btw_nr, $_POST['user_level']]);
+            $stmt->execute([$GLOBALS['email'], $wachtwoord_hash, $uniqid, $GLOBALS['voornaam'], $GLOBALS['achternaam'], $GLOBALS['adres_straat'], $GLOBALS['adres_nr'], $GLOBALS['adres_postcode'], $GLOBALS['adres_plaats'], $GLOBALS['adres_straat_2'], $GLOBALS['adres_nr_2'], $GLOBALS['adres_postcode_2'], $GLOBALS['adres_plaats_2'], $GLOBALS['telefoon_nr'], $GLOBALS['bedrijfsnaam'], $GLOBALS['btw_nr'], $_POST['user_level']]);
             if (account_activatie) {
-                $activatie_link = activatie_link . '?email=' . $email . '&code=' . $uniqid;
-                send_activatie_email($email, $activatie_link, $voornaam, $achternaam);
+                $activatie_link = activatie_link . '?email=' . $GLOBALS['email'] . '&code=' . $uniqid;
+                send_activatie_email($GLOBALS['email'], $activatie_link, $GLOBALS['voornaam'], $GLOBALS['achternaam']);
             }
             header('Location: registratie-voltooid.php');
             exit;

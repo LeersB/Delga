@@ -3,14 +3,15 @@ $menu = 4;
 include 'main.php';
 $msg = '';
 $msg2 = '';
+$filter_email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
 $pdo_function = pdo_connect_mysql();
-if (isset($_POST['email'])) {
+if (isset($filter_email)) {
     $stmt = $pdo_function->prepare("SELECT * FROM users WHERE email = ? AND activatie_code != '' AND activatie_code != 'activated'");
-    $stmt->execute([ $_POST['email']]);
+    $stmt->execute([$filter_email]);
     $account = $stmt->fetch(PDO::FETCH_ASSOC);
     if ($account) {
-        $activatie_link = activatie_link . '?email=' . $_POST['email'] . '&code=' . $account['activatie_code'];
-        send_activatie_email($_POST['email'], $activatie_link, $account['voornaam'], $account['achternaam']);
+        $activatie_link = activatie_link . '?email=' . $filter_email . '&code=' . $account['activatie_code'];
+        send_activatie_email($filter_email, $activatie_link, $account['voornaam'], $account['achternaam']);
         $msg2 = 'De link voor het activeren van uw account is naar uw e-mailadres verstuurd!';
     } else {
         $msg = 'Er is geen account gevonden met dit e-mailadres!';
@@ -41,8 +42,9 @@ if (isset($_POST['email'])) {
         <div class="content">
             <form class="needs-validation" novalidate action="activatie-resend.php" method="post">
                 <div class="input-group col-md-12"><h2>Activeren Delga account</h2></div>
-                <div class="input-group col-md-12">Voor het ontvangen van de activatie e-mail gelieve uw e-mailadres op te geven.</div>
-                <div class="input-group col-md-12"><br></div>
+                <div class="input-group col-md-12"><p>Voor het ontvangen van de activatie e-mail gelieve uw e-mailadres op
+                        te geven.</p>
+                </div>
                 <div class="input-group col-md-12">
                     <label class="sr-only" for="email">E-mailadres</label>
                     <div class="input-group mb-2">
@@ -50,14 +52,16 @@ if (isset($_POST['email'])) {
                             <div class="input-group-text"><i class="fas fa-envelope"></i></div>
                         </div>
                         <input type="email" class="form-control" id="email" name="email" placeholder="E-mailadres"
-                               required>
+                               maxlength="100" required>
                     </div>
                 </div>
                 <div class="col-md-12 text-danger msg"><?= $msg ?></div>
                 <div class="col-md-12 text-success msg2"><?= $msg2 ?></div>
                 <div class="input-group col-md-12"><br></div>
                 <div class="col-md-12">
-                    <button type="submit" value="submit" class="btn btn-success"><i class="far fa-envelope"></i> Verstuur</button>
+                    <button type="submit" value="submit" class="btn btn-success"><i class="far fa-envelope"></i>
+                        Verstuur
+                    </button>
                 </div>
             </form>
         </div>

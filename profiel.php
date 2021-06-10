@@ -167,7 +167,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                             <input type="text" class="form-control" id="telefoon_nr"
                                                                    name="telefoon_nr"
                                                                    value="<?= $account['telefoon_nr'] ?>"
-                                                                   placeholder="Telefoonnummer">
+                                                                   placeholder="Telefoonnummer" maxlength="15">
                                                         </div>
                                                     </div>
                                                     <div class="input-group col-md-12"><br></div>
@@ -184,7 +184,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                                        id="bedrijfsnaam"
                                                                        name="bedrijfsnaam"
                                                                        value="<?= $account['bedrijfsnaam'] ?>"
-                                                                       placeholder="Bedrijfsnaam"
+                                                                       placeholder="Bedrijfsnaam" maxlength="50"
                                                                        required>
                                                             </div>
                                                         </div>
@@ -198,7 +198,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                                 <input type="text" class="form-control" id="btw_nr"
                                                                        name="btw_nr"
                                                                        value="<?= $account['btw_nr'] ?>"
-                                                                       placeholder="BTW-nummer" required>
+                                                                       placeholder="BTW-nummer" maxlength="20" required>
                                                             </div>
                                                         </div>
                                                         <div class="input-group col-md-12"><br></div>
@@ -214,7 +214,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                             <input type="text" class="form-control" id="adres_straat"
                                                                    name="adres_straat"
                                                                    value="<?= $account['adres_straat'] ?>"
-                                                                   placeholder="Adres" required>
+                                                                   placeholder="Adres" maxlength="80" required>
                                                         </div>
                                                     </div>
                                                     <div class="input-group col-md-3">
@@ -228,7 +228,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                                    name="adres_nr"
                                                                    value="<?= $account['adres_nr'] ?>"
                                                                    placeholder="Huisnummer / Bus"
-                                                                   required>
+                                                                   maxlength="20" required>
                                                             <div class="invalid-feedback">Dit veld is verplicht.</div>
                                                         </div>
                                                     </div>
@@ -242,7 +242,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                             <input type="text" class="form-control" id="adres_postcode"
                                                                    name="adres_postcode"
                                                                    value="<?= $account['adres_postcode'] ?>"
-                                                                   placeholder="Postcode"
+                                                                   placeholder="Postcode" maxlength="4"
                                                                    required>
                                                         </div>
                                                     </div>
@@ -256,7 +256,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                             <input type="text" class="form-control" id="adres_plaats"
                                                                    name="adres_plaats"
                                                                    value="<?= $account['adres_plaats'] ?>"
-                                                                   placeholder="Plaats" required>
+                                                                   placeholder="Plaats" maxlength="50" required>
                                                         </div>
                                                     </div>
                                                     <div class="input-group col-md-12"><br></div>
@@ -271,7 +271,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                             <input type="text" class="form-control" id="adres_straat_2"
                                                                    name="adres_straat_2"
                                                                    value="<?= $account['adres_straat_2'] ?>"
-                                                                   placeholder="Adres" required>
+                                                                   placeholder="Adres" maxlength="80" required>
                                                         </div>
                                                     </div>
                                                     <div class="input-group col-md-3">
@@ -285,7 +285,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                                    name="adres_nr_2"
                                                                    value="<?= $account['adres_nr_2'] ?>"
                                                                    placeholder="Huisnummer / Bus"
-                                                                   required>
+                                                                   maxlength="20" required>
                                                             <div class="invalid-feedback">Dit veld is verplicht.</div>
                                                         </div>
                                                     </div>
@@ -301,7 +301,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                                    name="adres_postcode_2"
                                                                    value="<?= $account['adres_postcode_2'] ?>"
                                                                    placeholder="Postcode"
-                                                                   required>
+                                                                   maxlength="4" required>
                                                         </div>
                                                     </div>
                                                     <div class="input-group col-md-6">
@@ -314,7 +314,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                             <input type="text" class="form-control" id="adres_plaats_2"
                                                                    name="adres_plaats_2"
                                                                    value="<?= $account['adres_plaats_2'] ?>"
-                                                                   placeholder="Plaats" required>
+                                                                   placeholder="Plaats" maxlength="50" required>
                                                         </div>
                                                     </div>
                                                     <div class="input-group col-md-12"><br></div>
@@ -330,7 +330,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                             <input type="email" class="form-control" id="email"
                                                                    name="email"
                                                                    value="<?= $account['email'] ?>"
-                                                                   placeholder="E-mailadres" required>
+                                                                   placeholder="E-mailadres" maxlength="100" required>
                                                         </div>
                                                     </div>
                                                     <div class="input-group col-md-12">
@@ -364,7 +364,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                         </div>
                                                     </div>
                                                     <div class="col-md-12 text-danger h5">
-                                                        <p><?php if (isset($error)) echo $error ?><?php if (isset($msg)) echo $msg ?></p></div>
+                                                        <p><?php if (isset($error)) echo $error ?><?php if (isset($msg)) echo $msg ?></p>
+                                                    </div>
                                                     <div class="input-group col-md-12"><br></div>
                                                     <div class="col-12">
                                                         <a class="btn btn-secondary" href="profiel.php" role="button"><i

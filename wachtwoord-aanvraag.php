@@ -3,17 +3,18 @@ $menu = 4;
 include 'main.php';
 $msg = '';
 $msg2 = '';
+$filter_email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
 $pdo_function = pdo_connect_mysql();
-if (isset($_POST['email'])) {
+if (isset($filter_email)) {
     $stmt = $pdo_function->prepare('SELECT * FROM users WHERE email = ?');
-    $stmt->execute([$_POST['email']]);
+    $stmt->execute([$filter_email]);
     $account = $stmt->fetch(PDO::FETCH_ASSOC);
     if ($account) {
         $stmt = $pdo_function->prepare('UPDATE users SET reset_code = ? WHERE email = ?');
         $uniqid = uniqid();
-        $stmt->execute([$uniqid, $_POST['email']]);
-        $reset_link = reset_link . '?email=' . $_POST['email'] . '&code=' . $uniqid;
-        send_wachtwoord_email($_POST['email'], $reset_link, $account['voornaam'], $account['achternaam']);
+        $stmt->execute([$uniqid, $filter_email]);
+        $reset_link = reset_link . '?email=' . $filter_email . '&code=' . $uniqid;
+        send_wachtwoord_email($filter_email, $reset_link, $account['voornaam'], $account['achternaam']);
         $msg2 = 'De link voor het opnieuw instellen van het wachtwoord is naar uw e-mailadres verstuurd!';
     } else {
         $msg = 'Er is geen account gevonden met dit e-mailadres!';
@@ -44,7 +45,8 @@ if (isset($_POST['email'])) {
         <div class="content">
             <form class="needs-validation" novalidate action="wachtwoord-aanvraag.php" method="post">
                 <div class="input-group col-md-12"><h2>Wachtwoord vergeten</h2></div>
-                <div class="input-group col-md-12"><p>Voer uw e-mailadres hieronder in om een wachtwoord reset link te ontvangen.</p></div>
+                <div class="input-group col-md-12"><p>Voer uw e-mailadres hieronder in om een wachtwoord reset link te
+                        ontvangen.</p></div>
                 <div class="input-group col-md-12">
                     <label class="sr-only" for="email">E-mailadres</label>
                     <div class="input-group mb-2">

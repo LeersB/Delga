@@ -3,10 +3,12 @@ $menu = 4;
 include 'main.php';
 $msg = '';
 $msg2 = '';
+$filter_email = filter_input(INPUT_GET, 'email', FILTER_VALIDATE_EMAIL);
 $pdo_function = pdo_connect_mysql();
-if (isset($_GET['email'], $_GET['code']) && !empty($_GET['code'])) {
+
+if (isset($filter_email, $_GET['code']) && !empty($_GET['code'])) {
     $stmt = $pdo_function->prepare('SELECT * FROM users WHERE email = ? AND reset_code = ?');
-    $stmt->execute([$_GET['email'], $_GET['code']]);
+    $stmt->execute([$filter_email, $_GET['code']]);
     $account = $stmt->fetch(PDO::FETCH_ASSOC);
     if ($account) {
         if (isset($_POST['nwachtwoord'], $_POST['cwachtwoord'])) {
@@ -15,9 +17,9 @@ if (isset($_GET['email'], $_GET['code']) && !empty($_GET['code'])) {
             } else if ($_POST['nwachtwoord'] != $_POST['cwachtwoord']) {
                 $msg = 'Wachtwoorden komen niet overeen!';
             } else {
-                $stmt = $pdo_function->prepare('UPDATE users SET wachtwoord = ?, reset_code = "" WHERE email = ?');
+                $stmt = $pdo_function->prepare("UPDATE users SET wachtwoord = ?, reset_code = '' WHERE email = ?");
                 $wachtwoord = password_hash($_POST['nwachtwoord'], PASSWORD_DEFAULT);
-                $stmt->execute([$wachtwoord, $_GET['email']]);
+                $stmt->execute([$wachtwoord, $filter_email]);
                 $msg2 = 'Uw wachtwoord is aangepast! U kan zich nu <a href="login.php">aanmelden</a>!';
             }
         }
@@ -28,7 +30,6 @@ if (isset($_GET['email'], $_GET['code']) && !empty($_GET['code'])) {
     exit('Geef het e-mailadres en de code op!');
 }
 ?>
-
 <!DOCTYPE html>
 <html class="h-100" lang="nl">
 <head>
@@ -53,7 +54,7 @@ if (isset($_GET['email'], $_GET['code']) && !empty($_GET['code'])) {
 
         <div class="login">
             <h1>Wachtwoord aanpassen</h1>
-            <form class="needs-validation" novalidate action="wachtwoord-reset.php?email=<?= $_GET['email'] ?>&code=<?= $_GET['code'] ?>" method="post">
+            <form class="needs-validation" novalidate action="wachtwoord-reset.php?email=<?= $filter_email ?>&code=<?= $_GET['code'] ?>" method="post">
                 <div class="input-group col-md-12"><br></div>
                 <div class="input-group col-md-12">
                     <label class="sr-only" for="nwachtwoord">Nieuw wachtwoord</label>
@@ -83,7 +84,7 @@ if (isset($_GET['email'], $_GET['code']) && !empty($_GET['code'])) {
                 <div class="col-md-12 text-success msg2"><?= $msg2 ?></div>
                 <div class="input-group col-md-12"><br></div>
                 <div class="col-12">
-                    <button type="submit" class="btn btn-primary">Verstuur</button>
+                    <button type="submit" class="btn btn-success">Verstuur</button>
                 </div>
             </form>
         </div>

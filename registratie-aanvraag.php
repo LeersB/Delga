@@ -108,7 +108,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 <div class="input-group-text"><i class="fas fa-phone-alt"></i></div>
                             </div>
                             <input type="text" class="form-control" id="telefoon_nr" name="telefoon_nr"
-                                   placeholder="Telefoonnummer"
+                                   placeholder="Telefoonnummer" maxlength="15"
                                    value="<?php if (isset($telefoon_nr)) echo $telefoon_nr ?>">
                         </div>
                     </div>
@@ -133,7 +133,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                         <div class="input-group-text"><i class="fas fa-industry"></i></div>
                                     </div>
                                     <input type="text" class="form-control" id="btw_nr" name="btw_nr"
-                                           placeholder="BTW-nummer" value="<?php if (isset($btw_nr)) echo $btw_nr ?>">
+                                           placeholder="BTW-nummer" maxlength="20" value="<?php if (isset($btw_nr)) echo $btw_nr ?>">
                                 </div>
                             </div>
                         </div>

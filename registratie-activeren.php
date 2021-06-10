@@ -11,9 +11,9 @@ if (isset($filter_email, $filter_code) && !empty($filter_code)) {
     $stmt->execute([ $filter_email, $filter_code ]);
     $account = $stmt->fetch(PDO::FETCH_ASSOC);
     if ($account) {
-        $stmt = $pdo_function->prepare('UPDATE users SET activatie_code = ? WHERE email = ? AND activatie_code = ?');
+        $stmt = $pdo_function->prepare('UPDATE users SET activatie_code = ? WHERE email = ?');
         $activated = 'activated';
-        $stmt->execute([ $activated, $filter_email, $filter_code ]);
+        $stmt->execute([ $activated, $filter_email ]);
         $msg = 'Uw account is geactiveerd, je kan zich nu <a href="login.php">aanmelden</a>.';
     } else {
         $msg = 'Uw account is reeds geactiveerd of bestaat niet!';

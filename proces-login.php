@@ -1,14 +1,14 @@
 <?php
 include 'main.php';
-if (!isset($_POST['email'], $_POST['wachtwoord'])) {
-    exit('Vul zowel uw e-mailadres als wachtwoord in!');
-}
+$filter_email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
+$filter_wachtwoord = filter_input(INPUT_POST, 'wachtwoord');
 $pdo_function = pdo_connect_mysql();
+
 $stmt = $pdo_function->prepare('SELECT * FROM users WHERE email = ?');
-$stmt->execute([ $_POST['email'] ]);
+$stmt->execute([ $filter_email ]);
 $account = $stmt->fetch(PDO::FETCH_ASSOC);
 if ($account) {
-    if (password_verify($_POST['wachtwoord'], $account['wachtwoord'])) {
+    if (password_verify($filter_wachtwoord, $account['wachtwoord'])) {
         // Controleer of account geactiveerd is
         if ($account['activatie_code'] != 'activated') {
             // user heeft account nog niet geactiveerd
@@ -37,4 +37,3 @@ if ($account) {
 } else {
     echo 'Geldig e-mailadres is verplicht!';
 }
-?>

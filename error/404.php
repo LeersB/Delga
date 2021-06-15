@@ -1,3 +1,6 @@
+<?php
+include '../main.php';
+?>
 <!DOCTYPE html>
 <html class="h-100" lang="nl">
 <head>
